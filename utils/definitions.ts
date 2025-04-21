@@ -1,16 +1,16 @@
-export type BankName = 'Finabank' | 'Central Bank' | 'Central Money Exchange'
+export type BankName = "Finabank" | "Central Bank" | "Central Money Exchange";
 
-export type Currency = 'USD' | 'EUR'
+export type Currency = "USD" | "EUR";
 
 export type BankInfo = {
   name: BankName;
   logo: string;
   link: string;
-}
+};
 
 export type BankRates = BankInfo & {
-  rates: ExchangeRate[]
-}
+  rates: ExchangeRate[];
+};
 
 export interface ExchangeRate {
   currency: Currency;

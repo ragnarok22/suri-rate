@@ -1,28 +1,31 @@
-import Image from "next/image"
-import Link from "next/link"
-import { ExternalLink } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import type { BankRates } from "@/utils/definitions"
+import Image from "next/image";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import type { BankRates } from "@/utils/definitions";
 
 interface ExchangeRateCardProps {
-  bankRates: BankRates
+  bankRates: BankRates;
   bestRates: {
-    bestBuyUSD: string
-    bestSellUSD: string
-    bestBuyEUR: string
-    bestSellEUR: string
-  }
+    bestBuyUSD: string;
+    bestSellUSD: string;
+    bestBuyEUR: string;
+    bestSellEUR: string;
+  };
 }
 
-export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateCardProps) {
-  const { name, logo, link, rates } = bankRates
+export default function ExchangeRateCard({
+  bankRates,
+  bestRates,
+}: ExchangeRateCardProps) {
+  const { name, logo, link, rates } = bankRates;
 
   // Find USD and EUR rates
-  const usdRate = rates.find((rate) => rate.currency === "USD")
-  const eurRate = rates.find((rate) => rate.currency === "EUR")
+  const usdRate = rates.find((rate) => rate.currency === "USD");
+  const eurRate = rates.find((rate) => rate.currency === "EUR");
 
-  if (!usdRate || !eurRate) return null
+  if (!usdRate || !eurRate) return null;
 
   return (
     <Card className="overflow-hidden">
@@ -61,7 +64,10 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
                 <div className="flex items-center gap-1">
                   <span className="font-semibold">{usdRate.buy}</span>
                   {usdRate.buy === bestRates.bestBuyUSD && (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700 border-green-200"
+                    >
                       Best
                     </Badge>
                   )}
@@ -72,7 +78,10 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
                 <div className="flex items-center gap-1">
                   <span className="font-semibold">{usdRate.sell}</span>
                   {usdRate.sell === bestRates.bestSellUSD && (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700 border-green-200"
+                    >
                       Best
                     </Badge>
                   )}
@@ -91,7 +100,10 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
                 <div className="flex items-center gap-1">
                   <span className="font-semibold">{eurRate.buy}</span>
                   {eurRate.buy === bestRates.bestBuyEUR && (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700 border-green-200"
+                    >
                       Best
                     </Badge>
                   )}
@@ -102,7 +114,10 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
                 <div className="flex items-center gap-1">
                   <span className="font-semibold">{eurRate.sell}</span>
                   {eurRate.sell === bestRates.bestSellEUR && (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700 border-green-200"
+                    >
                       Best
                     </Badge>
                   )}
@@ -113,5 +128,5 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
