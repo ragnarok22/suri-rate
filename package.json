@@ -15,6 +15,7 @@
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
+    "posthog-js": "^1.236.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
