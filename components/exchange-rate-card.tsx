@@ -62,7 +62,6 @@ export default function ExchangeRateCard({
               <div className="flex items-center justify-between">
                 <span className="text-sm">Buy Rate:</span>
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold">{usdRate.buy}</span>
                   {usdRate.buy === bestRates.bestBuyUSD && (
                     <Badge
                       variant="outline"
@@ -71,12 +70,12 @@ export default function ExchangeRateCard({
                       Best
                     </Badge>
                   )}
+                  <span className="font-semibold">{usdRate.buy}</span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Sell Rate:</span>
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold">{usdRate.sell}</span>
                   {usdRate.sell === bestRates.bestSellUSD && (
                     <Badge
                       variant="outline"
@@ -85,6 +84,7 @@ export default function ExchangeRateCard({
                       Best
                     </Badge>
                   )}
+                  <span className="font-semibold">{usdRate.sell}</span>
                 </div>
               </div>
             </div>
@@ -98,7 +98,6 @@ export default function ExchangeRateCard({
               <div className="flex items-center justify-between">
                 <span className="text-sm">Buy Rate:</span>
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold">{eurRate.buy}</span>
                   {eurRate.buy === bestRates.bestBuyEUR && (
                     <Badge
                       variant="outline"
@@ -107,12 +106,12 @@ export default function ExchangeRateCard({
                       Best
                     </Badge>
                   )}
+                  <span className="font-semibold">{eurRate.buy}</span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Sell Rate:</span>
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold">{eurRate.sell}</span>
                   {eurRate.sell === bestRates.bestSellEUR && (
                     <Badge
                       variant="outline"
@@ -121,6 +120,7 @@ export default function ExchangeRateCard({
                       Best
                     </Badge>
                   )}
+                  <span className="font-semibold">{eurRate.sell}</span>
                 </div>
               </div>
             </div>
