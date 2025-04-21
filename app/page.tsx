@@ -1,13 +1,10 @@
-import { getFinabankExchangeRates } from "@/utils/places/providers";
+import Footer from "@/components/footer";
 
 export default function Home() {
-  // Example usage
-  getFinabankExchangeRates().then(rates => {
-    console.log('Exchange Rates:', rates);
-  });
   return (
-    <div className="">
+    <div className="w-full h-screen flex flex-col">
       hola
+      <Footer />
     </div>
   );
 }

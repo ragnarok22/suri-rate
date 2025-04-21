@@ -1,11 +1,16 @@
+export type BankName = 'Finabank' | 'Central Bank'
+
+export type Currency = 'USD' | 'EUR'
+
 export type Place = {
-  name: string;
+  name: BankName;
   logo: string;
   link: string;
+  getRates: () => Promise<ExchangeRate[]>
 }
 
 export interface ExchangeRate {
-  currency: string;
+  currency: Currency;
   buy: string;
   sell: string;
 }
