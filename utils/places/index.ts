@@ -10,6 +10,12 @@ import {
   getFinabankExchangeRates,
 } from "./providers";
 
+let cachedRates: BankRates[] | null = null;
+let lastFetchTime: number | null = null;
+const CACHE_DURATION = 1000 * 60 * 60 * 6; // 6 hours
+
+export const getLastFetchTime = (): number | null => lastFetchTime;
+
 const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
   switch (bank_name) {
     case "Finabank":
@@ -24,6 +30,12 @@ const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
 };
 
 export const getCurrentRates = async (): Promise<BankRates[]> => {
+  const now = Date.now();
+
+  if (cachedRates && lastFetchTime && now - lastFetchTime < CACHE_DURATION) {
+    return cachedRates;
+  }
+
   const bankInfos: BankInfo[] = [
     {
       name: "Finabank",
@@ -48,7 +60,8 @@ export const getCurrentRates = async (): Promise<BankRates[]> => {
     bankRates.push({ ...bankInfo, rates });
   }
 
-  console.log({ bankRates });
+  cachedRates = bankRates;
+  lastFetchTime = now;
 
   return bankRates;
 };

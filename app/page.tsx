@@ -1,9 +1,10 @@
 import ExchangeRateGrid from "@/components/exchange-rate-grid";
 import Footer from "@/components/footer";
-import { getCurrentRates } from "@/utils/places";
+import { getCurrentRates, getLastFetchTime } from "@/utils/places";
 
 export default async function Home() {
   const bankRates = await getCurrentRates();
+  const lastUpdated = getLastFetchTime();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col">
@@ -35,7 +36,7 @@ export default async function Home() {
         <ExchangeRateGrid bankRates={bankRates} />
       </main>
 
-      <Footer />
+      <Footer lastUpdated={lastUpdated} />
     </div>
   );
 }

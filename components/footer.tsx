@@ -1,15 +1,19 @@
-const Footer = () => {
+interface FooterProps {
+  lastUpdated: number | null;
+}
+const Footer = ({ lastUpdated }: FooterProps) => {
+  const formattedDate = lastUpdated
+    ? new Date(lastUpdated).toLocaleString("en-US", {
+        dateStyle: "medium",
+        timeStyle: "short",
+        timeZone: "America/Paramaribo",
+      })
+    : "Not yet updated";
+
   return (
     <>
       <div className="text-center text-sm text-gray-500 mt-auto">
-        <p>
-          Last updated:{" "}
-          {new Date().toLocaleString("en-US", {
-            dateStyle: "medium",
-            timeStyle: "short",
-            timeZone: "America/Paramaribo",
-          })}
-        </p>
+        <p>Last updated: {formattedDate}</p>
         <p className="mt-2">
           Rates are for informational purposes only. Contact your bank for
           official rates.
