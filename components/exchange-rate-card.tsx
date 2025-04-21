@@ -42,13 +42,13 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
               className="object-contain"
             />
           </div>
-          <div className="flex items-center gap-1 font-semibold text-lg">
+          <div className="flex items-center gap-1 text-gray-800 font-semibold text-lg">
             {name}
             <ExternalLink className="h-4 w-4 text-gray-400" />
           </div>
         </Link>
       </CardHeader>
-      <CardContent className="p-4">
+      <CardContent className="p-4 text-gray-800">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">

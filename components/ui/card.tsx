@@ -1,7 +1,7 @@
 import React from "react"
 import { cn } from "@/utils"
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> { }
+type CardProps = React.HTMLAttributes<HTMLDivElement>
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(({ className = '', ...props }, ref) => (
   <div
@@ -12,7 +12,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({ className = '', ...p
 ))
 Card.displayName = "Card"
 
-export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> { }
+type CardHeaderProps = React.HTMLAttributes<HTMLDivElement>
 
 const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ className = '', ...props }, ref) => (
@@ -25,7 +25,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
 )
 CardHeader.displayName = "CardHeader"
 
-export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> { }
+type CardContentProps = React.HTMLAttributes<HTMLDivElement>
 
 const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ className = '', ...props }, ref) => (
@@ -34,7 +34,7 @@ const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
 )
 CardContent.displayName = "CardContent"
 
-export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> { }
+type CardFooterProps = React.HTMLAttributes<HTMLDivElement>
 
 const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
   ({ className = '', ...props }, ref) => (
@@ -47,7 +47,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
 )
 CardFooter.displayName = "CardFooter"
 
-export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> { }
+type CardTitleProps = React.HTMLAttributes<HTMLHeadingElement>
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, CardTitleProps>(
   ({ className = '', ...props }, ref) => (
@@ -60,7 +60,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, CardTitleProps>(
 )
 CardTitle.displayName = "CardTitle"
 
-export interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> { }
+type CardDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>
 
 const CardDescription = React.forwardRef<HTMLParagraphElement, CardDescriptionProps>(
   ({ className = '', ...props }, ref) => (
