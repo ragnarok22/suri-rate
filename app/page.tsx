@@ -26,17 +26,6 @@ export default async function Home() {
 
         <ExchangeRateGrid bankRates={bankRates} />
 
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>
-            Last updated:{" "}
-            {new Date().toLocaleString("en-US", {
-              dateStyle: "medium",
-              timeStyle: "short",
-              timeZone: "America/Paramaribo",
-            })}
-          </p>
-          <p className="mt-2">Rates are for informational purposes only. Contact your bank for official rates.</p>
-        </div>
       </main>
 
       <Footer />
