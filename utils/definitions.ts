@@ -1,4 +1,4 @@
-export type BankName = 'Finabank' | 'Central Bank'
+export type BankName = 'Finabank' | 'Central Bank' | 'Central Money Exchange'
 
 export type Currency = 'USD' | 'EUR'
 

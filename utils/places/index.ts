@@ -1,5 +1,5 @@
 import { BankName, ExchangeRate, BankInfo, BankRates } from "@/utils/definitions";
-import { getCBVSExchangeRates, getFinabankExchangeRates } from "./providers";
+import { getCBVSExchangeRates, getCMEExchangeRates, getFinabankExchangeRates } from "./providers";
 
 const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
   switch (bank_name) {
@@ -7,6 +7,8 @@ const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
       return await getFinabankExchangeRates();
     case 'Central Bank':
       return await getCBVSExchangeRates();
+    case 'Central Money Exchange':
+      return await getCMEExchangeRates()
     default:
       throw new Error(`Bank ${bank_name} not found`);
   }
@@ -22,6 +24,10 @@ export const getCurrentRates = async (): Promise<BankRates[]> => {
     name: 'Central Bank',
     logo: '/logos/central-bank.jpg',
     link: 'https://www.cbvs.sr'
+  }, {
+    name: 'Central Money Exchange',
+    logo: '/logos/central-exchange.png',
+    link: 'https://www.cme.sr',
   }];
 
   const bankRates: BankRates[] = [];

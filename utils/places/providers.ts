@@ -57,3 +57,26 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
 
   return rates;
 }
+
+export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
+  const url = 'https://www.cme.sr/Home/GetTodaysExchangeRates/?BusinessDate=2016-07-25';
+
+  const { data } = await axios.post(url);
+
+  const item = data?.[0];
+
+  if (!item) throw new Error('No exchange rate data received from CME');
+
+  return [
+    {
+      currency: 'USD',
+      buy: item.BuyUsdExchangeRate.toFixed(2),
+      sell: item.SaleUsdExchangeRate.toFixed(2),
+    },
+    {
+      currency: 'EUR',
+      buy: item.BuyEuroExchangeRate.toFixed(2),
+      sell: item.SaleEuroExchangeRate.toFixed(2),
+    },
+  ];
+}
