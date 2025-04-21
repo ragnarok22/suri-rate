@@ -40,7 +40,7 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
 
   const rates: ExchangeRate[] = [];
 
-  $("table")
+  $(".rate-info table")
     .find("tr")
     .each((_, row) => {
       const cells = $(row)
