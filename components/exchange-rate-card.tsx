@@ -3,27 +3,24 @@ import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { BankInfo } from "@/utils/definitions"
+import type { BankRates } from "@/utils/definitions"
 
 interface ExchangeRateCardProps {
-  bankRates: BankInfo[]
+  bankRates: BankRates
   bestRates: {
-    buyUSD: number
-    sellUSD: number
-    buyEUR: number
-    sellEUR: number
+    bestBuyUSD: string
+    bestSellUSD: string
+    bestBuyEUR: string
+    bestSellEUR: string
   }
 }
 
 export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateCardProps) {
-  // We assume all rates in bankRates are from the same bank
-  const bank = bankRates[0].name
-  const bankLogo = bankRates[0].logo
-  const bankUrl = bankRates[0].link
+  const { name, logo, link, rates } = bankRates
 
   // Find USD and EUR rates
-  const usdRate = bankRates.find((rate) => rate === "USD")
-  const eurRate = bankRates.find((rate) => rate.currency === "EUR")
+  const usdRate = rates.find((rate) => rate.currency === "USD")
+  const eurRate = rates.find((rate) => rate.currency === "EUR")
 
   if (!usdRate || !eurRate) return null
 
@@ -31,22 +28,22 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
     <Card className="overflow-hidden">
       <CardHeader className="bg-green-50 p-4">
         <Link
-          href={bankUrl}
+          href={link}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 hover:text-green-700 transition-colors"
         >
           <div className="relative h-12 w-12 overflow-hidden rounded-md border bg-white">
             <Image
-              src={bankLogo || "/placeholder.svg"}
-              alt={`${bank} logo`}
+              src={logo || "/placeholder.svg"}
+              alt={`${name} logo`}
               width={48}
               height={48}
               className="object-contain"
             />
           </div>
           <div className="flex items-center gap-1 font-semibold text-lg">
-            {bank}
+            {name}
             <ExternalLink className="h-4 w-4 text-gray-400" />
           </div>
         </Link>
@@ -62,8 +59,8 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
               <div className="flex items-center justify-between">
                 <span className="text-sm">Buy Rate:</span>
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold">{usdRate.buyRate.toFixed(2)}</span>
-                  {usdRate.buyRate === bestRates.buyUSD && (
+                  <span className="font-semibold">{usdRate.buy}</span>
+                  {usdRate.buy === bestRates.bestBuyUSD && (
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                       Best
                     </Badge>
@@ -73,8 +70,8 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
               <div className="flex items-center justify-between">
                 <span className="text-sm">Sell Rate:</span>
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold">{usdRate.sellRate.toFixed(2)}</span>
-                  {usdRate.sellRate === bestRates.sellUSD && (
+                  <span className="font-semibold">{usdRate.sell}</span>
+                  {usdRate.sell === bestRates.bestSellUSD && (
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                       Best
                     </Badge>
@@ -92,8 +89,8 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
               <div className="flex items-center justify-between">
                 <span className="text-sm">Buy Rate:</span>
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold">{eurRate.buyRate.toFixed(2)}</span>
-                  {eurRate.buyRate === bestRates.buyEUR && (
+                  <span className="font-semibold">{eurRate.buy}</span>
+                  {eurRate.buy === bestRates.bestBuyEUR && (
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                       Best
                     </Badge>
@@ -103,8 +100,8 @@ export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateC
               <div className="flex items-center justify-between">
                 <span className="text-sm">Sell Rate:</span>
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold">{eurRate.sellRate.toFixed(2)}</span>
-                  {eurRate.sellRate === bestRates.sellEUR && (
+                  <span className="font-semibold">{eurRate.sell}</span>
+                  {eurRate.sell === bestRates.bestSellEUR && (
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                       Best
                     </Badge>

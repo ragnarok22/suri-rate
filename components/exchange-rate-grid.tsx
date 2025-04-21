@@ -1,4 +1,4 @@
-import { BankRates, ExchangeRate } from "@/utils/definitions"
+import type { BankRates } from "@/utils/definitions"
 import ExchangeRateCard from "./exchange-rate-card"
 
 interface ExchangeRateGridProps {
@@ -6,36 +6,41 @@ interface ExchangeRateGridProps {
 }
 
 export default function ExchangeRateGrid({ bankRates }: ExchangeRateGridProps) {
-  // Group rates by bank
-  const bankGroups = bankRates.reduce(
-    (groups, rate) => {
-      if (!groups[rate.name]) {
-        groups[rate.name] = []
-      }
-      groups[rate.name].push(rate.rates)
-      return groups
-    },
-    {} as Record<string, ExchangeRate[]>,
-  )
-
   // Find best rates
-  const bestBuyUSD = Math.max(...rates.filter((r) => r.currency === "USD").map((r) => r.buyRate))
-  const bestSellUSD = Math.min(...rates.filter((r) => r.currency === "USD").map((r) => r.sellRate))
-  const bestBuyEUR = Math.max(...rates.filter((r) => r.currency === "EUR").map((r) => r.buyRate))
-  const bestSellEUR = Math.min(...rates.filter((r) => r.currency === "EUR").map((r) => r.sellRate))
-
-  const bestRates = {
-    buyUSD: bestBuyUSD,
-    sellUSD: bestSellUSD,
-    buyEUR: bestBuyEUR,
-    sellEUR: bestSellEUR,
-  }
+  const bestRates = findBestRates(bankRates)
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
-      {Object.values(bankGroups).map((bankRates) => (
-        <ExchangeRateCard key={bankRates[0]} bankRates={bankRates} bestRates={bestRates} />
+      {bankRates.map((bankRate) => (
+        <ExchangeRateCard key={bankRate.name} bankRates={bankRate} bestRates={bestRates} />
       ))}
     </div>
   )
+}
+
+// Helper function to find best rates
+function findBestRates(allRates: BankRates[]): {
+  bestBuyUSD: string
+  bestSellUSD: string
+  bestBuyEUR: string
+  bestSellEUR: string
+} {
+  let bestBuyUSD = "0"
+  let bestSellUSD = "999999"
+  let bestBuyEUR = "0"
+  let bestSellEUR = "999999"
+
+  allRates.forEach(({ rates }) => {
+    rates.forEach((rate) => {
+      if (rate.currency === "USD") {
+        if (Number.parseFloat(rate.buy) > Number.parseFloat(bestBuyUSD)) bestBuyUSD = rate.buy
+        if (Number.parseFloat(rate.sell) < Number.parseFloat(bestSellUSD)) bestSellUSD = rate.sell
+      } else if (rate.currency === "EUR") {
+        if (Number.parseFloat(rate.buy) > Number.parseFloat(bestBuyEUR)) bestBuyEUR = rate.buy
+        if (Number.parseFloat(rate.sell) < Number.parseFloat(bestSellEUR)) bestSellEUR = rate.sell
+      }
+    })
+  })
+
+  return { bestBuyUSD, bestSellUSD, bestBuyEUR, bestSellEUR }
 }
