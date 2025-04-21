@@ -32,3 +32,28 @@ export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
 
   return rates;
 }
+
+
+export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
+  const url = 'https://www.cbvs.sr';
+  const { data } = await axios.get(url);
+  const $ = cheerio.load(data);
+
+  const rates: ExchangeRate[] = [];
+
+  $('table')
+    .find('tr')
+    .each((_, row) => {
+      const cells = $(row).find('td').map((_, td) => $(td).text().trim()).get();
+
+      if (cells.length === 3 && (cells[0] === 'USD' || cells[0] === 'EUR')) {
+        rates.push({
+          currency: cells[0],
+          buy: parseFloat(cells[1].replace(',', '.')).toFixed(2),
+          sell: parseFloat(cells[2].replace(',', '.')).toFixed(2),
+        });
+      }
+    });
+
+  return rates;
+}
