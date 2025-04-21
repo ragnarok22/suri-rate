@@ -2,11 +2,14 @@ export type BankName = 'Finabank' | 'Central Bank'
 
 export type Currency = 'USD' | 'EUR'
 
-export type Place = {
+export type BankInfo = {
   name: BankName;
   logo: string;
   link: string;
-  getRates: () => Promise<ExchangeRate[]>
+}
+
+export type BankRates = BankInfo & {
+  rates: ExchangeRate[]
 }
 
 export interface ExchangeRate {

@@ -3,10 +3,10 @@ import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import type { ExchangeRate } from "@/lib/exchange-rates"
+import { BankInfo } from "@/utils/definitions"
 
 interface ExchangeRateCardProps {
-  bankRates: ExchangeRate[]
+  bankRates: BankInfo[]
   bestRates: {
     buyUSD: number
     sellUSD: number
@@ -17,12 +17,12 @@ interface ExchangeRateCardProps {
 
 export default function ExchangeRateCard({ bankRates, bestRates }: ExchangeRateCardProps) {
   // We assume all rates in bankRates are from the same bank
-  const bank = bankRates[0].bank
-  const bankLogo = bankRates[0].bankLogo
-  const bankUrl = bankRates[0].bankUrl
+  const bank = bankRates[0].name
+  const bankLogo = bankRates[0].logo
+  const bankUrl = bankRates[0].link
 
   // Find USD and EUR rates
-  const usdRate = bankRates.find((rate) => rate.currency === "USD")
+  const usdRate = bankRates.find((rate) => rate === "USD")
   const eurRate = bankRates.find((rate) => rate.currency === "EUR")
 
   if (!usdRate || !eurRate) return null

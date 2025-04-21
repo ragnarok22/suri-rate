@@ -1,4 +1,4 @@
-import { BankName, ExchangeRate, Place } from "@/utils/definitions";
+import { BankName, ExchangeRate, BankInfo, BankRates } from "@/utils/definitions";
 import { getFinabankExchangeRates } from "./providers";
 
 const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
@@ -10,13 +10,19 @@ const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
   }
 }
 
-export const places: Place[] = [{
-  name: 'Finabank',
-  logo: 'https://finabanknv.com/ysimg/finabank_logo.png',
-  link: 'https://finabanknv.com/service-desk/koersen-rates/',
-  getRates: () => retrieveRates('Finabank')
-}];
 
-export const getCurrentRates = async (): Promise<Place[]> => {
-  return places;
+export const getCurrentRates = async (): Promise<BankRates[]> => {
+  const bankInfos: BankInfo[] = [{
+    name: 'Finabank',
+    logo: 'https://finabanknv.com/ysimg/finabank_logo.png',
+    link: 'https://finabanknv.com/service-desk/koersen-rates/',
+  }];
+
+  const bankRates: BankRates[] = [];
+  for (const bankInfo of bankInfos) {
+    const rates = await retrieveRates(bankInfo.name);
+    bankRates.push({ ...bankInfo, rates });
+  }
+
+  return bankRates;
 }
