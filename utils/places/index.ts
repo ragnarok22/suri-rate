@@ -8,6 +8,7 @@ import {
   getCBVSExchangeRates,
   getCMEExchangeRates,
   getFinabankExchangeRates,
+  getHakrinbankExchangeRates,
 } from "./providers";
 
 let cachedRates: BankRates[] | null = null;
@@ -24,6 +25,8 @@ const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
       return await getCBVSExchangeRates();
     case "Central Money Exchange":
       return await getCMEExchangeRates();
+    case "Hakrinbank":
+      return await getHakrinbankExchangeRates();
     default:
       throw new Error(`Bank ${bank_name} not found`);
   }
@@ -51,6 +54,11 @@ export const getCurrentRates = async (): Promise<BankRates[]> => {
       name: "Central Money Exchange",
       logo: "/logos/central-exchange.png",
       link: "https://www.cme.sr",
+    },
+    {
+      name: "Hakrinbank",
+      logo: "/logos/hakrinbank.jpg",
+      link: "https://www.hakrinbank.com",
     },
   ];
 

@@ -83,3 +83,55 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
     },
   ];
 }
+
+export async function getHakrinbankExchangeRates(): Promise<ExchangeRate[]> {
+  const url = "https://www.hakrinbank.com/en/private/foreign-exchange/";
+  const { data: html } = await axios.get(url);
+  const $ = cheerio.load(html);
+
+  let usdBuy = "";
+  let usdSell = "";
+  let eurBuy = "";
+  let eurSell = "";
+
+  $("table").each((_, table) => {
+    const headers = $(table)
+      .find("thead tr th")
+      .map((_, th) => $(th).text().trim().toLowerCase())
+      .get();
+    if (
+      headers.includes("foreign exchange") &&
+      headers.includes("purchase") &&
+      headers.includes("sale")
+    ) {
+      $(table)
+        .find("tbody tr")
+        .each((_, row) => {
+          const cells = $(row)
+            .find("td")
+            .map((_, td) => $(td).text().trim())
+            .get();
+          const currency = cells[0]?.toUpperCase();
+          const buy = cells[1];
+          const sell = cells[2];
+
+          if (currency === "USD") {
+            usdBuy = parseFloat(buy).toFixed(2);
+            usdSell = parseFloat(sell).toFixed(2);
+          } else if (currency === "EURO" || currency === "EUR") {
+            eurBuy = parseFloat(buy).toFixed(2);
+            eurSell = parseFloat(sell).toFixed(2);
+          }
+        });
+    }
+  });
+
+  if (!usdBuy || !usdSell || !eurBuy || !eurSell) {
+    throw new Error("No exchange rate data found on Hakrinbank page");
+  }
+
+  return [
+    { currency: "USD", buy: usdBuy, sell: usdSell },
+    { currency: "EUR", buy: eurBuy, sell: eurSell },
+  ];
+}
