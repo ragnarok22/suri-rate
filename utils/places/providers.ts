@@ -47,13 +47,13 @@ export async function getDsbExchangeRates(): Promise<ExchangeRate[]> {
   return [
     {
       currency: "USD",
-      buy: item.USD.buy.toFixed(2),
-      sell: item.USD.sell.toFixed(2),
+      buy: item.USD.buy,
+      sell: item.USD.sell,
     },
     {
       currency: "EUR",
-      buy: item.EUR.buy.toFixed(2),
-      sell: item.EUR.sell.toFixed(2),
+      buy: item.EUR.buy,
+      sell: item.EUR.sell,
     },
   ];
 }
