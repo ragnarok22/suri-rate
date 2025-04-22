@@ -1,4 +1,5 @@
 import axios from "axios";
+import https from "https";
 import * as cheerio from "cheerio";
 import { ExchangeRate } from "@/utils/definitions";
 
@@ -31,6 +32,30 @@ export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
   }
 
   return rates;
+}
+
+export async function getDsbExchangeRates(): Promise<ExchangeRate[]> {
+  const url = "https://service.dsbtools.com/exchange/rates";
+  const { data } = await axios.get(url, {
+    httpAgent: new https.Agent({ rejectUnauthorized: false }),
+  });
+
+  const item = data?.valuta;
+
+  if (!item) throw new Error("No exchange rate data received from DSB");
+
+  return [
+    {
+      currency: "USD",
+      buy: item.USD.buy,
+      sell: item.USD.sell,
+    },
+    {
+      currency: "EUR",
+      buy: item.EUR.buy,
+      sell: item.EUR.sell,
+    },
+  ];
 }
 
 export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
