@@ -7,6 +7,7 @@ import {
 import {
   getCBVSExchangeRates,
   getCMEExchangeRates,
+  getDsbExchangeRates,
   getFinabankExchangeRates,
   getHakrinbankExchangeRates,
 } from "./providers";
@@ -27,6 +28,8 @@ const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
       return await getCMEExchangeRates();
     case "Hakrinbank":
       return await getHakrinbankExchangeRates();
+    case "De Surinaamsche Bank (DSB)":
+      return await getDsbExchangeRates();
     default:
       throw new Error(`Bank ${bank_name} not found`);
   }
@@ -59,6 +62,11 @@ export const getCurrentRates = async (): Promise<BankRates[]> => {
       name: "Hakrinbank",
       logo: "/logos/hakrinbank.jpg",
       link: "https://www.hakrinbank.com",
+    },
+    {
+      name: "De Surinaamsche Bank (DSB)",
+      logo: "/logos/dsb.png",
+      link: "https://www.dsb.sr",
     },
   ];
 
