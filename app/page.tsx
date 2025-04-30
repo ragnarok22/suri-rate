@@ -1,9 +1,10 @@
 import ExchangeRateGrid from "@/components/exchange-rate-grid";
 import Footer from "@/components/footer";
-import { getCurrentRates, getLastFetchTime } from "@/utils/places";
+import Loading from "@/components/loading";
+import { getLastFetchTime } from "@/utils/places";
+import { Suspense } from "react";
 
 export default async function Home() {
-  const bankRates = await getCurrentRates();
   const lastUpdated = getLastFetchTime();
 
   return (
@@ -31,7 +32,9 @@ export default async function Home() {
           </p>
         </div>
 
-        <ExchangeRateGrid bankRates={bankRates} />
+        <Suspense fallback={<Loading />}>
+          <ExchangeRateGrid />
+        </Suspense>
       </main>
 
       <Footer lastUpdated={lastUpdated} />

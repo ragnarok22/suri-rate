@@ -1,11 +1,11 @@
 import type { BankRates } from "@/utils/definitions";
 import ExchangeRateCard from "./exchange-rate-card";
+import { getCurrentRates } from "@/utils/places";
 
-interface ExchangeRateGridProps {
-  bankRates: BankRates[];
-}
+interface ExchangeRateGridProps {}
 
-export default function ExchangeRateGrid({ bankRates }: ExchangeRateGridProps) {
+export default async function ExchangeRateGrid({}: ExchangeRateGridProps) {
+  const bankRates = await getCurrentRates();
   // Find best rates
   const bestRates = findBestRates(bankRates);
 
