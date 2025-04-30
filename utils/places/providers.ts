@@ -100,7 +100,19 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
   } catch (e) {
     const error = e as AxiosError;
     console.error("Error getting CBVS info:", error.message);
-    throw e;
+    return [
+      {
+        currency: "USD",
+        buy: "0.00",
+        sell: "0.00",
+      },
+      {
+        currency: "EUR",
+        buy: "0.00",
+        sell: "0.00",
+      },
+    ];
+    // throw e;
   }
 }
 
