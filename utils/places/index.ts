@@ -38,9 +38,13 @@ const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
 export const getCurrentRates = async (): Promise<BankRates[]> => {
   const now = Date.now();
 
+  console.log(now);
+  console.log(lastFetchTime);
   if (cachedRates && lastFetchTime && now - lastFetchTime < CACHE_DURATION) {
+    console.log("using cache");
     return cachedRates;
   }
+  console.log("using real data info");
 
   const bankInfos: BankInfo[] = [
     {

@@ -42,7 +42,7 @@ function PostHogPageView() {
     }
   }, [pathname, searchParams, posthog]);
 
-  return null;
+  return <div />;
 }
 
 // Wrap PostHogPageView in Suspense to avoid the useSearchParams usage above
