@@ -74,6 +74,7 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://www.cbvs.sr";
   try {
     const { data } = await axios.get(url);
+    console.log("data obtain");
     const $ = cheerio.load(data);
 
     const rates: ExchangeRate[] = [];
@@ -98,12 +99,7 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
     return rates;
   } catch (e) {
     const error = e as AxiosError;
-    console.error(
-      "Error getting CBVS info:",
-      error.cause,
-      error.name,
-      error.response?.data,
-    );
+    console.error("Error getting CBVS info:", error.message);
     throw e;
   }
 }
