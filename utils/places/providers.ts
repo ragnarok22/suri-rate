@@ -98,7 +98,12 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
     return rates;
   } catch (e) {
     const error = e as AxiosError;
-    console.error("Error getting CBVS info:", error.message);
+    console.error(
+      "Error getting CBVS info:",
+      error.cause,
+      error.name,
+      error.response?.data,
+    );
     throw e;
   }
 }
