@@ -1,4 +1,5 @@
 import ExchangeRateGrid from "@/components/exchange-rate-grid";
+import ExchangeSkeleton from "@/components/exchange-skeleton";
 import Footer from "@/components/footer";
 import Loading from "@/components/loading";
 import { getLastFetchTime } from "@/utils/places";
@@ -32,7 +33,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<ExchangeSkeleton />}>
           <ExchangeRateGrid />
         </Suspense>
       </main>
