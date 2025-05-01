@@ -240,11 +240,11 @@ export async function getRepublicBankExchangeRates(): Promise<ExchangeRate[]> {
             const sell = cells[3]; // Sell (column index 3 in the table)
 
             if (currency === "USD") {
-              usdBuy = parseFloat(buy).toFixed(4);
-              usdSell = parseFloat(sell).toFixed(4);
+              usdBuy = parseFloat(buy).toFixed(2);
+              usdSell = parseFloat(sell).toFixed(2);
             } else if (currency === "EURO" || currency === "EUR") {
-              eurBuy = parseFloat(buy).toFixed(4);
-              eurSell = parseFloat(sell).toFixed(4);
+              eurBuy = parseFloat(buy).toFixed(2);
+              eurSell = parseFloat(sell).toFixed(2);
             }
           });
       }
