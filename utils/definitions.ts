@@ -3,7 +3,8 @@ export type BankName =
   | "Central Bank"
   | "Central Money Exchange"
   | "Hakrinbank"
-  | "De Surinaamsche Bank (DSB)";
+  | "De Surinaamsche Bank (DSB)"
+  | "Republic Bank";
 
 export type Currency = "USD" | "EUR";
 

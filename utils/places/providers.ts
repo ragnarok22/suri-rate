@@ -202,3 +202,65 @@ export async function getHakrinbankExchangeRates(): Promise<ExchangeRate[]> {
     throw e;
   }
 }
+
+export async function getRepublicBankExchangeRates(): Promise<ExchangeRate[]> {
+  const url = "https://www.republicbanksr.com";
+
+  try {
+    const { data: html } = await axios.get(url);
+    const $ = cheerio.load(html);
+
+    let usdBuy = "";
+    let usdSell = "";
+    let eurBuy = "";
+    let eurSell = "";
+
+    $("table").each((_, table) => {
+      const headers = $(table)
+        .find("thead tr th")
+        .map((_, th) => $(th).text().trim().toLowerCase())
+        .get();
+
+      // Look for relevant table
+      if (
+        headers.includes("abbr.") &&
+        headers.includes("buy (cash)") &&
+        headers.includes("sell")
+      ) {
+        $(table)
+          .find("tbody tr")
+          .each((_, row) => {
+            const cells = $(row)
+              .find("td")
+              .map((_, td) => $(td).text().trim())
+              .get();
+
+            const currency = cells[0]?.toUpperCase();
+            const buy = cells[1]; // Buy (Cash)
+            const sell = cells[3]; // Sell (column index 3 in the table)
+
+            if (currency === "USD") {
+              usdBuy = parseFloat(buy).toFixed(4);
+              usdSell = parseFloat(sell).toFixed(4);
+            } else if (currency === "EURO" || currency === "EUR") {
+              eurBuy = parseFloat(buy).toFixed(4);
+              eurSell = parseFloat(sell).toFixed(4);
+            }
+          });
+      }
+    });
+
+    if (!usdBuy || !usdSell || !eurBuy || !eurSell) {
+      throw new Error("No exchange rate data found on Republic Bank page");
+    }
+
+    return [
+      { currency: "USD", buy: usdBuy, sell: usdSell },
+      { currency: "EUR", buy: eurBuy, sell: eurSell },
+    ];
+  } catch (e) {
+    const error = e as AxiosError;
+    console.error("Error getting Republic Bank exchange rates:", error.message);
+    throw e;
+  }
+}

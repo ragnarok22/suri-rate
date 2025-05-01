@@ -10,6 +10,7 @@ import {
   getDsbExchangeRates,
   getFinabankExchangeRates,
   getHakrinbankExchangeRates,
+  getRepublicBankExchangeRates,
 } from "./providers";
 
 let cachedRates: BankRates[] | null = null;
@@ -32,6 +33,8 @@ const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
       return await getHakrinbankExchangeRates();
     case "De Surinaamsche Bank (DSB)":
       return await getDsbExchangeRates();
+    case "Republic Bank":
+      return await getRepublicBankExchangeRates();
     default:
       throw new Error(`Bank ${bank_name} not found`);
   }
@@ -71,6 +74,11 @@ export const getCurrentRates = async (): Promise<BankRates[]> => {
       name: "De Surinaamsche Bank (DSB)",
       logo: "/logos/dsb.png",
       link: "https://www.dsb.sr",
+    },
+    {
+      name: "Republic Bank",
+      logo: "/logos/republic-bank.jpg",
+      link: "https://www.republicbanksr.com",
     },
   ];
 
