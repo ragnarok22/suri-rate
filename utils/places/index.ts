@@ -14,7 +14,9 @@ import {
 
 let cachedRates: BankRates[] | null = null;
 let lastFetchTime: number | null = null;
-const CACHE_DURATION = 1000 * 60 * 60 * 6; // 6 hours
+const DEFAULT_CACHE_DURATION = 1000 * 60 * 60 * 6; // 6 hours
+const CACHE_DURATION =
+  Number(process.env.NEXT_PUBLIC_CACHE_DURATION) || DEFAULT_CACHE_DURATION;
 
 export const getLastFetchTime = (): number | null => lastFetchTime;
 
@@ -38,8 +40,6 @@ const retrieveRates = async (bank_name: BankName): Promise<ExchangeRate[]> => {
 export const getCurrentRates = async (): Promise<BankRates[]> => {
   const now = Date.now();
 
-  console.log(now);
-  console.log(lastFetchTime);
   if (cachedRates && lastFetchTime && now - lastFetchTime < CACHE_DURATION) {
     console.log("using cache");
     return cachedRates;

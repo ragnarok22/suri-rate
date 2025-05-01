@@ -74,7 +74,6 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://www.cbvs.sr";
   try {
     const { data } = await axios.get(url);
-    console.log("data obtain");
     const $ = cheerio.load(data);
 
     const rates: ExchangeRate[] = [];
