@@ -1,18 +1,9 @@
-"use client";
-
-import type { BankRates } from "@/utils/definitions";
 import ExchangeRateCard from "./exchange-rate-card";
 import { getCurrentRates } from "@/utils/places";
 import { findBestRates } from "@/utils";
-import { useEffect, useState } from "react";
 
-export default function ExchangeRateGrid() {
-  const [bankRates, setBankRates] = useState<BankRates[]>([]);
-
-  useEffect(() => {
-    getCurrentRates().then((info) => setBankRates(info));
-  }, []);
-
+export default async function ExchangeRateGrid() {
+  const bankRates = await getCurrentRates();
   // Find best rates
   const bestRates = findBestRates(bankRates);
 
