@@ -1,9 +1,18 @@
+"use client";
+
 import type { BankRates } from "@/utils/definitions";
 import ExchangeRateCard from "./exchange-rate-card";
 import { getCurrentRates } from "@/utils/places";
+import { findBestRates } from "@/utils";
+import { useEffect, useState } from "react";
 
-export default async function ExchangeRateGrid() {
-  const bankRates = await getCurrentRates();
+export default function ExchangeRateGrid() {
+  const [bankRates, setBankRates] = useState<BankRates[]>([]);
+
+  useEffect(() => {
+    getCurrentRates().then((info) => setBankRates(info));
+  }, []);
+
   // Find best rates
   const bestRates = findBestRates(bankRates);
 
@@ -18,35 +27,4 @@ export default async function ExchangeRateGrid() {
       ))}
     </div>
   );
-}
-
-// Helper function to find best rates
-function findBestRates(allRates: BankRates[]): {
-  bestBuyUSD: string;
-  bestSellUSD: string;
-  bestBuyEUR: string;
-  bestSellEUR: string;
-} {
-  let bestBuyUSD = "0";
-  let bestSellUSD = "999999";
-  let bestBuyEUR = "0";
-  let bestSellEUR = "999999";
-
-  allRates.forEach(({ rates }) => {
-    rates.forEach((rate) => {
-      if (rate.currency === "USD") {
-        if (Number.parseFloat(rate.buy) > Number.parseFloat(bestBuyUSD))
-          bestBuyUSD = rate.buy;
-        if (Number.parseFloat(rate.sell) < Number.parseFloat(bestSellUSD))
-          bestSellUSD = rate.sell;
-      } else if (rate.currency === "EUR") {
-        if (Number.parseFloat(rate.buy) > Number.parseFloat(bestBuyEUR))
-          bestBuyEUR = rate.buy;
-        if (Number.parseFloat(rate.sell) < Number.parseFloat(bestSellEUR))
-          bestSellEUR = rate.sell;
-      }
-    });
-  });
-
-  return { bestBuyUSD, bestSellUSD, bestBuyEUR, bestSellEUR };
 }
