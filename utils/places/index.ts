@@ -76,8 +76,19 @@ export const getCurrentRates = async (): Promise<BankRates[]> => {
 
   const bankRates: BankRates[] = [];
   for (const bankInfo of bankInfos) {
-    const rates = await retrieveRates(bankInfo.name);
-    bankRates.push({ ...bankInfo, rates });
+    try {
+      const rates = await retrieveRates(bankInfo.name);
+      bankRates.push({ ...bankInfo, rates });
+    } catch (e) {
+      console.error(e);
+      bankRates.push({
+        ...bankInfo,
+        rates: [
+          { currency: "USD", buy: "0.00", sell: "0.00" },
+          { currency: "EUR", buy: "0.00", sell: "0.00" },
+        ],
+      });
+    }
   }
 
   cachedRates = bankRates;
