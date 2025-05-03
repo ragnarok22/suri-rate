@@ -1,5 +1,4 @@
 import ExchangeRateCard from "./exchange-rate-card";
-import { getCurrentRates } from "@/utils/places";
 import { findBestRates } from "@/utils";
 import { getRates } from "@/utils/data";
 
