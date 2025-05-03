@@ -1,11 +1,14 @@
 interface FooterProps {
-  lastUpdated: number | null;
+  lastUpdated: string | undefined;
 }
 const Footer = ({ lastUpdated }: FooterProps) => {
   const formattedDate = lastUpdated
     ? new Date(lastUpdated).toLocaleString("en-US", {
-        dateStyle: "medium",
-        timeStyle: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
         timeZone: "America/Paramaribo",
       })
     : "Not yet updated";
