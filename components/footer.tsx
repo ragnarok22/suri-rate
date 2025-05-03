@@ -1,5 +1,5 @@
 interface FooterProps {
-  lastUpdated: string | null;
+  lastUpdated: string | undefined;
 }
 const Footer = ({ lastUpdated }: FooterProps) => {
   const formattedDate = lastUpdated
