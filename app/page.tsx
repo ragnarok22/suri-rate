@@ -1,11 +1,13 @@
 import ExchangeRateGrid from "@/components/exchange-rate-grid";
 import ExchangeSkeleton from "@/components/exchange-skeleton";
 import Footer from "@/components/footer";
-import { getLastFetchTime } from "@/utils/places";
+import { getRates } from "@/utils/data";
 import { Suspense } from "react";
 
 export default async function Home() {
-  const lastUpdated = getLastFetchTime();
+  const info = await getRates();
+  const updatedAt = info?.updatedAt;
+  const rates = info?.rates || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col">
@@ -33,11 +35,11 @@ export default async function Home() {
         </div>
 
         <Suspense fallback={<ExchangeSkeleton />}>
-          <ExchangeRateGrid />
+          <ExchangeRateGrid rates={rates} />
         </Suspense>
       </main>
 
-      <Footer lastUpdated={lastUpdated} />
+      <Footer lastUpdated={updatedAt} />
     </div>
   );
 }
