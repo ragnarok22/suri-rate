@@ -1,5 +1,4 @@
-import { saveRates } from "@/utils/data";
-import { getCurrentRates } from "@/utils/places";
+import { getRates } from "@/utils/data";
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get("authorization");
@@ -9,8 +8,6 @@ export async function GET(request: Request) {
     });
   }
 
-  const rates = await getCurrentRates();
-  await saveRates(rates);
-
-  return Response.json({ updated: true });
+  const rates = await getRates();
+  return Response.json({ rates });
 }
