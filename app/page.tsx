@@ -4,6 +4,8 @@ import Footer from "@/components/footer";
 import { getRates } from "@/utils/data";
 import { Suspense } from "react";
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const info = await getRates();
   const updatedAt = info?.updatedAt;
