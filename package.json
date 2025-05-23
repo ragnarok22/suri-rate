@@ -15,18 +15,18 @@
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
-    "posthog-js": "^1.242.1",
+    "posthog-js": "^1.246.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "redis": "^5.0.1"
+    "redis": "^5.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.7",
-    "@types/node": "^20.17.47",
-    "@types/react": "^19.1.4",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
-    "eslint": "^9.26.0",
+    "eslint": "^9.27.0",
     "eslint-config-next": "15.3.1",
     "eslint-config-prettier": "^10.1.5",
     "prettier": "^3.5.3",
