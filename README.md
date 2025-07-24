@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SuriRate
+
+SuriRate is a small PWA built with [Next.js](https://nextjs.org/) that compares daily USD and EUR exchange rates from several banks in Suriname.  Rates are fetched on a schedule and cached so they are always available, even offline.
+
+## Features
+
+- Scrapes exchange rates from Finabank, the Central Bank (CBvS), Central Money Exchange, Hakrinbank, De Surinaamsche Bank (DSB) and Republic Bank.
+- Rates are refreshed daily via a Vercel cron job and stored in Redis for quick retrieval.
+- Offline support through `next-pwa`.
+- Optional analytics integration with PostHog.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install      # install dependencies
+pnpm dev          # start the development server
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
+Create a `.env.local` file and provide the following variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+REDIS_URL=redis://localhost:6379   # connection string for Redis
+ENABLE_EXPERIMENTAL_COREPACK=1     # required by Next.js when using pnpm
+CRON_SECRET=<secret-token>         # token used to call the cron endpoints
+NEXT_PUBLIC_CACHE_DURATION=86400   # cache lifetime in seconds
+NEXT_PUBLIC_POSTHOG_KEY=           # optional, PostHog project key
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com  # optional
+```
 
-## Learn More
+## Updating exchange rates
 
-To learn more about Next.js, take a look at the following resources:
+The endpoint `/api/cron/rates` stores new rates when called with `Authorization: Bearer $CRON_SECRET`.  A scheduled job in `vercel.json` triggers this automatically every day.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+pnpm test --run
+```
 
-## Deploy on Vercel
+Runs the [Vitest](https://vitest.dev/) suite.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project is configured for deployment on [Vercel](https://vercel.com/) and will generate a PWA with offline support.
+
+Rates provided by this project are for informational purposes only.  Always check with your bank for official values.
