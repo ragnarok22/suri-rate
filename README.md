@@ -1,5 +1,7 @@
 # SuriRate
 
+[![CI](https://github.com/ragnarok22/suri-rate/actions/workflows/test.yml/badge.svg)](https://github.com/ragnarok22/suri-rate/actions/workflows/test.yml)
+
 SuriRate is a small PWA built with [Next.js](https://nextjs.org/) that compares daily USD and EUR exchange rates from several banks in Suriname.  Rates are fetched on a schedule and cached so they are always available, even offline.
 
 ## Features
