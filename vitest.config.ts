@@ -8,9 +8,6 @@ export default defineConfig({
   test: {
     environment: 'node',
   },
-  css: {
-    postcss: null,
-  },
   resolve: {
     alias: {
       '@': root,
