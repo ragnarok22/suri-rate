@@ -23,7 +23,9 @@ Create a `.env.local` file and provide the following variables:
 
 ```
 REDIS_URL=redis://localhost:6379   # connection string for Redis
+ENABLE_EXPERIMENTAL_COREPACK=1     # required by Next.js when using pnpm
 CRON_SECRET=<secret-token>         # token used to call the cron endpoints
+NEXT_PUBLIC_CACHE_DURATION=86400   # cache lifetime in seconds
 NEXT_PUBLIC_POSTHOG_KEY=           # optional, PostHog project key
 NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com  # optional
 ```
@@ -35,7 +37,7 @@ The endpoint `/api/cron/rates` stores new rates when called with `Authorization:
 ## Tests
 
 ```
-pnpm test
+pnpm test --run
 ```
 
 Runs the [Vitest](https://vitest.dev/) suite.
