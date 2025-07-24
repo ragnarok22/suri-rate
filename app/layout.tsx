@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { PostHogProvider } from "./providers";
 import "./globals.css";
 import GitHubLink from "@/components/github";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = { className: "" };
 
 export const metadata: Metadata = {
   title: "SuriRate – Compare Suriname's Exchange Rates in One Place",
   description:
     "SuriRate helps you find the best exchange rates in Suriname by comparing USD and EUR rates from Finabank, the Central Bank, and CME – all in one place, updated daily.",
+  manifest: "/manifest.json",
+  themeColor: "#0f172a",
+  appleWebApp: {
+    capable: true,
+    title: "SuriRate",
+    statusBarStyle: "default",
+  },
   metadataBase: new URL("https://suri-rate.ragnarok22.dev"),
   openGraph: {
     title: "SuriRate – Compare Suriname's Exchange Rates in One Place",
