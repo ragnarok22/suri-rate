@@ -3,7 +3,7 @@
 [![CI](https://github.com/ragnarok22/suri-rate/actions/workflows/test.yml/badge.svg)](https://github.com/ragnarok22/suri-rate/actions/workflows/test.yml)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ragnarok22/suri-rate)
 
-SuriRate is a small PWA built with [Next.js](https://nextjs.org/) that compares daily USD and EUR exchange rates from several banks in Suriname.  Rates are fetched on a schedule and cached so they are always available, even offline.
+SuriRate is a small PWA built with [Next.js](https://nextjs.org/) that compares daily USD and EUR exchange rates from several banks in Suriname. Rates are fetched on a schedule and cached so they are always available, even offline.
 
 ## Features
 
@@ -22,6 +22,7 @@ pnpm dev          # start the development server
 Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ### Environment variables
+
 Create a `.env.local` file and provide the following variables:
 
 ```
@@ -35,7 +36,7 @@ NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com  # optional
 
 ## Updating exchange rates
 
-The endpoint `/api/cron/rates` stores new rates when called with `Authorization: Bearer $CRON_SECRET`.  A scheduled job in `vercel.json` triggers this automatically every day.
+The endpoint `/api/cron/rates` stores new rates when called with `Authorization: Bearer $CRON_SECRET`. A scheduled job in `vercel.json` triggers this automatically every day.
 
 ## Tests
 
@@ -49,4 +50,4 @@ Runs the [Vitest](https://vitest.dev/) suite.
 
 The project is configured for deployment on [Vercel](https://vercel.com/) and will generate a PWA with offline support.
 
-Rates provided by this project are for informational purposes only.  Always check with your bank for official values.
+Rates provided by this project are for informational purposes only. Always check with your bank for official values.
