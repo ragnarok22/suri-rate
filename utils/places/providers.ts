@@ -19,16 +19,16 @@ export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
     if (usdMatch) {
       rates.push({
         currency: "USD",
-        buy: usdMatch[1].replace(",", "."),
-        sell: usdMatch[2].replace(",", "."),
+        buy: parseFloat(usdMatch[1].replace(",", ".")).toFixed(2),
+        sell: parseFloat(usdMatch[2].replace(",", ".")).toFixed(2),
       });
     }
 
     if (eurMatch) {
       rates.push({
         currency: "EUR",
-        buy: eurMatch[1].replace(",", "."),
-        sell: eurMatch[2].replace(",", "."),
+        buy: parseFloat(eurMatch[1].replace(",", ".")).toFixed(2),
+        sell: parseFloat(eurMatch[2].replace(",", ".")).toFixed(2),
       });
     }
 
