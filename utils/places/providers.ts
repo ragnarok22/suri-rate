@@ -43,7 +43,7 @@ export async function getDsbExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://service.dsbtools.com/exchange/rates";
   try {
     const response = await api(url);
-    const data = await response.json();
+    const data = await JSON.parse(response.html);
 
     const item = data?.valuta;
 
