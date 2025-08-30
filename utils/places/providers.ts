@@ -33,7 +33,7 @@ export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
     }
 
     return rates;
-  } catch (e) {
+  } catch (e: any) {
     console.error("Error getting Finabank info:", e.message);
     throw e;
   }
@@ -61,7 +61,7 @@ export async function getDsbExchangeRates(): Promise<ExchangeRate[]> {
         sell: item.EUR.sell,
       },
     ];
-  } catch (e) {
+  } catch (e: any) {
     console.error("Error getting DSB info:", e.message);
     throw e;
   }
@@ -94,7 +94,7 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
       });
 
     return rates;
-  } catch (e) {
+  } catch (e: any) {
     console.error("Error getting CBVS info:", e.message);
     return [
       {
@@ -142,7 +142,7 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
         sell: item.SaleEuroExchangeRate.toFixed(2),
       },
     ];
-  } catch (e) {
+  } catch (e: any) {
     console.error("Error getting CME info:", e.message);
     throw e;
   }
@@ -199,7 +199,7 @@ export async function getHakrinbankExchangeRates(): Promise<ExchangeRate[]> {
       { currency: "USD", buy: usdBuy, sell: usdSell },
       { currency: "EUR", buy: eurBuy, sell: eurSell },
     ];
-  } catch (e) {
+  } catch (e: any) {
     console.error("Error getting Hakrinbank info:", e.message);
     throw e;
   }
@@ -260,7 +260,7 @@ export async function getRepublicBankExchangeRates(): Promise<ExchangeRate[]> {
       { currency: "USD", buy: usdBuy, sell: usdSell },
       { currency: "EUR", buy: eurBuy, sell: eurSell },
     ];
-  } catch (e) {
+  } catch (e: any) {
     console.error("Error getting Republic Bank exchange rates:", e.message);
     throw e;
   }
