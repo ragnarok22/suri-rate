@@ -1,13 +1,13 @@
-import axios, { AxiosError } from "axios";
-import https from "https";
 import * as cheerio from "cheerio";
 import { ExchangeRate } from "@/utils/definitions";
+import { api } from "@/utils";
+import axios from "axios";
 
 export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://www.finabanknv.com/service-desk/koersen-rates/";
   try {
-    const { data } = await axios.get(url);
-    const $ = cheerio.load(data);
+    const response = await api(url);
+    const $ = cheerio.load(response.html);
 
     const rates: ExchangeRate[] = [];
 
@@ -34,8 +34,7 @@ export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
 
     return rates;
   } catch (e) {
-    const error = e as AxiosError;
-    console.error("Error getting Finabank info:", error.message);
+    console.error("Error getting Finabank info:", e.message);
     throw e;
   }
 }
@@ -43,9 +42,8 @@ export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
 export async function getDsbExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://service.dsbtools.com/exchange/rates";
   try {
-    const { data } = await axios.get(url, {
-      httpAgent: new https.Agent({ rejectUnauthorized: false }),
-    });
+    const response = await api(url);
+    const data = await response.json();
 
     const item = data?.valuta;
 
@@ -64,8 +62,7 @@ export async function getDsbExchangeRates(): Promise<ExchangeRate[]> {
       },
     ];
   } catch (e) {
-    const error = e as AxiosError;
-    console.error("Error getting DSB info:", error.message);
+    console.error("Error getting DSB info:", e.message);
     throw e;
   }
 }
@@ -73,7 +70,8 @@ export async function getDsbExchangeRates(): Promise<ExchangeRate[]> {
 export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://www.cbvs.sr";
   try {
-    const { data } = await axios.get(url);
+    const response = await api(url);
+    const data = response.html;
     const $ = cheerio.load(data);
 
     const rates: ExchangeRate[] = [];
@@ -97,8 +95,7 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
 
     return rates;
   } catch (e) {
-    const error = e as AxiosError;
-    console.error("Error getting CBVS info:", error.message);
+    console.error("Error getting CBVS info:", e.message);
     return [
       {
         currency: "USD",
@@ -146,8 +143,7 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
       },
     ];
   } catch (e) {
-    const error = e as AxiosError;
-    console.error("Error getting CME info:", error.message);
+    console.error("Error getting CME info:", e.message);
     throw e;
   }
 }
@@ -155,7 +151,7 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
 export async function getHakrinbankExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://www.hakrinbank.com/en/private/foreign-exchange/";
   try {
-    const { data: html } = await axios.get(url);
+    const { html } = await api(url);
     const $ = cheerio.load(html);
 
     let usdBuy = "";
@@ -204,8 +200,7 @@ export async function getHakrinbankExchangeRates(): Promise<ExchangeRate[]> {
       { currency: "EUR", buy: eurBuy, sell: eurSell },
     ];
   } catch (e) {
-    const error = e as AxiosError;
-    console.error("Error getting Hakrinbank info:", error.message);
+    console.error("Error getting Hakrinbank info:", e.message);
     throw e;
   }
 }
@@ -214,7 +209,7 @@ export async function getRepublicBankExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://www.republicbanksr.com";
 
   try {
-    const { data: html } = await axios.get(url);
+    const { html } = await api(url);
     const $ = cheerio.load(html);
 
     let usdBuy = "";
@@ -266,8 +261,7 @@ export async function getRepublicBankExchangeRates(): Promise<ExchangeRate[]> {
       { currency: "EUR", buy: eurBuy, sell: eurSell },
     ];
   } catch (e) {
-    const error = e as AxiosError;
-    console.error("Error getting Republic Bank exchange rates:", error.message);
+    console.error("Error getting Republic Bank exchange rates:", e.message);
     throw e;
   }
 }
