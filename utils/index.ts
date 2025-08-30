@@ -35,12 +35,14 @@ const readStream = async (
  * @returns The fetch API response.
  */
 export const api = async (
-  url: string,
+  url: string | URL,
+  init?: RequestInit,
 ): Promise<{ html: string } & Response> => {
   const response = await fetch(url, {
     next: {
       revalidate: EXPIRATION,
     },
+    ...init,
   });
 
   let html = "";

@@ -1,10 +1,9 @@
-const axios = require("axios");
 const cheerio = require("cheerio");
 
 (async () => {
   try {
     // Step 1: Fetch the HTML content
-    const { data: html } = await axios.get("https://www.republicbanksr.com");
+    const { html } = await api("https://www.republicbanksr.com");
 
     // Step 2: Load the HTML into Cheerio
     const $ = cheerio.load(html);

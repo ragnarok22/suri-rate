@@ -1,7 +1,6 @@
 import * as cheerio from "cheerio";
 import { ExchangeRate } from "@/utils/definitions";
 import { api } from "@/utils";
-import axios from "axios";
 
 export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://www.finabanknv.com/service-desk/koersen-rates/";
@@ -124,8 +123,12 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
         "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
     };
-    const { data } = await axios.post(url, headers);
+    const { html } = await api(url, {
+      headers,
+      method: "POST",
+    });
 
+    const data = JSON.parse(html);
     const item = data?.[0];
 
     if (!item) throw new Error("No exchange rate data received from CME");
