@@ -13,9 +13,5 @@ export default defineConfig({
       threads: { singleThread: true },
     },
   },
-  resolve: {
-    alias: {
-      "@": root,
-    },
-  },
+  resolve: {},
 });

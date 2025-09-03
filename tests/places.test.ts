@@ -1,9 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { getCurrentRates } from "../utils/places";
-import {
-  getDsbExchangeRates,
-  getHakrinbankExchangeRates,
-} from "../utils/places/providers";
+import { getDsbExchangeRates } from "../utils/places/providers";
 import type { ExchangeRate } from "../utils/definitions";
 import axios from "axios";
 
