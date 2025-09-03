@@ -1,21 +1,19 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { cn, findBestRates } from "../utils";
-import { saveRates, getRates } from "../utils/data";
-import type { BankRates } from "../utils/definitions";
+import { getRates } from "../utils/data";
+import type { BankRates, ExchangeRate } from "../utils/definitions";
 
-vi.mock("../utils/redis", () => {
-  const store = new Map<string, string>();
-  return {
-    getRedisClient: async () => ({
-      isOpen: true,
-      connect: vi.fn(),
-      set: vi.fn((key: string, value: string) => {
-        store.set(key, value);
-      }),
-      get: vi.fn((key: string) => store.get(key)),
-    }),
-  };
-});
+// Mock places to keep tests offline and deterministic
+const mockRatesList: ExchangeRate[] = [
+  { currency: "USD", buy: "1", sell: "2" },
+  { currency: "EUR", buy: "3", sell: "4" },
+];
+
+vi.mock("../utils/places", () => ({
+  getCurrentRates: vi.fn(async () => [
+    { name: "Finabank", logo: "", link: "", rates: mockRatesList },
+  ] satisfies BankRates[]),
+}));
 
 describe("cn", () => {
   it("joins truthy class names with spaces", () => {
@@ -60,23 +58,11 @@ describe("findBestRates", () => {
   });
 });
 
-describe("saveRates and getRates", () => {
-  const rates: BankRates[] = [
-    {
-      name: "Finabank",
-      logo: "",
-      link: "",
-      rates: [
-        { currency: "USD", buy: "1", sell: "2" },
-        { currency: "EUR", buy: "3", sell: "4" },
-      ],
-    },
-  ];
-
-  it("persists and retrieves rates using redis client", async () => {
-    await saveRates(rates);
+describe("getRates", () => {
+  it("returns current rates aggregated from providers", async () => {
     const result = await getRates();
-    expect(result?.rates).toEqual(rates);
-    expect(result?.updatedAt).toBeDefined();
+    expect(result?.rates).toEqual([
+      { name: "Finabank", logo: "", link: "", rates: mockRatesList },
+    ]);
   });
 });
