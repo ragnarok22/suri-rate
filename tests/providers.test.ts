@@ -2,10 +2,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ExchangeRate } from "../utils/definitions";
 
 // Mock the api() helper used by provider functions to avoid network
-const apiMock = vi.fn<
-  [string | URL, RequestInit?],
-  Promise<{ html: string }>
->(() => Promise.resolve({ html: "" }));
+const apiMock = vi.fn<[string | URL, RequestInit?], Promise<{ html: string }>>(
+  () => Promise.resolve({ html: "" }),
+);
 
 vi.mock("@/utils", () => ({
   api: (...args: any[]) => apiMock(...(args as [string | URL, RequestInit?])),
@@ -41,7 +40,9 @@ describe("providers: parsing", () => {
 
   it("parses DSB JSON response", async () => {
     apiMock.mockResolvedValue({
-      html: JSON.stringify({ valuta: { USD: { buy: "1", sell: "2" }, EUR: { buy: "3", sell: "4" } } }),
+      html: JSON.stringify({
+        valuta: { USD: { buy: "1", sell: "2" }, EUR: { buy: "3", sell: "4" } },
+      }),
     });
     const rates = await getDsbExchangeRates();
     expect(rates).toEqual<ExchangeRate[]>([

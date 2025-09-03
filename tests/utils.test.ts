@@ -10,9 +10,12 @@ const mockRatesList: ExchangeRate[] = [
 ];
 
 vi.mock("../utils/places", () => ({
-  getCurrentRates: vi.fn(async () => [
-    { name: "Finabank", logo: "", link: "", rates: mockRatesList },
-  ] satisfies BankRates[]),
+  getCurrentRates: vi.fn(
+    async () =>
+      [
+        { name: "Finabank", logo: "", link: "", rates: mockRatesList },
+      ] satisfies BankRates[],
+  ),
 }));
 
 describe("cn", () => {
