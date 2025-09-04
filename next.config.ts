@@ -53,7 +53,8 @@ const pwaPlugin = withPWA({
     // Fonts – CacheFirst (immutable)
     {
       urlPattern: ({ request, url }) =>
-        request.destination === "font" || /\.(?:woff2?|ttf|otf)$/.test(url.pathname),
+        request.destination === "font" ||
+        /\.(?:woff2?|ttf|otf)$/.test(url.pathname),
       handler: "CacheFirst",
       options: {
         cacheName: "fonts",
