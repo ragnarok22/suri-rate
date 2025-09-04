@@ -8,12 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const info = await getRates();
-  // const updatedAt = info?.updatedAt;
-  const updatedAt = new Date().toLocaleString("en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const updatedAt = info?.updatedAt;
   const rates = info?.rates || [];
 
   return (
