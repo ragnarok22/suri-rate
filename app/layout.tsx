@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { PostHogProvider } from "./providers";
 import "./globals.css";
 import GitHubLink from "@/components/github";
+import OfflineBanner from "@/components/offline-banner";
 
 const inter = { className: "" };
 
@@ -55,6 +56,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
+        <OfflineBanner />
         <GitHubLink />
         <PostHogProvider>{children}</PostHogProvider>
       </body>
