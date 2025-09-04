@@ -31,8 +31,6 @@ export default function PwaPrompts() {
   );
   const reloading = useRef(false);
 
-  
-
   const isInstalled = useMemo(() => {
     if (typeof window === "undefined") return false;
     // iOS Safari

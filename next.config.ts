@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 
+// Minimal types to avoid implicit any in runtimeCaching matchers
+type UrlMatch = { request: Request; url: URL };
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL("https://finabanknv.com/**")],
@@ -23,7 +26,7 @@ const pwaPlugin = withPWA({
   runtimeCaching: [
     // HTML navigations – try network first, fallback to cache/offline
     {
-      urlPattern: ({ request }) => request.mode === "navigate",
+      urlPattern: ({ request }: UrlMatch) => request.mode === "navigate",
       handler: "NetworkFirst",
       options: {
         cacheName: "html-navigations",
@@ -33,7 +36,7 @@ const pwaPlugin = withPWA({
     },
     // Static assets (JS/CSS) – SWR
     {
-      urlPattern: ({ request }) =>
+      urlPattern: ({ request }: UrlMatch) =>
         request.destination === "script" || request.destination === "style",
       handler: "StaleWhileRevalidate",
       options: {
@@ -43,7 +46,7 @@ const pwaPlugin = withPWA({
     },
     // Images – SWR
     {
-      urlPattern: ({ request }) => request.destination === "image",
+      urlPattern: ({ request }: UrlMatch) => request.destination === "image",
       handler: "StaleWhileRevalidate",
       options: {
         cacheName: "images",
@@ -52,7 +55,7 @@ const pwaPlugin = withPWA({
     },
     // Fonts – CacheFirst (immutable)
     {
-      urlPattern: ({ request, url }) =>
+      urlPattern: ({ request, url }: UrlMatch) =>
         request.destination === "font" ||
         /\.(?:woff2?|ttf|otf)$/.test(url.pathname),
       handler: "CacheFirst",
