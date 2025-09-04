@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SuriRate is a Next.js 15 PWA that compares USD and EUR exchange rates from major Surinamese banks. It scrapes rates from 6 banks (Finabank, Central Bank, CME, Hakrinbank, DSB, Republic Bank), caches them in Redis, and displays them in a comparative interface with offline support.
+SuriRate is a Next.js 15 PWA that compares USD and EUR exchange rates from major Surinamese banks. It scrapes rates from 6 banks (Finabank, Central Bank, CME, Hakrinbank, DSB, Republic Bank), caches them using Next.js revalidation, and displays them in a comparative interface with offline support.
 
 ## Development Commands
 
@@ -29,7 +29,7 @@ SuriRate is a Next.js 15 PWA that compares USD and EUR exchange rates from major
 ### Data Flow
 
 1. **Rate Collection**: Bank scrapers in `utils/places/providers.ts` fetch exchange rates using custom fetch wrapper (`utils/index.ts`)
-2. **Caching**: Rates stored in Redis via Vercel cron job (`vercel.json`) hitting `/api/cron/rates`
+2. **Caching**: Rates cached using Next.js 12-hour revalidation and service worker caching
 3. **Display**: Main page compares rates, highlights best rates using `findBestRates()` helper
 
 ### Bank Scrapers
@@ -66,9 +66,7 @@ Custom fetch wrapper in `utils/index.ts`:
 Required in `.env.local`:
 
 ```
-REDIS_URL=redis://localhost:6379
 ENABLE_EXPERIMENTAL_COREPACK=1
-CRON_SECRET=<secret-token>
 NEXT_PUBLIC_CACHE_DURATION=86400
 NEXT_PUBLIC_POSTHOG_KEY=<optional>
 NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
@@ -84,8 +82,8 @@ NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 
 - Configured for Vercel deployment
 - PWA generation via `next-pwa` (disabled in development)
-- Daily cron job at 9 AM UTC updates exchange rates
-- Cron endpoint: `/api/cron/rates` with Bearer token auth
+- Next.js caching with 12-hour revalidation
+- Service worker caching for offline support
 
 ## Key Implementation Notes
 
