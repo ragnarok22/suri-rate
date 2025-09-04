@@ -84,7 +84,6 @@ pnpm test --run   # Run all tests once
 pnpm test         # Run tests in watch mode
 ```
 
-
 ## 🌐 Deployment
 
 The project is optimized for [Vercel](https://vercel.com/) deployment:
