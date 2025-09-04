@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { PostHogProvider } from "./providers";
 import "./globals.css";
 import GitHubLink from "@/components/github";
@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   description:
     "SuriRate helps you find the best exchange rates in Suriname by comparing USD and EUR rates from Finabank, the Central Bank, and CME – all in one place, updated daily.",
   manifest: "/manifest.json",
-  themeColor: "#0f172a",
   appleWebApp: {
     capable: true,
     title: "SuriRate",
@@ -42,6 +41,10 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
     creator: "@ragnarokreinier",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0f172a",
 };
 
 export default function RootLayout({
