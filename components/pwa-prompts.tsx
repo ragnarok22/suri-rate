@@ -2,6 +2,23 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
+type WBEvent = "waiting" | "externalwaiting" | "controlling";
+interface WorkboxLike {
+  addEventListener: (event: WBEvent, callback: () => void) => void;
+  removeEventListener: (event: WBEvent, callback: () => void) => void;
+  messageSW: (data: { type: string }) => Promise<void> | void;
+}
+
+const isWorkboxLike = (v: unknown): v is WorkboxLike => {
+  if (!v || typeof v !== "object") return false;
+  const obj = v as Record<string, unknown>;
+  return (
+    typeof obj.addEventListener === "function" &&
+    typeof obj.removeEventListener === "function" &&
+    typeof obj.messageSW === "function"
+  );
+};
+
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
@@ -14,6 +31,8 @@ export default function PwaPrompts() {
   );
   const reloading = useRef(false);
 
+  
+
   const isInstalled = useMemo(() => {
     if (typeof window === "undefined") return false;
     // iOS Safari
@@ -25,7 +44,8 @@ export default function PwaPrompts() {
 
   // Listen to next-pwa workbox lifecycle for update prompt
   useEffect(() => {
-    const wb: any = (window as any).workbox;
+    const wbCandidate = (window as unknown as { workbox?: unknown }).workbox;
+    const wb = isWorkboxLike(wbCandidate) ? wbCandidate : null;
     if (!wb) return;
 
     const onWaiting = () => setUpdateReady(true);
@@ -60,7 +80,8 @@ export default function PwaPrompts() {
   }, [isInstalled]);
 
   const acceptUpdate = () => {
-    const wb: any = (window as any).workbox;
+    const wbCandidate = (window as unknown as { workbox?: unknown }).workbox;
+    const wb = isWorkboxLike(wbCandidate) ? wbCandidate : null;
     if (!wb) return;
     // Tell the waiting SW to skip waiting; next-pwa/workbox will take control and we reload on 'controlling'
     wb.messageSW({ type: "SKIP_WAITING" });
