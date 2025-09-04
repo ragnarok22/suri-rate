@@ -8,6 +8,7 @@ SuriRate is a Next.js 15 PWA that compares USD and EUR exchange rates from major
 
 ## Development Commands
 
+- `pnpm install` - Install dependencies
 - `pnpm dev` - Start development server with Turbopack
 - `pnpm build` - Build for production
 - `pnpm start` - Start production server
@@ -58,6 +59,7 @@ Custom fetch wrapper in `utils/index.ts`:
 - 12-hour revalidation via Next.js `next.revalidate`
 - Stream reading for response body handling
 - Error handling with bank-specific fallbacks
+- Used alongside axios for HTTP requests to bank endpoints
 
 ## Environment Variables
 
@@ -87,7 +89,7 @@ NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 
 ## Key Implementation Notes
 
-- Uses custom fetch wrapper instead of axios for better Next.js integration
+- Uses custom fetch wrapper with axios for HTTP requests and Next.js caching integration
 - Bank scrapers handle various data formats (HTML tables, JSON APIs, regex parsing)
 - Error handling includes graceful fallbacks for unreliable bank websites
 - PWA includes offline page (`app/_offline/page.tsx`)
