@@ -7,7 +7,14 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPWA({
+// Avoid wrapping with next-pwa in development so Turbopack stays enabled.
+const isDev = process.env.NODE_ENV === "development";
+
+const pwaPlugin = withPWA({
   dest: "public",
-  disable: process.env.NODE_ENV === "development",
-})(nextConfig);
+  disable: isDev,
+});
+
+const config = isDev ? nextConfig : pwaPlugin(nextConfig);
+
+export default config;
