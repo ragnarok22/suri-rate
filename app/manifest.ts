@@ -2,24 +2,43 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Suri Rate",
-    short_name: "Suri Rate",
+    name: "SuriRate",
+    short_name: "SuriRate",
     description:
-      "SuriRate helps you find the best exchange rates in Suriname by comparing USD and EUR rates from Finabank, the Central Bank, and CME – all in one place, updated daily.",
+      "Compare USD and EUR exchange rates in Suriname from Finabank, CBvS, and CME.",
     start_url: "/",
     display: "standalone",
-    background_color: "#FFFFFF",
-    theme_color: "#000000",
+    display_override: ["standalone", "browser"],
+    background_color: "#ffffff",
+    theme_color: "#0f172a",
+    orientation: "portrait",
+    lang: "en",
+    scope: "/",
+    categories: ["finance", "productivity"],
     icons: [
       {
         src: "/android-chrome-192x192.png",
         sizes: "192x192",
         type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/android-chrome-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
       },
       {
         src: "/android-chrome-512x512.png",
         sizes: "512x512",
         type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/android-chrome-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };
