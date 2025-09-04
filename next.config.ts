@@ -14,7 +14,8 @@ const pwaPlugin = withPWA({
   dest: "public",
   disable: isDev,
   register: true,
-  skipWaiting: true,
+  skipWaiting: false,
+  clientsClaim: true,
   // Provide sensible runtime caching and an offline fallback in production
   fallbacks: {
     document: "/offline.html",

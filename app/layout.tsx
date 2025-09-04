@@ -3,6 +3,7 @@ import { PostHogProvider } from "./providers";
 import "./globals.css";
 import GitHubLink from "@/components/github";
 import OfflineBanner from "@/components/offline-banner";
+import PwaPrompts from "@/components/pwa-prompts";
 
 const inter = { className: "" };
 
@@ -57,6 +58,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <OfflineBanner />
+        <PwaPrompts />
         <GitHubLink />
         <PostHogProvider>{children}</PostHogProvider>
       </body>
