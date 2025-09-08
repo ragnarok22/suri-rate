@@ -59,6 +59,28 @@ describe("findBestRates", () => {
       bestSellEUR: "6.40",
     });
   });
+
+  it("ignores zero rates when determining best values", () => {
+    const result = findBestRates([
+      {
+        name: "Zero Bank",
+        logo: "",
+        link: "",
+        rates: [
+          { currency: "USD", buy: "0", sell: "0" },
+          { currency: "EUR", buy: "0", sell: "0" },
+        ],
+      },
+      ...sampleRates,
+    ]);
+
+    expect(result).toEqual({
+      bestBuyUSD: "5.50",
+      bestSellUSD: "5.80",
+      bestBuyEUR: "5.60",
+      bestSellEUR: "6.40",
+    });
+  });
 });
 
 describe("getRates", () => {
