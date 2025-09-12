@@ -78,11 +78,13 @@ export function findBestRates(allRates: BankRates[]): {
       const sell = Number.parseFloat(rate.sell);
 
       if (rate.currency === "USD") {
-        if (buy > 0 && buy > Number.parseFloat(bestBuyUSD)) bestBuyUSD = rate.buy;
+        if (buy > 0 && buy > Number.parseFloat(bestBuyUSD))
+          bestBuyUSD = rate.buy;
         if (sell > 0 && sell < Number.parseFloat(bestSellUSD))
           bestSellUSD = rate.sell;
       } else if (rate.currency === "EUR") {
-        if (buy > 0 && buy > Number.parseFloat(bestBuyEUR)) bestBuyEUR = rate.buy;
+        if (buy > 0 && buy > Number.parseFloat(bestBuyEUR))
+          bestBuyEUR = rate.buy;
         if (sell > 0 && sell < Number.parseFloat(bestSellEUR))
           bestSellEUR = rate.sell;
       }
