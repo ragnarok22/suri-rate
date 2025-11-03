@@ -117,8 +117,13 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
 
   try {
     const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+      Accept: "application/json, text/javascript, */*; q=0.01",
+      "Content-Type": "application/json;charset=UTF-8",
+      "X-Requested-With": "XMLHttpRequest",
+      Origin: "https://www.cme.sr",
+      Referer: "https://www.cme.sr/",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Cache-Control": "no-cache",
       "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
         "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
@@ -126,9 +131,15 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
     const { html } = await api(url, {
       headers,
       method: "POST",
+      body: "{}",
     });
 
-    const data = JSON.parse(html);
+    const trimmed = html.trim();
+    if (!trimmed.startsWith("{") && !trimmed.startsWith("[")) {
+      throw new Error("Unexpected CME response payload");
+    }
+
+    const data = JSON.parse(trimmed);
     const item = data?.[0];
 
     if (!item) throw new Error("No exchange rate data received from CME");
