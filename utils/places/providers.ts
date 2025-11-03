@@ -116,6 +116,27 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
     "https://www.cme.sr/Home/GetTodaysExchangeRates/?BusinessDate=2016-07-25";
 
   try {
+    const landing = await api("https://www.cme.sr", {
+      headers: {
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "Upgrade-Insecure-Requests": "1",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+          "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+      },
+      method: "GET",
+    });
+
+    const cookieHeader = landing.headers?.get("set-cookie") ?? "";
+
     const headers = {
       Accept: "application/json, text/javascript, */*; q=0.01",
       "Content-Type": "application/json;charset=UTF-8",
@@ -124,9 +145,18 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
       Referer: "https://www.cme.sr/",
       "Accept-Language": "en-US,en;q=0.9",
       "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+      "Sec-Fetch-Dest": "empty",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Ch-Ua":
+        '"Chromium";v="125", "Not.A/Brand";v="24", "Google Chrome";v="125"',
+      "Sec-Ch-Ua-Mobile": "?0",
+      "Sec-Ch-Ua-Platform": '"Windows"',
       "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
         "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+      ...(cookieHeader ? { Cookie: cookieHeader } : {}),
     };
     const { html } = await api(url, {
       headers,
