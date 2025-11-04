@@ -12,10 +12,10 @@ SuriRate is a Next.js 15 PWA that compares USD and EUR exchange rates from major
 - `pnpm dev` - Start development server with Turbopack
 - `pnpm build` - Build for production
 - `pnpm start` - Start production server
-- `pnpm test` - Run Vitest test suite
+- `pnpm test` - Run Vitest test suite in watch mode
 - `pnpm test --run` - Run tests once (non-watch mode)
 - `pnpm lint` - Run ESLint
-- `pnpm prettier` - Format code with Prettier
+- `pnpm format` - Format code with Prettier
 
 ## Architecture
 
@@ -38,10 +38,12 @@ Each bank has a dedicated scraper function in `utils/places/providers.ts`:
 
 - **Finabank**: HTML scraping with regex patterns
 - **DSB**: JSON API endpoint
-- **CBVS**: Table scraping from HTML
-- **CME**: JSON POST request with specific headers
+- **CBVS**: Table scraping from HTML (has graceful fallback returning zeros on error)
+- **CME**: Direct axios POST request with comprehensive browser headers to bypass Cloudflare bot detection (critical: requires full browser fingerprint including User-Agent, Sec-Ch-Ua, Sec-Fetch headers, Origin, and Referer to work on Vercel)
 - **Hakrinbank**: Table parsing from exchange page
 - **Republic Bank**: Table scraping with specific column mapping
+
+The `getCurrentRates()` function in `utils/places/index.ts` orchestrates all scrapers sequentially, returning zeros for failed banks to ensure the app always displays data.
 
 ### Type System
 
@@ -52,14 +54,19 @@ Core types in `utils/definitions.ts`:
 - `ExchangeRate` - Currency with buy/sell rates
 - `BankRates` - Bank info + exchange rates array
 
-### API Layer
+### HTTP Request Handling
 
-Custom fetch wrapper in `utils/index.ts`:
+Two approaches used depending on requirements:
 
-- 12-hour revalidation via Next.js `next.revalidate`
-- Stream reading for response body handling
-- Error handling with bank-specific fallbacks
-- Used alongside axios for HTTP requests to bank endpoints
+1. **Custom fetch wrapper** (`utils/index.ts`):
+   - 12-hour revalidation via Next.js `next.revalidate`
+   - Stream reading for response body handling
+   - Used by most bank scrapers (Finabank, DSB, CBVS, Hakrinbank, Republic Bank)
+
+2. **Direct axios** (CME scraper only):
+   - Required for CME to bypass Cloudflare protection
+   - Uses comprehensive browser headers for bot detection evasion
+   - Cannot use fetch wrapper due to Cloudflare's advanced fingerprinting
 
 ## Environment Variables
 
@@ -76,7 +83,9 @@ NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 
 - Uses Vitest with Node.js environment
 - Path alias `@` maps to project root
+- Tests mock both the custom `api()` wrapper and axios for comprehensive coverage
 - CI runs on GitHub Actions with Node 20 and pnpm
+- Important: CME tests require mocking `axios.post` with `vi.spyOn()`
 
 ## Deployment
 
@@ -87,8 +96,20 @@ NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 
 ## Key Implementation Notes
 
-- Uses custom fetch wrapper with axios for HTTP requests and Next.js caching integration
+- Main page uses `force-dynamic` to ensure fresh data on each request
 - Bank scrapers handle various data formats (HTML tables, JSON APIs, regex parsing)
-- Error handling includes graceful fallbacks for unreliable bank websites
+- Error handling includes graceful fallbacks (zeros) for unreliable bank websites to ensure app always displays
 - PWA includes offline page (`app/_offline/page.tsx`)
 - PostHog analytics integration via providers pattern
+
+### Critical: CME Cloudflare Bypass
+
+The CME scraper **must** include comprehensive browser headers to bypass Cloudflare bot detection on Vercel:
+
+- User-Agent (modern Chrome version)
+- Sec-Ch-Ua, Sec-Ch-Ua-Mobile, Sec-Ch-Ua-Platform
+- Sec-Fetch-Dest, Sec-Fetch-Mode, Sec-Fetch-Site
+- Origin, Referer (pointing to cme.sr)
+- Accept-Encoding, Connection, Host
+
+If CME returns 403 with "Just a moment..." HTML, it means Cloudflare is blocking the request. Verify all headers are present and match a real browser fingerprint.
