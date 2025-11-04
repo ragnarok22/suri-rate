@@ -10,6 +10,16 @@ vi.mock("@/utils", () => ({
   api: (...args: any[]) => apiMock(...(args as [string | URL, RequestInit?])),
 }));
 
+// Mock axios for CME provider
+vi.mock("axios", () => {
+  return {
+    default: {
+      create: vi.fn(),
+    },
+  };
+});
+
+import axios from "axios";
 import {
   getFinabankExchangeRates,
   getDsbExchangeRates,
@@ -21,6 +31,7 @@ import {
 
 beforeEach(() => {
   apiMock.mockReset();
+  vi.mocked(axios.create).mockClear();
 });
 
 describe("providers: parsing", () => {
@@ -77,16 +88,33 @@ describe("providers: parsing", () => {
   });
 
   it("parses CME JSON payload", async () => {
-    apiMock.mockResolvedValue({
-      html: JSON.stringify([
+    // Create mock functions for axios instance
+    const mockGet = vi.fn().mockResolvedValue({
+      status: 200,
+      headers: {
+        "set-cookie": ["session=abc123; Path=/; HttpOnly"],
+      },
+      data: "<html>Landing page</html>",
+    });
+
+    const mockPost = vi.fn().mockResolvedValue({
+      status: 200,
+      data: [
         {
           BuyUsdExchangeRate: 5.5,
           SaleUsdExchangeRate: 5.8,
           BuyEuroExchangeRate: 6.1,
           SaleEuroExchangeRate: 6.4,
         },
-      ]),
+      ],
     });
+
+    // Mock axios.create to return an instance with our mocks
+    vi.mocked(axios.create).mockReturnValue({
+      get: mockGet,
+      post: mockPost,
+    } as any);
+
     const rates = await getCMEExchangeRates();
     expect(rates).toEqual<ExchangeRate[]>([
       { currency: "USD", buy: "5.50", sell: "5.80" },
