@@ -4,7 +4,8 @@ import Footer from "@/components/footer";
 import { getRates } from "@/utils/data";
 import { Suspense } from "react";
 
-export const dynamic = "force-dynamic";
+// Revalidate every 12 hours (43200 seconds)
+export const revalidate = 43200;
 
 export default async function Home() {
   const info = await getRates();

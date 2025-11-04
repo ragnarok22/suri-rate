@@ -1,5 +1,6 @@
 import * as cheerio from "cheerio";
 import axios from "axios";
+import { unstable_cache } from "next/cache";
 import { ExchangeRate } from "@/utils/definitions";
 import { api } from "@/utils";
 
@@ -112,7 +113,8 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
   }
 }
 
-export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
+// Internal function that does the actual CME scraping
+async function fetchCMEExchangeRates(): Promise<ExchangeRate[]> {
   const url =
     "https://www.cme.sr/Home/GetTodaysExchangeRates/?BusinessDate=2016-07-25";
 
@@ -212,6 +214,16 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
     throw e;
   }
 }
+
+// Export cached version with 12-hour revalidation
+export const getCMEExchangeRates = unstable_cache(
+  fetchCMEExchangeRates,
+  ["cme-exchange-rates"],
+  {
+    revalidate: 43200, // 12 hours in seconds
+    tags: ["cme-rates"],
+  },
+);
 
 export async function getHakrinbankExchangeRates(): Promise<ExchangeRate[]> {
   const url = "https://www.hakrinbank.com/en/private/foreign-exchange/";

@@ -10,6 +10,11 @@ vi.mock("@/utils", () => ({
   api: (...args: any[]) => apiMock(...(args as [string | URL, RequestInit?])),
 }));
 
+// Mock Next.js unstable_cache to bypass caching in tests
+vi.mock("next/cache", () => ({
+  unstable_cache: (fn: any) => fn, // Return the function unwrapped
+}));
+
 // Mock axios for CME provider
 vi.mock("axios", () => {
   return {
