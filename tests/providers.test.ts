@@ -14,7 +14,7 @@ vi.mock("@/utils", () => ({
 vi.mock("axios", () => {
   return {
     default: {
-      create: vi.fn(),
+      post: vi.fn(),
     },
   };
 });
@@ -31,7 +31,6 @@ import {
 
 beforeEach(() => {
   apiMock.mockReset();
-  vi.mocked(axios.create).mockClear();
 });
 
 describe("providers: parsing", () => {
