@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import axios from "axios";
 import { ExchangeRate } from "@/utils/definitions";
 import { api } from "@/utils";
 
@@ -116,60 +117,106 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
     "https://www.cme.sr/Home/GetTodaysExchangeRates/?BusinessDate=2016-07-25";
 
   try {
-    const landing = await api("https://www.cme.sr", {
+    // Create axios instance with common config
+    const axiosInstance = axios.create({
+      baseURL: "https://www.cme.sr",
+      timeout: 30000,
       headers: {
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+          "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
         "Accept-Language": "en-US,en;q=0.9",
         "Cache-Control": "no-cache",
         Pragma: "no-cache",
+      },
+      // Disable automatic redirects to handle them manually if needed
+      maxRedirects: 5,
+      // Don't throw on any status code
+      validateStatus: () => true,
+    });
+
+    // Step 1: Visit landing page to establish session and get cookies
+    const landingResponse = await axiosInstance.get("/", {
+      headers: {
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Sec-Fetch-Dest": "document",
         "Sec-Fetch-Mode": "navigate",
         "Sec-Fetch-Site": "none",
         "Sec-Fetch-User": "?1",
         "Upgrade-Insecure-Requests": "1",
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
-          "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
       },
-      method: "GET",
     });
 
-    const cookieHeader = landing.headers?.get("set-cookie") ?? "";
+    // Extract cookies from response
+    const setCookieHeaders = landingResponse.headers["set-cookie"] || [];
+    const cookies = setCookieHeaders
+      .map((cookie: string) => {
+        // Extract just the cookie name=value part before semicolon
+        const match = cookie.match(/^([^;]+)/);
+        return match ? match[1].trim() : "";
+      })
+      .filter(Boolean)
+      .join("; ");
 
-    const headers = {
-      Accept: "application/json, text/javascript, */*; q=0.01",
-      "Content-Type": "application/json;charset=UTF-8",
-      "X-Requested-With": "XMLHttpRequest",
-      Origin: "https://www.cme.sr",
-      Referer: "https://www.cme.sr/",
-      "Accept-Language": "en-US,en;q=0.9",
-      "Cache-Control": "no-cache",
-      Pragma: "no-cache",
-      "Sec-Fetch-Dest": "empty",
-      "Sec-Fetch-Mode": "cors",
-      "Sec-Fetch-Site": "same-origin",
-      "Sec-Ch-Ua":
-        '"Chromium";v="125", "Not.A/Brand";v="24", "Google Chrome";v="125"',
-      "Sec-Ch-Ua-Mobile": "?0",
-      "Sec-Ch-Ua-Platform": '"Windows"',
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
-        "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-      ...(cookieHeader ? { Cookie: cookieHeader } : {}),
-    };
-    const { html } = await api(url, {
-      headers,
-      method: "POST",
-      body: "{}",
-    });
+    console.log("CME landing page status:", landingResponse.status);
+    console.log("CME cookies received:", cookies ? "Yes" : "No");
 
-    const trimmed = html.trim();
-    if (!trimmed.startsWith("{") && !trimmed.startsWith("[")) {
-      throw new Error("Unexpected CME response payload");
+    // Step 2: Make API request with cookies
+    const apiResponse = await axiosInstance.post(
+      "/Home/GetTodaysExchangeRates/?BusinessDate=2016-07-25",
+      {},
+      {
+        headers: {
+          Accept: "application/json, text/javascript, */*; q=0.01",
+          "Content-Type": "application/json;charset=UTF-8",
+          "X-Requested-With": "XMLHttpRequest",
+          Origin: "https://www.cme.sr",
+          Referer: "https://www.cme.sr/",
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "same-origin",
+          "Sec-Ch-Ua":
+            '"Chromium";v="125", "Not.A/Brand";v="24", "Google Chrome";v="125"',
+          "Sec-Ch-Ua-Mobile": "?0",
+          "Sec-Ch-Ua-Platform": '"Windows"',
+          ...(cookies ? { Cookie: cookies } : {}),
+        },
+      },
+    );
+
+    console.log("CME API response status:", apiResponse.status);
+
+    if (apiResponse.status !== 200) {
+      throw new Error(
+        `CME API returned status ${apiResponse.status}: ${apiResponse.statusText}`,
+      );
     }
 
-    const data = JSON.parse(trimmed);
+    const responseData =
+      typeof apiResponse.data === "string"
+        ? apiResponse.data.trim()
+        : apiResponse.data;
+
+    // Check if response is valid JSON
+    if (typeof responseData === "string") {
+      if (!responseData.startsWith("{") && !responseData.startsWith("[")) {
+        console.error("CME response details:", {
+          status: apiResponse.status,
+          responseLength: responseData.length,
+          responsePreview: responseData.substring(0, 500),
+          hasCookies: !!cookies,
+        });
+        throw new Error(
+          `Unexpected CME response payload. Response preview: ${responseData.substring(0, 200)}`,
+        );
+      }
+    }
+
+    const data =
+      typeof responseData === "string"
+        ? JSON.parse(responseData)
+        : responseData;
     const item = data?.[0];
 
     if (!item) throw new Error("No exchange rate data received from CME");
@@ -188,6 +235,10 @@ export async function getCMEExchangeRates(): Promise<ExchangeRate[]> {
     ];
   } catch (e: any) {
     console.error("Error getting CME info:", e.message);
+    if (e.response) {
+      console.error("CME error response data:", e.response.data);
+      console.error("CME error response status:", e.response.status);
+    }
     throw e;
   }
 }
