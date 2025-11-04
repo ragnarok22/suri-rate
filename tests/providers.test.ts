@@ -88,16 +88,8 @@ describe("providers: parsing", () => {
   });
 
   it("parses CME JSON payload", async () => {
-    // Create mock functions for axios instance
-    const mockGet = vi.fn().mockResolvedValue({
-      status: 200,
-      headers: {
-        "set-cookie": ["session=abc123; Path=/; HttpOnly"],
-      },
-      data: "<html>Landing page</html>",
-    });
-
-    const mockPost = vi.fn().mockResolvedValue({
+    // Mock axios.post to return successful response
+    vi.spyOn(axios, "post").mockResolvedValue({
       status: 200,
       data: [
         {
@@ -107,12 +99,6 @@ describe("providers: parsing", () => {
           SaleEuroExchangeRate: 6.4,
         },
       ],
-    });
-
-    // Mock axios.create to return an instance with our mocks
-    vi.mocked(axios.create).mockReturnValue({
-      get: mockGet,
-      post: mockPost,
     } as any);
 
     const rates = await getCMEExchangeRates();
@@ -120,6 +106,9 @@ describe("providers: parsing", () => {
       { currency: "USD", buy: "5.50", sell: "5.80" },
       { currency: "EUR", buy: "6.10", sell: "6.40" },
     ]);
+
+    // Restore the mock
+    vi.mocked(axios.post).mockRestore();
   });
 
   it("parses Hakrinbank table with headers", async () => {
