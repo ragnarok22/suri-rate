@@ -36,7 +36,7 @@ export default function ExchangeRateCard({
           rel="noopener noreferrer"
           className="flex items-center gap-3 hover:text-green-700 dark:hover:text-green-300 transition-colors duration-200"
         >
-          <div className="relative h-12 w-12 overflow-hidden rounded-md border dark:border-gray-600 bg-white dark:bg-gray-700">
+          <div className="relative h-12 w-12 overflow-hidden rounded-md border dark:border-gray-600 bg-white dark:bg-gray-700 shrink-0">
             <Image
               src={logo || "/placeholder.svg"}
               alt={`${name} logo`}
