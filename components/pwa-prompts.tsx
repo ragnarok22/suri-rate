@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePostHog } from "posthog-js/react";
 
 type WBEvent = "waiting" | "externalwaiting" | "controlling";
 interface WorkboxLike {
@@ -25,6 +26,7 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 export default function PwaPrompts() {
+  const posthog = usePostHog();
   const [updateReady, setUpdateReady] = useState(false);
   const [installEvt, setInstallEvt] = useState<BeforeInstallPromptEvent | null>(
     null,
@@ -109,6 +111,10 @@ export default function PwaPrompts() {
 
   const dismissInstall = () => {
     setInstallDismissed(true);
+    posthog?.capture("pwa_install_banner_dismiss", {
+      platform: isIos ? "ios" : "other",
+      hadPrompt: Boolean(installEvt),
+    });
     if (typeof window === "undefined") return;
     window.localStorage.setItem("install-banner-dismissed", "true");
   };
@@ -125,14 +131,24 @@ export default function PwaPrompts() {
     if (!installEvt) return;
     try {
       await installEvt.prompt();
-      await installEvt.userChoice;
+      const choice = await installEvt.userChoice;
+      posthog?.capture("pwa_install_prompt_result", {
+        outcome: choice.outcome,
+        platform: isIos ? "ios" : "other",
+      });
       setInstallEvt(null);
     } catch {
-      // ignore
+      posthog?.capture("pwa_install_prompt_error", {
+        platform: isIos ? "ios" : "other",
+      });
     }
   };
 
   const handleInstallClick = () => {
+    posthog?.capture("pwa_install_banner_click", {
+      platform: isIos ? "ios" : "other",
+      variant: installEvt ? "prompt" : "instructions",
+    });
     if (installEvt) {
       void install();
       return;
