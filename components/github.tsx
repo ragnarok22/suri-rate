@@ -3,7 +3,7 @@ import styles from "./github.module.css";
 const GitHubLink = () => {
   return (
     <a
-      href="https://github.com/ragnarok22/central-exchange"
+      href="https://github.com/ragnarok22/suri-rate"
       className={styles["github-corner"]}
       aria-label="View source on GitHub"
     >

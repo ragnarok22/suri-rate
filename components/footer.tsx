@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface FooterProps {
   lastUpdated: string | undefined;
 }
@@ -37,6 +39,20 @@ const Footer = ({ lastUpdated }: FooterProps) => {
           <p className="mt-2 text-sm text-green-200">
             Helping you find the best exchange rates for Suriname
           </p>
+          <nav className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
+            <Link href="/about" className="text-green-100 hover:text-white">
+              About
+            </Link>
+            <Link
+              href="/methodology"
+              className="text-green-100 hover:text-white"
+            >
+              Methodology
+            </Link>
+            <Link href="/banks" className="text-green-100 hover:text-white">
+              Bank profiles
+            </Link>
+          </nav>
         </div>
       </footer>
     </>
