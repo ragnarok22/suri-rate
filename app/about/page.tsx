@@ -68,7 +68,7 @@ export default function AboutPage() {
           which banks we cover? The{" "}
           <Link href="/banks" className="text-green-700 underline">
             bank directory
-          </Link>
+          </Link>{" "}
           highlights links, services, and profiles.
         </p>
       </section>
