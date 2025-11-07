@@ -274,19 +274,19 @@ export default async function Home() {
             <div className="mt-4 space-y-3 text-sm">
               <Link
                 href="/banks"
-                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200 text-gray-900 dark:text-gray-100"
               >
                 Explore the bank profiles
               </Link>
               <Link
                 href="/banks/finabank"
-                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200 text-gray-900 dark:text-gray-100"
               >
                 View Finabank details
               </Link>
               <Link
                 href="/banks/central-bank"
-                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200 text-gray-900 dark:text-gray-100"
               >
                 View Central Bank insights
               </Link>
