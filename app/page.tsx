@@ -199,8 +199,8 @@ export default async function Home() {
               1. Scan the dashboard
             </h4>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-              Identify the green "Best" badges for buy and sell prices so you
-              instantly know which bank leads the pack.
+              Identify the green &quot;Best&quot; badges for buy and sell prices
+              so you instantly know which bank leads the pack.
             </p>
           </article>
           <article>
