@@ -118,12 +118,10 @@ export default async function Home() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="uppercase tracking-wide text-xs text-green-600 font-semibold">
+              <h1 className="text-3xl font-bold text-green-900">SuriRate</h1>
+              <p className="uppercase tracking-wide text-xs text-green-600 font-semibold mt-1">
                 Suriname FX dashboard
               </p>
-              <h1 className="text-3xl font-bold text-green-900 mt-1">
-                SuriRate
-              </h1>
               <p className="text-sm text-gray-600 mt-2 max-w-2xl">
                 Compare USD and EUR exchange rates from Suriname&apos;s
                 most-used banks in one glance. We normalize each quote,
