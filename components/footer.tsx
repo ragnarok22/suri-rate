@@ -42,19 +42,19 @@ const Footer = ({ lastUpdated }: FooterProps) => {
           <nav className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
             <Link
               href="/about"
-              className="text-green-100 dark:text-green-300 hover:text-white"
+              className="text-green-100 dark:text-green-300 hover:text-white transition-colors duration-200"
             >
               About
             </Link>
             <Link
               href="/methodology"
-              className="text-green-100 dark:text-green-300 hover:text-white"
+              className="text-green-100 dark:text-green-300 hover:text-white transition-colors duration-200"
             >
               Methodology
             </Link>
             <Link
               href="/banks"
-              className="text-green-100 dark:text-green-300 hover:text-white"
+              className="text-green-100 dark:text-green-300 hover:text-white transition-colors duration-200"
             >
               Bank profiles
             </Link>

@@ -12,7 +12,10 @@ export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-10">
       <nav className="text-sm text-green-700 dark:text-green-400">
-        <Link href="/" className="underline">
+        <Link
+          href="/"
+          className="underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
+        >
           ← Back to dashboard
         </Link>
       </nav>
@@ -63,7 +66,7 @@ export default function AboutPage() {
           Head to the{" "}
           <Link
             href="/methodology"
-            className="text-green-700 dark:text-green-400 underline"
+            className="text-green-700 dark:text-green-400 underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
           >
             methodology page
           </Link>{" "}
@@ -71,7 +74,7 @@ export default function AboutPage() {
           which banks we cover? The{" "}
           <Link
             href="/banks"
-            className="text-green-700 dark:text-green-400 underline"
+            className="text-green-700 dark:text-green-400 underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
           >
             bank directory
           </Link>{" "}

@@ -30,7 +30,10 @@ export default function MethodologyPage() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-10">
       <nav className="text-sm text-green-700 dark:text-green-400">
-        <Link href="/" className="underline">
+        <Link
+          href="/"
+          className="underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
+        >
           ← Back to dashboard
         </Link>
       </nav>
@@ -77,7 +80,7 @@ export default function MethodologyPage() {
           Need bank-specific notes? Jump to the{" "}
           <Link
             href="/banks"
-            className="text-green-700 dark:text-green-400 underline"
+            className="text-green-700 dark:text-green-400 underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
           >
             bank profiles
           </Link>

@@ -136,19 +136,19 @@ export default async function Home() {
               <nav className="flex flex-wrap gap-3 text-sm font-medium text-green-900 dark:text-green-400">
                 <Link
                   href="/methodology"
-                  className="hover:text-green-600 dark:hover:text-green-300"
+                  className="hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
                 >
                   Methodology
                 </Link>
                 <Link
                   href="/about"
-                  className="hover:text-green-600 dark:hover:text-green-300"
+                  className="hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
                 >
                   About
                 </Link>
                 <Link
                   href="/banks"
-                  className="hover:text-green-600 dark:hover:text-green-300"
+                  className="hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
                 >
                   Banks
                 </Link>
@@ -220,7 +220,7 @@ export default async function Home() {
               Head to the{" "}
               <Link
                 href="/methodology"
-                className="text-green-700 dark:text-green-400 underline"
+                className="text-green-700 dark:text-green-400 underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
               >
                 methodology page
               </Link>{" "}
@@ -254,7 +254,10 @@ export default async function Home() {
             </dl>
             <p className="text-sm text-green-700 dark:text-green-400 mt-4">
               Need more details? Visit the{" "}
-              <Link href="/about" className="underline">
+              <Link
+                href="/about"
+                className="underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
+              >
                 about page
               </Link>{" "}
               for the project story.
@@ -271,19 +274,19 @@ export default async function Home() {
             <div className="mt-4 space-y-3 text-sm">
               <Link
                 href="/banks"
-                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200"
               >
                 Explore the bank profiles
               </Link>
               <Link
                 href="/banks/finabank"
-                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200"
               >
                 View Finabank details
               </Link>
               <Link
                 href="/banks/central-bank"
-                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600 transition-colors duration-200"
               >
                 View Central Bank insights
               </Link>

@@ -34,7 +34,7 @@ export default function ExchangeRateCard({
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 hover:text-green-700 dark:hover:text-green-300 transition-colors"
+          className="flex items-center gap-3 hover:text-green-700 dark:hover:text-green-300 transition-colors duration-200"
         >
           <div className="relative h-12 w-12 overflow-hidden rounded-md border dark:border-gray-600 bg-white dark:bg-gray-700">
             <Image
