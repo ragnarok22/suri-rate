@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePostHog } from "posthog-js/react";
 
+type InstallPlatform = "ios" | "android" | "desktop" | "other" | "unknown";
+
 type WBEvent = "waiting" | "externalwaiting" | "controlling";
 interface WorkboxLike {
   addEventListener: (event: WBEvent, callback: () => void) => void;
@@ -33,6 +35,7 @@ export default function PwaPrompts() {
   );
   const [isMobile, setIsMobile] = useState(false);
   const [isIos, setIsIos] = useState(false);
+  const [platform, setPlatform] = useState<InstallPlatform>("unknown");
   const [installDismissed, setInstallDismissed] = useState(false);
   const [bannerHeight, setBannerHeight] = useState(0);
   const bannerRef = useRef<HTMLDivElement | null>(null);
@@ -106,13 +109,21 @@ export default function PwaPrompts() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const ua = window.navigator.userAgent || "";
-    setIsIos(/iPhone|iPad|iPod/i.test(ua));
+    const detected: InstallPlatform = /iPhone|iPad|iPod/i.test(ua)
+      ? "ios"
+      : /Android/i.test(ua)
+        ? "android"
+        : /Windows|Macintosh|Linux|CrOS/i.test(ua)
+          ? "desktop"
+          : "other";
+    setIsIos(detected === "ios");
+    setPlatform(detected);
   }, []);
 
   const dismissInstall = () => {
     setInstallDismissed(true);
     posthog?.capture("pwa_install_banner_dismiss", {
-      platform: isIos ? "ios" : "other",
+      platform,
       hadPrompt: Boolean(installEvt),
     });
     if (typeof window === "undefined") return;
@@ -134,19 +145,19 @@ export default function PwaPrompts() {
       const choice = await installEvt.userChoice;
       posthog?.capture("pwa_install_prompt_result", {
         outcome: choice.outcome,
-        platform: isIos ? "ios" : "other",
+        platform,
       });
       setInstallEvt(null);
     } catch {
       posthog?.capture("pwa_install_prompt_error", {
-        platform: isIos ? "ios" : "other",
+        platform,
       });
     }
   };
 
   const handleInstallClick = () => {
     posthog?.capture("pwa_install_banner_click", {
-      platform: isIos ? "ios" : "other",
+      platform,
       variant: installEvt ? "prompt" : "instructions",
     });
     if (installEvt) {
