@@ -29,14 +29,14 @@ export default function ExchangeRateCard({
 
   return (
     <Card className="overflow-hidden">
-      <CardHeader className="bg-green-50 p-4">
+      <CardHeader className="bg-green-50 dark:bg-green-950 p-4">
         <Link
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 hover:text-green-700 transition-colors"
+          className="flex items-center gap-3 hover:text-green-700 dark:hover:text-green-300 transition-colors duration-200"
         >
-          <div className="relative h-12 w-12 overflow-hidden rounded-md border bg-white">
+          <div className="relative h-12 w-12 overflow-hidden rounded-md border dark:border-gray-600 bg-white dark:bg-gray-700 shrink-0">
             <Image
               src={logo || "/placeholder.svg"}
               alt={`${name} logo`}
@@ -45,18 +45,22 @@ export default function ExchangeRateCard({
               className="object-contain"
             />
           </div>
-          <div className="flex items-center gap-1 text-gray-800 font-semibold text-lg">
+          <div className="flex items-center gap-1 text-gray-800 dark:text-gray-100 font-semibold text-lg">
             {name}
-            <ExternalLink className="h-4 w-4 text-gray-400" />
+            <ExternalLink className="h-4 w-4 text-gray-400 dark:text-gray-500" />
           </div>
         </Link>
       </CardHeader>
-      <CardContent className="p-4 text-gray-800">
+      <CardContent className="text-gray-800 dark:text-gray-100">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-500">USD</span>
-              <span className="text-xs text-gray-400">US Dollar</span>
+              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                USD
+              </span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">
+                US Dollar
+              </span>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -65,7 +69,7 @@ export default function ExchangeRateCard({
                   {usdRate.buy === bestRates.bestBuyUSD && (
                     <Badge
                       variant="outline"
-                      className="bg-green-50 text-green-700 border-green-200"
+                      className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
                     >
                       Best
                     </Badge>
@@ -79,7 +83,7 @@ export default function ExchangeRateCard({
                   {usdRate.sell === bestRates.bestSellUSD && (
                     <Badge
                       variant="outline"
-                      className="bg-green-50 text-green-700 border-green-200"
+                      className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
                     >
                       Best
                     </Badge>
@@ -91,8 +95,12 @@ export default function ExchangeRateCard({
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-500">EUR</span>
-              <span className="text-xs text-gray-400">Euro</span>
+              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                EUR
+              </span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">
+                Euro
+              </span>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -101,7 +109,7 @@ export default function ExchangeRateCard({
                   {eurRate.buy === bestRates.bestBuyEUR && (
                     <Badge
                       variant="outline"
-                      className="bg-green-50 text-green-700 border-green-200"
+                      className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
                     >
                       Best
                     </Badge>
@@ -115,7 +123,7 @@ export default function ExchangeRateCard({
                   {eurRate.sell === bestRates.bestSellEUR && (
                     <Badge
                       variant="outline"
-                      className="bg-green-50 text-green-700 border-green-200"
+                      className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
                     >
                       Best
                     </Badge>
