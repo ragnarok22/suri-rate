@@ -29,6 +29,8 @@ export default function PwaPrompts() {
   const [installEvt, setInstallEvt] = useState<BeforeInstallPromptEvent | null>(
     null,
   );
+  const [isMobile, setIsMobile] = useState(false);
+  const [installDismissed, setInstallDismissed] = useState(false);
   const reloading = useRef(false);
 
   const isInstalled = useMemo(() => {
@@ -77,6 +79,31 @@ export default function PwaPrompts() {
     return () => window.removeEventListener("beforeinstallprompt", onBip);
   }, [isInstalled]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem("install-banner-dismissed");
+    setInstallDismissed(stored === "true");
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia("(max-width: 768px)");
+    const updateMobile = () => setIsMobile(media.matches);
+    updateMobile();
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", updateMobile);
+      return () => media.removeEventListener("change", updateMobile);
+    }
+    media.addListener?.(updateMobile);
+    return () => media.removeListener?.(updateMobile);
+  }, []);
+
+  const dismissInstall = () => {
+    setInstallDismissed(true);
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("install-banner-dismissed", "true");
+  };
+
   const acceptUpdate = () => {
     const wbCandidate = (window as unknown as { workbox?: unknown }).workbox;
     const wb = isWorkboxLike(wbCandidate) ? wbCandidate : null;
@@ -118,13 +145,32 @@ export default function PwaPrompts() {
         </div>
       )}
 
-      {installEvt && !isInstalled && (
-        <button
-          onClick={install}
-          className="fixed right-3 bottom-16 z-50 rounded-full bg-green-900 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-green-800"
-        >
-          Install app
-        </button>
+      {installEvt && !isInstalled && isMobile && !installDismissed && (
+        <div className="fixed inset-x-0 top-0 z-50 bg-green-900 px-4 py-3 text-white shadow-lg">
+          <div className="mx-auto flex w-full max-w-md items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold">Install this app</p>
+              <p className="text-xs text-white/80">
+                Add Suri Rate to your home screen for quick access.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={install}
+                className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide hover:bg-white/15"
+              >
+                Install
+              </button>
+              <button
+                onClick={dismissInstall}
+                aria-label="Close install banner"
+                className="rounded-full bg-white/0 px-2 py-1 text-xs font-semibold hover:bg-white/10"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
