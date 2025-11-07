@@ -106,7 +106,7 @@ export const bankPages: BankPageContent[] = [
       "Republic Bank (Suriname) Limited is part of Republic Financial Holdings and focuses on cross-border services.",
     website: "https://www.republicbanksr.com",
     headquarters: "Port of Spain, Trinidad and Tobago",
-    founded: "2015",
+    founded: "1837",
     highlights: [
       "Regional banking network",
       "Corporate and investment services",
