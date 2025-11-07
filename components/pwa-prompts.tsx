@@ -30,6 +30,7 @@ export default function PwaPrompts() {
     null,
   );
   const [isMobile, setIsMobile] = useState(false);
+  const [isIos, setIsIos] = useState(false);
   const [installDismissed, setInstallDismissed] = useState(false);
   const reloading = useRef(false);
 
@@ -98,6 +99,12 @@ export default function PwaPrompts() {
     return () => media.removeListener?.(updateMobile);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const ua = window.navigator.userAgent || "";
+    setIsIos(/iPhone|iPad|iPod/i.test(ua));
+  }, []);
+
   const dismissInstall = () => {
     setInstallDismissed(true);
     if (typeof window === "undefined") return;
@@ -123,6 +130,22 @@ export default function PwaPrompts() {
     }
   };
 
+  const handleInstallClick = () => {
+    if (installEvt) {
+      void install();
+      return;
+    }
+    if (isIos) {
+      window.alert(
+        'In Safari, tap the share icon and choose "Add to Home Screen" to install.',
+      );
+      return;
+    }
+  };
+
+  const shouldShowInstallBanner =
+    !isInstalled && isMobile && !installDismissed && (installEvt || isIos);
+
   return (
     <>
       {updateReady && (
@@ -145,26 +168,33 @@ export default function PwaPrompts() {
         </div>
       )}
 
-      {installEvt && !isInstalled && isMobile && !installDismissed && (
+      {shouldShowInstallBanner && (
         <div className="fixed inset-x-0 top-0 z-50 bg-green-900 px-4 py-3 text-white shadow-lg">
-          <div className="mx-auto flex w-full max-w-md items-center justify-between gap-3">
-            <div>
+          <div className="mx-auto flex w-full max-w-md flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
               <p className="text-sm font-semibold">Install this app</p>
               <p className="text-xs text-white/80">
                 Add Suri Rate to your home screen for quick access.
               </p>
+              {isIos && !installEvt && (
+                <p className="text-[11px] text-white/70">
+                  Tap the share icon in Safari and pick &quot;Add to Home
+                  Screen.&quot;
+                </p>
+              )}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end">
               <button
-                onClick={install}
-                className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide hover:bg-white/15"
+                onClick={handleInstallClick}
+                disabled={!installEvt && !isIos}
+                className="rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-wide hover:bg-white/15 disabled:opacity-50"
               >
-                Install
+                {installEvt ? "Install" : "Add to home"}
               </button>
               <button
                 onClick={dismissInstall}
                 aria-label="Close install banner"
-                className="rounded-full bg-white/0 px-2 py-1 text-xs font-semibold hover:bg-white/10"
+                className="rounded-full bg-white/0 px-2 py-1 text-xs font-semibold hover:bg-white/10 sm:px-3"
               >
                 Close
               </button>
