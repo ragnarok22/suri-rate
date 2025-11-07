@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About SuriRate",
+  title: "About | SuriRate",
   description:
     "Learn why SuriRate tracks Suriname's exchange rates, how the project started, and what powers the dashboard.",
   alternates: { canonical: "/about" },

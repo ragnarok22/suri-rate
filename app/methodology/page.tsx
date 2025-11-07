@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "SuriRate Methodology",
+  title: "Methodology | SuriRate",
   description:
     "Understand how SuriRate scrapes Suriname bank rates, caches responses, and highlights the best exchange prices.",
   alternates: { canonical: "/methodology" },
@@ -12,7 +12,7 @@ const steps = [
   {
     title: "Scraping",
     detail:
-      "Cheerio-based parsers read HTML tables from CBvS, Hakrinbank, Republic Bank, and Finabank. JSON APIs power DSB and CME.",
+      "Cheerio-based parsers read HTML tables from Central Bank, Hakrinbank, Republic Bank, and Finabank. JSON APIs power DSB and CME.",
   },
   {
     title: "Normalization",

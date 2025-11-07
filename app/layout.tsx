@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "SuriRate – Compare Suriname's Exchange Rates in One Place",
     description:
-      "SuriRate helps you find the best exchange rates in Suriname by comparing USD and EUR rates from Finabank, the Central Bank, and CME – all in one place, updated daily.",
+      "SuriRate helps you find the best exchange rates in Suriname by comparing USD and EUR rates from Finabank, Central Bank, and CME – all in one place, updated daily.",
     manifest: "/manifest.json",
     metadataBase: new URL(siteUrl),
     alternates: { canonical: "/" },
@@ -54,7 +54,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "SuriRate – Compare Suriname's Exchange Rates in One Place",
       description:
-        "Find the best USD and EUR exchange rates in Suriname. SuriRate compares daily rates from Finabank, CBvS, and CME.",
+        "Find the best USD and EUR exchange rates in Suriname. SuriRate compares daily rates from Finabank, Central Bank, and CME.",
       url: siteUrl,
       siteName: "SuriRate",
       images: [

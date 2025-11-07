@@ -3,9 +3,9 @@ import Link from "next/link";
 import { bankPages } from "@/utils/bank-pages";
 
 export const metadata: Metadata = {
-  title: "Suriname Bank Directory",
+  title: "Bank Directory | SuriRate",
   description:
-    "Profiles for Finabank, CBvS, CME, Hakrinbank, DSB, and Republic Bank.",
+    "Profiles for Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank.",
   alternates: { canonical: "/banks" },
 };
 

@@ -12,7 +12,7 @@ const faqItems = [
   {
     question: "How often does SuriRate update Suriname exchange rates?",
     answer:
-      "We refresh data every 12 hours using cached scrapers for Finabank, CBvS, CME, Hakrinbank, DSB, and Republic Bank.",
+      "We refresh data every 12 hours using cached scrapers for Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank.",
   },
   {
     question: "Which currencies can I track?",
@@ -94,7 +94,7 @@ export default async function Home() {
       "USD to SRD",
       "EUR to SRD",
       "Finabank rates",
-      "CBvS rates",
+      "Central Bank rates",
     ],
     hasPart: exchangeRateSpecifications,
   };
@@ -156,8 +156,8 @@ export default async function Home() {
               Current Exchange Rates
             </h2>
             <p className="text-sm text-gray-600">
-              USD and EUR to SRD from Finabank, CBvS, CME, Hakrinbank, DSB, and
-              Republic Bank.
+              USD and EUR to SRD from Finabank, Central Bank, CME, Hakrinbank,
+              DSB, and Republic Bank.
             </p>
           </div>
 

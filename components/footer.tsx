@@ -27,7 +27,7 @@ const Footer = ({ lastUpdated }: FooterProps) => {
       <footer className="bg-green-900 py-6 text-white mt-8">
         <div className="container mx-auto px-4 text-center">
           <p>
-            © {new Date().getFullYear()} Suri Rate - Created by{" "}
+            © {new Date().getFullYear()} SuriRate - Created by{" "}
             <a
               target="_blank"
               rel="noopener noreferrer"

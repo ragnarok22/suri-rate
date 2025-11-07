@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "SuriRate",
     short_name: "SuriRate",
     description:
-      "Compare USD and EUR exchange rates in Suriname from Finabank, CBvS, and CME.",
+      "Compare USD and EUR exchange rates in Suriname from Finabank, Central Bank, and CME.",
     start_url: "/",
     display: "standalone",
     display_override: ["standalone", "browser"],
