@@ -42,7 +42,10 @@ export default async function BankDetailPage({ params }: Props) {
   return (
     <div className="container mx-auto px-4 py-12 space-y-6">
       <nav className="text-sm text-green-700 dark:text-green-400">
-        <Link href="/banks" className="underline">
+        <Link
+          href="/banks"
+          className="underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
+        >
           ← Back to bank profiles
         </Link>
       </nav>
@@ -116,14 +119,14 @@ export default async function BankDetailPage({ params }: Props) {
           Compare today&apos;s prices on the{" "}
           <Link
             href="/"
-            className="text-green-700 dark:text-green-400 underline"
+            className="text-green-700 dark:text-green-400 underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
           >
             SuriRate dashboard
           </Link>{" "}
           or learn how we process the numbers in the{" "}
           <Link
             href="/methodology"
-            className="text-green-700 dark:text-green-400 underline"
+            className="text-green-700 dark:text-green-400 underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
           >
             methodology guide
           </Link>

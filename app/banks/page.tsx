@@ -50,7 +50,7 @@ export default function BanksPage() {
               </div>
               <Link
                 href={`/banks/${bank.slug}`}
-                className="text-sm text-green-700 dark:text-green-400 underline"
+                className="text-sm text-green-700 dark:text-green-400 underline hover:text-green-600 dark:hover:text-green-300 transition-colors duration-200"
               >
                 Details
               </Link>
