@@ -3,10 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBankPageBySlug, bankSlugs } from "@/utils/bank-pages";
 
+type PageParams = {
+  slug: string;
+};
+
 type Props = {
-  params: {
-    slug: string;
-  };
+  params: Promise<PageParams>;
 };
 
 export function generateStaticParams() {
@@ -14,7 +16,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const bank = findBankPageBySlug(params.slug);
+  const { slug } = await params;
+  const bank = findBankPageBySlug(slug);
   if (!bank) {
     return {
       title: "Bank not found",
@@ -28,8 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function BankDetailPage({ params }: Props) {
-  const bank = findBankPageBySlug(params.slug);
+export default async function BankDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const bank = findBankPageBySlug(slug);
 
   if (!bank) {
     notFound();
