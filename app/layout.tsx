@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { getRates } from "@/utils/data";
 import { bankPages } from "@/utils/bank-pages";
-import { PostHogProvider } from "./providers";
+import { ThemeProvider, PostHogProvider } from "./providers";
 import "./globals.css";
 import GitHubLink from "@/components/github";
 import OfflineBanner from "@/components/offline-banner";
@@ -95,12 +95,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <OfflineBanner />
-        <PwaPrompts />
-        <GitHubLink />
-        <PostHogProvider>{children}</PostHogProvider>
+        <ThemeProvider>
+          <OfflineBanner />
+          <PwaPrompts />
+          <GitHubLink />
+          <PostHogProvider>{children}</PostHogProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

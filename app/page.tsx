@@ -2,6 +2,7 @@ import Link from "next/link";
 import ExchangeRateGrid from "@/components/exchange-rate-grid";
 import ExchangeSkeleton from "@/components/exchange-skeleton";
 import Footer from "@/components/footer";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { getRates } from "@/utils/data";
 import { Suspense } from "react";
 
@@ -113,33 +114,47 @@ export default async function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col">
-      <header className="bg-white shadow-sm">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950 flex flex-col">
+      <header className="bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-800">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-green-900">SuriRate</h1>
-              <p className="uppercase tracking-wide text-xs text-green-600 font-semibold mt-1">
+              <h1 className="text-3xl font-bold text-green-900 dark:text-green-400">
+                SuriRate
+              </h1>
+              <p className="uppercase tracking-wide text-xs text-green-600 dark:text-green-500 font-semibold mt-1">
                 Suriname FX dashboard
               </p>
-              <p className="text-sm text-gray-600 mt-2 max-w-2xl">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
                 Compare USD and EUR exchange rates from Suriname&apos;s
                 most-used banks in one glance. We normalize each quote,
                 highlight the best buy/sell prices, and link back to the source
                 so you can take action with confidence.
               </p>
             </div>
-            <nav className="flex flex-wrap gap-3 text-sm font-medium text-green-900">
-              <Link href="/methodology" className="hover:text-green-600">
-                Methodology
-              </Link>
-              <Link href="/about" className="hover:text-green-600">
-                About
-              </Link>
-              <Link href="/banks" className="hover:text-green-600">
-                Banks
-              </Link>
-            </nav>
+            <div className="flex items-center gap-4">
+              <nav className="flex flex-wrap gap-3 text-sm font-medium text-green-900 dark:text-green-400">
+                <Link
+                  href="/methodology"
+                  className="hover:text-green-600 dark:hover:text-green-300"
+                >
+                  Methodology
+                </Link>
+                <Link
+                  href="/about"
+                  className="hover:text-green-600 dark:hover:text-green-300"
+                >
+                  About
+                </Link>
+                <Link
+                  href="/banks"
+                  className="hover:text-green-600 dark:hover:text-green-300"
+                >
+                  Banks
+                </Link>
+              </nav>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </header>
@@ -149,11 +164,11 @@ export default async function Home() {
           <div className="mb-6">
             <h2
               id="rates-heading"
-              className="text-xl font-semibold text-gray-900"
+              className="text-xl font-semibold text-gray-900 dark:text-gray-100"
             >
               Current Exchange Rates
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               USD and EUR to SRD from Finabank, Central Bank, CME, Hakrinbank,
               DSB, and Republic Bank.
             </p>
@@ -166,44 +181,47 @@ export default async function Home() {
 
         <section
           aria-labelledby="how-to-heading"
-          className="grid gap-6 rounded-2xl border border-green-100 bg-white/80 p-6 shadow-sm md:grid-cols-3"
+          className="grid gap-6 rounded-2xl border border-green-100 dark:border-green-900 bg-white/80 dark:bg-gray-800/80 p-6 shadow-sm md:grid-cols-3"
         >
           <div className="md:col-span-3 mb-2">
             <h3
               id="how-to-heading"
-              className="text-lg font-semibold text-gray-900"
+              className="text-lg font-semibold text-gray-900 dark:text-gray-100"
             >
               How to use SuriRate
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Follow this quick workflow to lock in better USD/EUR deals.
             </p>
           </div>
           <article>
-            <h4 className="font-semibold text-green-900">
+            <h4 className="font-semibold text-green-900 dark:text-green-400">
               1. Scan the dashboard
             </h4>
-            <p className="text-sm text-gray-600 mt-2">
-              Identify the green “Best” badges for buy and sell prices so you
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+              Identify the green "Best" badges for buy and sell prices so you
               instantly know which bank leads the pack.
             </p>
           </article>
           <article>
-            <h4 className="font-semibold text-green-900">
+            <h4 className="font-semibold text-green-900 dark:text-green-400">
               2. Check the source
             </h4>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
               Click any bank card to open the official website or API endpoint
               for confirmation if you plan a trade today.
             </p>
           </article>
           <article>
-            <h4 className="font-semibold text-green-900">
+            <h4 className="font-semibold text-green-900 dark:text-green-400">
               3. Plan with context
             </h4>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
               Head to the{" "}
-              <Link href="/methodology" className="text-green-700 underline">
+              <Link
+                href="/methodology"
+                className="text-green-700 dark:text-green-400 underline"
+              >
                 methodology page
               </Link>{" "}
               to learn how we normalize rates and what caching rules apply.
@@ -215,24 +233,26 @@ export default async function Home() {
           className="grid gap-6 md:grid-cols-2"
           aria-labelledby="faq-heading"
         >
-          <div className="rounded-2xl border border-green-100 bg-white/80 p-6 shadow-sm">
+          <div className="rounded-2xl border border-green-100 dark:border-green-900 bg-white/80 dark:bg-gray-800/80 p-6 shadow-sm">
             <h3
               id="faq-heading"
-              className="text-lg font-semibold text-gray-900"
+              className="text-lg font-semibold text-gray-900 dark:text-gray-100"
             >
               Frequently asked questions
             </h3>
             <dl className="mt-4 space-y-4">
               {faqItems.map((item) => (
                 <div key={item.question}>
-                  <dt className="font-medium text-green-900">
+                  <dt className="font-medium text-green-900 dark:text-green-400">
                     {item.question}
                   </dt>
-                  <dd className="text-sm text-gray-600 mt-1">{item.answer}</dd>
+                  <dd className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    {item.answer}
+                  </dd>
                 </div>
               ))}
             </dl>
-            <p className="text-sm text-green-700 mt-4">
+            <p className="text-sm text-green-700 dark:text-green-400 mt-4">
               Need more details? Visit the{" "}
               <Link href="/about" className="underline">
                 about page
@@ -240,30 +260,30 @@ export default async function Home() {
               for the project story.
             </p>
           </div>
-          <div className="rounded-2xl border border-green-100 bg-white/80 p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-900">
+          <div className="rounded-2xl border border-green-100 dark:border-green-900 bg-white/80 dark:bg-gray-800/80 p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Bank coverage
             </h3>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
               Learn about each institution&apos;s strengths, branch
               availability, and contact details before you move money.
             </p>
             <div className="mt-4 space-y-3 text-sm">
               <Link
                 href="/banks"
-                className="block rounded-lg border border-green-200 px-4 py-3 hover:border-green-400"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600"
               >
                 Explore the bank profiles
               </Link>
               <Link
                 href="/banks/finabank"
-                className="block rounded-lg border border-green-200 px-4 py-3 hover:border-green-400"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600"
               >
                 View Finabank details
               </Link>
               <Link
                 href="/banks/central-bank"
-                className="block rounded-lg border border-green-200 px-4 py-3 hover:border-green-400"
+                className="block rounded-lg border border-green-200 dark:border-green-800 px-4 py-3 hover:border-green-400 dark:hover:border-green-600"
               >
                 View Central Bank insights
               </Link>

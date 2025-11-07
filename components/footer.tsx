@@ -17,14 +17,14 @@ const Footer = ({ lastUpdated }: FooterProps) => {
 
   return (
     <>
-      <div className="text-center text-sm text-gray-500 mt-auto">
+      <div className="text-center text-sm text-gray-500 dark:text-gray-400 mt-auto">
         <p>Last updated: {formattedDate}</p>
         <p className="mt-2">
           Rates are for informational purposes only. Contact your bank for
           official rates.
         </p>
       </div>
-      <footer className="bg-green-900 py-6 text-white mt-8">
+      <footer className="bg-green-900 dark:bg-gray-950 py-6 text-white mt-8">
         <div className="container mx-auto px-4 text-center">
           <p>
             © {new Date().getFullYear()} SuriRate - Created by{" "}
@@ -36,20 +36,26 @@ const Footer = ({ lastUpdated }: FooterProps) => {
               Reinier Hernández
             </a>
           </p>
-          <p className="mt-2 text-sm text-green-200">
+          <p className="mt-2 text-sm text-green-200 dark:text-green-400">
             Helping you find the best exchange rates for Suriname
           </p>
           <nav className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
-            <Link href="/about" className="text-green-100 hover:text-white">
+            <Link
+              href="/about"
+              className="text-green-100 dark:text-green-300 hover:text-white"
+            >
               About
             </Link>
             <Link
               href="/methodology"
-              className="text-green-100 hover:text-white"
+              className="text-green-100 dark:text-green-300 hover:text-white"
             >
               Methodology
             </Link>
-            <Link href="/banks" className="text-green-100 hover:text-white">
+            <Link
+              href="/banks"
+              className="text-green-100 dark:text-green-300 hover:text-white"
+            >
               Bank profiles
             </Link>
           </nav>
