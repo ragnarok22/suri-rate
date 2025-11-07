@@ -51,7 +51,7 @@ export default function ExchangeRateCard({
           </div>
         </Link>
       </CardHeader>
-      <CardContent className="p-4 text-gray-800 dark:text-gray-100">
+      <CardContent className="text-gray-800 dark:text-gray-100">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
