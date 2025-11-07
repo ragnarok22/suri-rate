@@ -29,6 +29,11 @@ const steps = [
 export default function MethodologyPage() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-10">
+      <nav className="text-sm text-green-700">
+        <Link href="/" className="underline">
+          ← Back to dashboard
+        </Link>
+      </nav>
       <header className="space-y-2">
         <p className="text-xs uppercase tracking-wide text-green-600 font-semibold">
           Transparency
