@@ -9,6 +9,7 @@ import {
   getOrganizationSchema,
   getWebSiteSchema,
   getItemListSchema,
+  getExchangeRateSpecifications,
 } from "@/utils/schema";
 
 // Revalidate every 12 hours (43200 seconds)
@@ -106,6 +107,10 @@ export default async function Home() {
   const organizationSchema = getOrganizationSchema();
   const webSiteSchema = getWebSiteSchema();
   const itemListSchema = getItemListSchema(rates, updatedAt);
+  const exchangeRateSpecifications = getExchangeRateSpecifications(
+    rates,
+    updatedAt,
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950 flex flex-col">
@@ -322,6 +327,14 @@ export default async function Home() {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
+      {exchangeRateSpecifications.map((spec, index) => (
+        <script
+          key={`exchange-rate-${index}`}
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(spec) }}
+        />
+      ))}
 
       <Footer lastUpdated={updatedAt} />
     </div>

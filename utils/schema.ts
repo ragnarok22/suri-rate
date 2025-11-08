@@ -133,3 +133,48 @@ export function getItemListSchema(rates: BankRates[], updatedAt?: string) {
     })),
   };
 }
+
+export function getExchangeRateSpecifications(
+  rates: BankRates[],
+  updatedAt?: string,
+) {
+  return rates.flatMap((bank) =>
+    bank.rates.flatMap((rate) => [
+      {
+        "@context": "https://schema.org",
+        "@type": "ExchangeRateSpecification",
+        name: `${bank.name} - ${rate.currency} to SRD Buy Rate`,
+        description: `${bank.name} buy rate for converting ${rate.currency} to Surinamese Dollar (SRD)`,
+        url: bank.link,
+        currency: rate.currency,
+        currentExchangeRate: {
+          "@type": "UnitPriceSpecification",
+          price: Number.parseFloat(rate.buy),
+          priceCurrency: "SRD",
+          name: `${rate.currency}/SRD Buy Rate`,
+          validFrom: updatedAt ?? new Date().toISOString(),
+        },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ExchangeRateSpecification",
+        name: `${bank.name} - ${rate.currency} to SRD Sell Rate`,
+        description: `${bank.name} sell rate for converting ${rate.currency} to Surinamese Dollar (SRD)`,
+        url: bank.link,
+        currency: rate.currency,
+        currentExchangeRate: {
+          "@type": "UnitPriceSpecification",
+          price: Number.parseFloat(rate.sell),
+          priceCurrency: "SRD",
+          name: `${rate.currency}/SRD Sell Rate`,
+          validFrom: updatedAt ?? new Date().toISOString(),
+        },
+        exchangeRateSpread: Number.parseFloat(
+          (Number.parseFloat(rate.sell) - Number.parseFloat(rate.buy)).toFixed(
+            2,
+          ),
+        ),
+      },
+    ]),
+  );
+}
