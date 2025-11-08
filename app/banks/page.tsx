@@ -5,7 +5,7 @@ import { bankPages } from "@/utils/bank-pages";
 export const metadata: Metadata = {
   title: "Bank Directory | SuriRate",
   description:
-    "Profiles for Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank.",
+    "Comprehensive profiles for all 6 major Surinamese banks providing USD and EUR exchange rates: Finabank, Central Bank of Suriname, CME, Hakrinbank, DSB, and Republic Bank.",
   alternates: { canonical: "/banks" },
 };
 
