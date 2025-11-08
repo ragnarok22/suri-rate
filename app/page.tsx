@@ -5,6 +5,11 @@ import Footer from "@/components/footer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getRates } from "@/utils/data";
 import { Suspense } from "react";
+import {
+  getOrganizationSchema,
+  getWebSiteSchema,
+  getItemListSchema,
+} from "@/utils/schema";
 
 // Revalidate every 12 hours (43200 seconds)
 export const revalidate = 43200;
@@ -13,22 +18,27 @@ const faqItems = [
   {
     question: "How often does SuriRate update Suriname exchange rates?",
     answer:
-      "We refresh data every 12 hours using cached scrapers for Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank.",
+      "We refresh USD to SRD and EUR to SRD rates every 12 hours from 6 major Surinamese banks: Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank in Paramaribo.",
   },
   {
     question: "Which currencies can I track?",
     answer:
-      "The dashboard focuses on USD and EUR quotes, the most requested pairs for SRD conversions.",
+      "SuriRate tracks USD to SRD and EUR to SRD exchange rates, the two most commonly exchanged foreign currencies in Suriname.",
   },
   {
-    question: "Where do the buy and sell rates come from?",
+    question: "Where do the Suriname exchange rates come from?",
     answer:
-      "Rates are pulled from each bank's public website or API and normalized with the same timestamp so you can compare apples to apples.",
+      "All rates are pulled directly from each bank's official website or API in Paramaribo and Suriname, normalized with timestamps for accurate comparison.",
   },
   {
-    question: "Can I verify the rates with each bank?",
+    question: "Which Suriname bank has the best exchange rate today?",
     answer:
-      "Yes. Each card links directly to the institution so you can double-check or contact them before executing a transaction.",
+      "SuriRate highlights the best buy and sell rates with green badges, making it easy to find the top USD and EUR exchange rates across all major Surinamese banks.",
+  },
+  {
+    question: "Can I verify the exchange rates with each bank?",
+    answer:
+      "Yes. Each bank card links directly to the institution's official website so you can verify current rates or contact them before making a transaction.",
   },
 ];
 
@@ -78,9 +88,9 @@ export default async function Home() {
   const datasetStructuredData = {
     "@context": "https://schema.org",
     "@type": "Dataset",
-    name: "SuriRate Exchange Rates",
+    name: "SuriRate Suriname Exchange Rates",
     description:
-      "Daily USD and EUR exchange rates from six major Surinamese banks, normalized for quick comparison.",
+      "Real-time USD to SRD and EUR to SRD exchange rates from six major banks in Suriname (Paramaribo): Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank. Updated every 12 hours for accurate comparison.",
     url: siteUrl,
     sameAs: ["https://github.com/ragnarok22/suri-rate"],
     dateModified: updatedAt ?? new Date().toISOString(),
@@ -89,13 +99,30 @@ export default async function Home() {
       name: "SuriRate",
       url: siteUrl,
     },
+    spatialCoverage: {
+      "@type": "Place",
+      name: "Suriname",
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 5.852,
+        longitude: -55.2038,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "SR",
+        addressLocality: "Paramaribo",
+      },
+    },
     inLanguage: "en",
     keywords: [
       "Suriname exchange rate",
       "USD to SRD",
       "EUR to SRD",
+      "Suriname dollar rate",
+      "Paramaribo exchange rate",
       "Finabank rates",
-      "Central Bank rates",
+      "Central Bank Suriname",
+      "best exchange rate Suriname",
     ],
     hasPart: exchangeRateSpecifications,
   };
@@ -113,6 +140,10 @@ export default async function Home() {
     })),
   };
 
+  const organizationSchema = getOrganizationSchema();
+  const webSiteSchema = getWebSiteSchema();
+  const itemListSchema = getItemListSchema(rates, updatedAt);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950 flex flex-col">
       <header className="bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-800">
@@ -120,16 +151,16 @@ export default async function Home() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-3xl font-bold text-green-900 dark:text-green-400">
-                SuriRate
+                SuriRate - Suriname Exchange Rate Comparison
               </h1>
               <p className="uppercase tracking-wide text-xs text-green-600 dark:text-green-500 font-semibold mt-1">
-                Suriname FX dashboard
+                USD & EUR to SRD • Paramaribo Banks
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
-                Compare USD and EUR exchange rates from Suriname&apos;s
-                most-used banks in one glance. We normalize each quote,
-                highlight the best buy/sell prices, and link back to the source
-                so you can take action with confidence.
+                Compare today&apos;s USD to SRD and EUR to SRD exchange rates
+                from 6 major banks in Suriname. Find the best Suriname dollar
+                rates in Paramaribo - we highlight top buy/sell prices and link
+                directly to each bank for easy verification.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -166,11 +197,12 @@ export default async function Home() {
               id="rates-heading"
               className="text-xl font-semibold text-gray-900 dark:text-gray-100"
             >
-              Current Exchange Rates
+              Today&apos;s Suriname Exchange Rates (USD & EUR to SRD)
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              USD and EUR to SRD from Finabank, Central Bank, CME, Hakrinbank,
-              DSB, and Republic Bank.
+              Compare current exchange rates from 6 major banks in Paramaribo:
+              Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank.
+              Updated every 12 hours.
             </p>
           </div>
 
@@ -188,10 +220,11 @@ export default async function Home() {
               id="how-to-heading"
               className="text-lg font-semibold text-gray-900 dark:text-gray-100"
             >
-              How to use SuriRate
+              How to Find the Best Suriname Exchange Rates
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Follow this quick workflow to lock in better USD/EUR deals.
+              Follow these steps to get the best USD to SRD or EUR to SRD rates
+              in Paramaribo today.
             </p>
           </div>
           <article>
@@ -295,6 +328,25 @@ export default async function Home() {
         </section>
       </main>
 
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListSchema),
+        }}
+      />
       <script
         type="application/ld+json"
         suppressHydrationWarning

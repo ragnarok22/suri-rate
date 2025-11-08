@@ -1,15 +1,63 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { bankPages } from "@/utils/bank-pages";
+import { getBreadcrumbSchema } from "@/utils/schema";
 
 export const metadata: Metadata = {
-  title: "Bank Directory | SuriRate",
+  title:
+    "Suriname Banks Directory - Exchange Rate Comparison | USD & EUR to SRD",
   description:
-    "Comprehensive profiles for all 6 major Surinamese banks providing USD and EUR exchange rates: Finabank, Central Bank of Suriname, CME, Hakrinbank, DSB, and Republic Bank.",
+    "Complete profiles of 6 major banks in Suriname offering USD and EUR to SRD exchange rates: Finabank, Central Bank of Suriname, CME, Hakrinbank, DSB, and Republic Bank in Paramaribo.",
   alternates: { canonical: "/banks" },
+  keywords: [
+    "Suriname banks",
+    "Paramaribo banks",
+    "Suriname exchange rates",
+    "banks in Suriname",
+    "Finabank",
+    "Central Bank Suriname",
+    "CME bank",
+    "Hakrinbank",
+    "DSB bank",
+    "Republic Bank Suriname",
+  ],
+  openGraph: {
+    title: "Suriname Banks Directory - Exchange Rate Comparison",
+    description:
+      "Explore profiles of 6 major banks in Suriname providing USD and EUR to SRD exchange rates.",
+    url: "/banks",
+  },
 };
 
 export default function BanksPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Banks", url: "/banks" },
+  ]);
+
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Suriname Banks Offering Exchange Rates",
+    description:
+      "List of major banks in Suriname providing USD and EUR to SRD exchange rates",
+    itemListElement: bankPages.map((bank, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "FinancialService",
+        name: bank.name,
+        url: `https://suri-rate.ragnarok22.dev/banks/${bank.slug}`,
+        description: bank.summary,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: bank.headquarters,
+          addressCountry: "SR",
+        },
+      },
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950">
       <div className="container mx-auto px-4 py-12 space-y-8">
@@ -23,14 +71,15 @@ export default function BanksPage() {
         </nav>
         <header className="space-y-2">
           <p className="text-xs uppercase tracking-wide text-green-600 dark:text-green-500 font-semibold">
-            Coverage
+            Suriname Banks • Exchange Rates
           </p>
           <h1 className="text-3xl font-bold text-green-900 dark:text-green-400">
-            Bank profiles
+            Banks Offering USD & EUR Exchange Rates in Suriname
           </h1>
           <p className="text-gray-600 dark:text-gray-400 max-w-3xl">
-            Understand who powers the exchange rates you see on the dashboard
-            and bookmark the ones you rely on the most.
+            Explore detailed profiles of the 6 major banks in Paramaribo and
+            Suriname providing USD to SRD and EUR to SRD exchange rates. Compare
+            their services, locations, and current rates.
           </p>
         </header>
 
@@ -68,6 +117,21 @@ export default function BanksPage() {
           ))}
         </section>
       </div>
+
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListSchema),
+        }}
+      />
     </div>
   );
 }

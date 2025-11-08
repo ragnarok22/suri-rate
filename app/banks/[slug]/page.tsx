@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBankPageBySlug, bankSlugs } from "@/utils/bank-pages";
+import { getBreadcrumbSchema } from "@/utils/schema";
 
 type PageParams = {
   slug: string;
@@ -25,9 +26,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${bank.name} Exchange Rates | SuriRate`,
-    description: bank.summary,
+    title: `${bank.name} Exchange Rates Suriname | USD & EUR to SRD | SuriRate`,
+    description: `${bank.summary} Compare ${bank.name}'s current USD to SRD and EUR to SRD exchange rates in Paramaribo, Suriname. ${bank.highlights[0] || ""}`,
     alternates: { canonical: `/banks/${bank.slug}` },
+    keywords: [
+      `${bank.name} exchange rate`,
+      `${bank.name} Suriname`,
+      `${bank.name} USD to SRD`,
+      `${bank.name} EUR to SRD`,
+      `${bank.name} Paramaribo`,
+      "Suriname bank rates",
+      "exchange rate Suriname",
+    ],
+    openGraph: {
+      title: `${bank.name} Exchange Rates in Suriname`,
+      description: bank.summary,
+      url: `/banks/${bank.slug}`,
+    },
   };
 }
 
@@ -38,6 +53,44 @@ export default async function BankDetailPage({ params }: Props) {
   if (!bank) {
     notFound();
   }
+
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Banks", url: "/banks" },
+    { name: bank.name, url: `/banks/${bank.slug}` },
+  ]);
+
+  const financialServiceSchema = {
+    "@context": "https://schema.org",
+    "@type": "FinancialService",
+    name: bank.name,
+    url: bank.website,
+    description: bank.summary,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: bank.headquarters,
+      addressCountry: "SR",
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "Suriname",
+    },
+    serviceType: ["Currency Exchange", "Banking Services"],
+    knowsAbout: ["USD to SRD", "EUR to SRD", "Exchange Rates"],
+    foundingDate: bank.founded,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Banking Services",
+      itemListElement: bank.services.map((service, index) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: service,
+        },
+        position: index + 1,
+      })),
+    },
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950">
@@ -52,10 +105,10 @@ export default async function BankDetailPage({ params }: Props) {
         </nav>
         <header className="space-y-2">
           <p className="text-xs uppercase tracking-wide text-green-600 dark:text-green-500 font-semibold">
-            Bank profile
+            Bank profile • Suriname Exchange Rates
           </p>
           <h1 className="text-3xl font-bold text-green-900 dark:text-green-400">
-            {bank.name}
+            {bank.name} - USD & EUR to SRD Exchange Rates
           </h1>
           <p className="text-gray-600 dark:text-gray-400 max-w-3xl">
             {bank.summary}
@@ -135,6 +188,21 @@ export default async function BankDetailPage({ params }: Props) {
           </p>
         </section>
       </div>
+
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(financialServiceSchema),
+        }}
+      />
     </div>
   );
 }
