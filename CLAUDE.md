@@ -70,14 +70,20 @@ Two approaches used depending on requirements:
 
 ## Environment Variables
 
-Required in `.env.local`:
+### Vercel Deployment (Required)
 
+```bash
+ENABLE_EXPERIMENTAL_COREPACK=1  # Required for pnpm on Vercel
 ```
-ENABLE_EXPERIMENTAL_COREPACK=1
-NEXT_PUBLIC_CACHE_DURATION=86400
-NEXT_PUBLIC_POSTHOG_KEY=<optional>
-NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+
+### Analytics (Optional)
+
+```bash
+NEXT_PUBLIC_POSTHOG_KEY=phc_xxxxx           # PostHog analytics key
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com  # PostHog API endpoint
 ```
+
+**Note**: Cache duration is hardcoded to 12 hours in `utils/index.ts:3`. PostHog analytics are optional and only used in `app/providers.tsx`.
 
 ## Testing
 

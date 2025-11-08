@@ -52,14 +52,15 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 Create a `.env.local` file in the project root:
 
 ```bash
-# Required
-ENABLE_EXPERIMENTAL_COREPACK=1            # Required for pnpm with Next.js
+# Required for Vercel deployment
+ENABLE_EXPERIMENTAL_COREPACK=1            # Required for pnpm on Vercel
 
-# Optional
-NEXT_PUBLIC_CACHE_DURATION=86400          # Cache lifetime (24 hours)
+# Optional - Analytics
 NEXT_PUBLIC_POSTHOG_KEY=phc_xxxxx          # PostHog analytics key
 NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
+
+**Note**: Cache duration is hardcoded to 12 hours in the codebase (`utils/index.ts`).
 
 ## 🛠️ Development
 
