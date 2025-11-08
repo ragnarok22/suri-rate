@@ -39,17 +39,6 @@ export async function generateMetadata(): Promise<Metadata> {
     ...bankNames.map((name) => `${name} Suriname`),
   ]);
 
-  const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
-  const bingVerification = process.env.NEXT_PUBLIC_BING_WEBMASTER_VERIFICATION;
-
-  const verification: Metadata["verification"] = {};
-  if (googleVerification) verification.google = googleVerification;
-  if (bingVerification)
-    verification.other = { "msvalidate.01": bingVerification };
-
-  const verificationField =
-    Object.keys(verification).length > 0 ? verification : undefined;
-
   return {
     title:
       "SuriRate – Suriname Exchange Rate Comparison | USD & EUR to SRD Today",
@@ -97,7 +86,6 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "SuriRate",
       statusBarStyle: "default",
     },
-    verification: verificationField,
   };
 }
 
