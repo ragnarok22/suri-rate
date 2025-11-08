@@ -1,6 +1,43 @@
-import type { BankRates } from "./definitions";
+import type { BankName, BankRates } from "./definitions";
 
 const siteUrl = "https://suri-rate.ragnarok22.dev";
+
+// Bank addresses for Schema.org LocalBusiness
+const bankAddresses: Record<
+  BankName,
+  { streetAddress: string; addressLocality: string; addressCountry: string }
+> = {
+  Finabank: {
+    streetAddress: "Waterkant",
+    addressLocality: "Paramaribo",
+    addressCountry: "SR",
+  },
+  "Central Bank": {
+    streetAddress: "Waterkant 20",
+    addressLocality: "Paramaribo",
+    addressCountry: "SR",
+  },
+  "Central Money Exchange": {
+    streetAddress: "Henck Arronstraat",
+    addressLocality: "Paramaribo",
+    addressCountry: "SR",
+  },
+  Hakrinbank: {
+    streetAddress: "Henck Arronstraat 26-30",
+    addressLocality: "Paramaribo",
+    addressCountry: "SR",
+  },
+  "De Surinaamsche Bank (DSB)": {
+    streetAddress: "Henck Arronstraat 26-30",
+    addressLocality: "Paramaribo",
+    addressCountry: "SR",
+  },
+  "Republic Bank": {
+    streetAddress: "Domineestraat 23",
+    addressLocality: "Paramaribo",
+    addressCountry: "SR",
+  },
+};
 
 export function getOrganizationSchema() {
   return {
@@ -113,6 +150,12 @@ export function getItemListSchema(rates: BankRates[], updatedAt?: string) {
         url: bank.link,
         additionalType: "FinancialService",
         currenciesAccepted: "USD,EUR,SRD",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: bankAddresses[bank.name].streetAddress,
+          addressLocality: bankAddresses[bank.name].addressLocality,
+          addressCountry: bankAddresses[bank.name].addressCountry,
+        },
         areaServed: {
           "@type": "Country",
           name: "Suriname",
