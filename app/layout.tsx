@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "SuriRate – Compare Suriname's Exchange Rates in One Place",
     description:
-      "SuriRate helps you find the best exchange rates in Suriname by comparing USD and EUR rates from Finabank, Central Bank, and CME – all in one place, updated daily.",
+      "Compare USD and EUR exchange rates from 6 major Surinamese banks: Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank. Updated every 12 hours.",
     manifest: "/manifest.json",
     metadataBase: new URL(siteUrl),
     alternates: { canonical: "/" },
