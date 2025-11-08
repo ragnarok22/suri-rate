@@ -48,42 +48,6 @@ export default async function Home() {
   const rates = info?.rates || [];
 
   const siteUrl = "https://suri-rate.ragnarok22.dev";
-  const exchangeRateSpecifications = rates.flatMap((bank) =>
-    bank.rates.flatMap((rate) => [
-      {
-        "@type": "ExchangeRateSpecification",
-        currency: `${rate.currency}/SRD`,
-        provider: {
-          "@type": "FinancialService",
-          name: bank.name,
-          url: bank.link,
-        },
-        description: `${bank.name} buy rate for ${rate.currency} to SRD`,
-        priceType: "buy",
-        currentExchangeRate: {
-          "@type": "UnitPriceSpecification",
-          price: Number.parseFloat(rate.buy),
-          priceCurrency: "SRD",
-        },
-      },
-      {
-        "@type": "ExchangeRateSpecification",
-        currency: `${rate.currency}/SRD`,
-        provider: {
-          "@type": "FinancialService",
-          name: bank.name,
-          url: bank.link,
-        },
-        description: `${bank.name} sell rate for ${rate.currency} to SRD`,
-        priceType: "sell",
-        currentExchangeRate: {
-          "@type": "UnitPriceSpecification",
-          price: Number.parseFloat(rate.sell),
-          priceCurrency: "SRD",
-        },
-      },
-    ]),
-  );
 
   const datasetStructuredData = {
     "@context": "https://schema.org",
@@ -124,7 +88,6 @@ export default async function Home() {
       "Central Bank Suriname",
       "best exchange rate Suriname",
     ],
-    hasPart: exchangeRateSpecifications,
   };
 
   const faqStructuredData = {

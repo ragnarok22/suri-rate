@@ -102,24 +102,34 @@ export function getItemListSchema(rates: BankRates[], updatedAt?: string) {
     name: "Suriname Exchange Rates Comparison",
     description:
       "Current USD and EUR exchange rates from major Surinamese banks",
+    numberOfItems: rates.length,
     itemListElement: rates.map((bank, index) => ({
       "@type": "ListItem",
       position: index + 1,
       item: {
-        "@type": "FinancialService",
+        "@type": "LocalBusiness",
+        "@id": bank.link,
         name: bank.name,
         url: bank.link,
-        offers: bank.rates.map((rate) => ({
+        additionalType: "FinancialService",
+        currenciesAccepted: "USD,EUR,SRD",
+        areaServed: {
+          "@type": "Country",
+          name: "Suriname",
+        },
+        makesOffer: bank.rates.map((rate) => ({
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            name: `${rate.currency}/SRD Exchange`,
+            name: `${rate.currency} to SRD Currency Exchange`,
+            serviceType: "Currency Exchange",
           },
           price: rate.buy,
           priceCurrency: "SRD",
+          description: `Buy ${rate.currency} at ${rate.buy} SRD, Sell at ${rate.sell} SRD`,
+          validFrom: updatedAt ?? new Date().toISOString(),
         })),
       },
     })),
-    dateModified: updatedAt ?? new Date().toISOString(),
   };
 }
