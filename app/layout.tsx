@@ -78,7 +78,7 @@ export async function generateMetadata(): Promise<Metadata> {
         "SuriRate – Suriname Exchange Rate Comparison | USD & EUR to SRD Today",
       description:
         "Get the most accurate USD and EUR exchange rates in Suriname. Compare rates from 6 major banks in Paramaribo and find the best deal today.",
-      images: ["/twitter-image.jpg"],
+      images: ["/twitter-image.png"],
       creator: "@ragnarokreinier",
     },
     appleWebApp: {
