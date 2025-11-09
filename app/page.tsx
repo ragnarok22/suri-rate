@@ -59,6 +59,7 @@ export default async function Home() {
     url: siteUrl,
     sameAs: ["https://github.com/ragnarok22/suri-rate"],
     dateModified: updatedAt ?? new Date().toISOString(),
+    license: "https://creativecommons.org/publicdomain/zero/1.0/",
     creator: {
       "@type": "Organization",
       name: "SuriRate",
@@ -89,6 +90,12 @@ export default async function Home() {
       "Central Bank Suriname",
       "best exchange rate Suriname",
     ],
+    hasPart: rates.map((bank) => ({
+      "@type": "Dataset",
+      name: `${bank.name} Exchange Rates`,
+      description: `USD and EUR to SRD exchange rates from ${bank.name}`,
+      identifier: bank.link,
+    })),
   };
 
   const faqStructuredData = {
