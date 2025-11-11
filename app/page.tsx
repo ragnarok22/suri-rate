@@ -12,8 +12,8 @@ import {
   getExchangeRateSpecifications,
 } from "@/utils/schema";
 
-// Revalidate every 12 hours (43200 seconds)
-export const revalidate = 43200;
+// Render dynamically; caching is handled via unstable_cache to avoid double ISR
+export const dynamic = "force-dynamic";
 
 const faqItems = [
   {
