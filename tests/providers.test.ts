@@ -10,10 +10,14 @@ vi.mock("@/utils", () => ({
   api: (...args: [string | URL, RequestInit?]) => apiMock(...args),
 }));
 
-// Mock Next.js unstable_cache to bypass caching in tests
-vi.mock("next/cache", () => ({
-  unstable_cache: <T extends (...args: unknown[]) => unknown>(fn: T) => fn, // Return the function unwrapped
-}));
+// Mock React cache to bypass caching in tests
+vi.mock("react", async () => {
+  const actual = await vi.importActual<typeof import("react")>("react");
+  return {
+    ...actual,
+    cache: <T extends (...args: unknown[]) => unknown>(fn: T) => fn, // Return the function unwrapped
+  };
+});
 
 // Mock axios for CME provider
 vi.mock("axios", () => {

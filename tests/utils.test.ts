@@ -3,9 +3,13 @@ import { cn, findBestRates } from "../utils";
 import { getRates } from "../utils/data";
 import type { BankRates, ExchangeRate } from "../utils/definitions";
 
-vi.mock("next/cache", () => ({
-  unstable_cache: <T extends (...args: unknown[]) => unknown>(cb: T) => cb,
-}));
+vi.mock("react", async () => {
+  const actual = await vi.importActual<typeof import("react")>("react");
+  return {
+    ...actual,
+    cache: <T extends (...args: unknown[]) => unknown>(cb: T) => cb,
+  };
+});
 
 // Mock places to keep tests offline and deterministic
 const mockRatesList: ExchangeRate[] = [

@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL("https://finabanknv.com/**")],
   },
+  // Empty turbopack config to silence webpack/turbopack warning in Next.js 16
+  turbopack: {},
 };
 
 // Avoid wrapping with next-pwa in development so Turbopack stays enabled.

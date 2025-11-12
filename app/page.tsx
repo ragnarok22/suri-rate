@@ -12,7 +12,7 @@ import {
   getExchangeRateSpecifications,
 } from "@/utils/schema";
 
-// Render dynamically; caching is handled via unstable_cache to avoid double ISR
+// Render dynamically; caching is handled via React cache to avoid double ISR
 export const dynamic = "force-dynamic";
 
 const faqItems = [
