@@ -34,8 +34,11 @@ export async function getFinabankExchangeRates(): Promise<ExchangeRate[]> {
     }
 
     return rates;
-  } catch (e: any) {
-    console.error("Error getting Finabank info:", e.message);
+  } catch (e) {
+    console.error(
+      "Error getting Finabank info:",
+      e instanceof Error ? e.message : String(e),
+    );
     throw e;
   }
 }
@@ -62,8 +65,11 @@ export async function getDsbExchangeRates(): Promise<ExchangeRate[]> {
         sell: item.EUR.sell,
       },
     ];
-  } catch (e: any) {
-    console.error("Error getting DSB info:", e.message);
+  } catch (e) {
+    console.error(
+      "Error getting DSB info:",
+      e instanceof Error ? e.message : String(e),
+    );
     throw e;
   }
 }
@@ -95,8 +101,11 @@ export async function getCBVSExchangeRates(): Promise<ExchangeRate[]> {
       });
 
     return rates;
-  } catch (e: any) {
-    console.error("Error getting CBVS info:", e.message);
+  } catch (e) {
+    console.error(
+      "Error getting CBVS info:",
+      e instanceof Error ? e.message : String(e),
+    );
     return [
       {
         currency: "USD",
@@ -204,9 +213,12 @@ async function fetchCMEExchangeRates(): Promise<ExchangeRate[]> {
         sell: item.SaleEuroExchangeRate.toFixed(2),
       },
     ];
-  } catch (e: any) {
-    console.error("Error getting CME info:", e.message);
-    if (e.response) {
+  } catch (e) {
+    console.error(
+      "Error getting CME info:",
+      e instanceof Error ? e.message : String(e),
+    );
+    if (axios.isAxiosError(e) && e.response) {
       console.error("CME error response data:", e.response.data);
       console.error("CME error response status:", e.response.status);
       console.error("CME error response headers:", e.response.headers);
@@ -276,8 +288,11 @@ export async function getHakrinbankExchangeRates(): Promise<ExchangeRate[]> {
       { currency: "USD", buy: usdBuy, sell: usdSell },
       { currency: "EUR", buy: eurBuy, sell: eurSell },
     ];
-  } catch (e: any) {
-    console.error("Error getting Hakrinbank info:", e.message);
+  } catch (e) {
+    console.error(
+      "Error getting Hakrinbank info:",
+      e instanceof Error ? e.message : String(e),
+    );
     throw e;
   }
 }
@@ -337,8 +352,11 @@ export async function getRepublicBankExchangeRates(): Promise<ExchangeRate[]> {
       { currency: "USD", buy: usdBuy, sell: usdSell },
       { currency: "EUR", buy: eurBuy, sell: eurSell },
     ];
-  } catch (e: any) {
-    console.error("Error getting Republic Bank exchange rates:", e.message);
+  } catch (e) {
+    console.error(
+      "Error getting Republic Bank exchange rates:",
+      e instanceof Error ? e.message : String(e),
+    );
     throw e;
   }
 }

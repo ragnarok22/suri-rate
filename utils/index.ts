@@ -14,7 +14,7 @@ const readStream = async (
   if (stream && typeof stream.getReader === "function") {
     // Read from ReadableStream<Uint8Array>
     const reader = stream.getReader();
-    let chunks: Uint8Array[] = [];
+    const chunks: Uint8Array[] = [];
     let done = false;
     while (!done) {
       const { value, done: streamDone } = await reader.read();

@@ -4,11 +4,7 @@ import { getRates } from "../utils/data";
 import type { BankRates, ExchangeRate } from "../utils/definitions";
 
 vi.mock("next/cache", () => ({
-  unstable_cache: <T extends (...args: unknown[]) => unknown>(
-    cb: T,
-    _key?: string[],
-    _options?: object,
-  ) => cb,
+  unstable_cache: <T extends (...args: unknown[]) => unknown>(cb: T) => cb,
 }));
 
 // Mock places to keep tests offline and deterministic

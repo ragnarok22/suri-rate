@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePostHog } from "posthog-js/react";
 
 type InstallPlatform = "ios" | "android" | "desktop" | "other" | "unknown";
@@ -29,6 +29,7 @@ type BeforeInstallPromptEvent = Event & {
 
 export default function PwaPrompts() {
   const posthog = usePostHog();
+  const [mounted, setMounted] = useState(false);
   const [updateReady, setUpdateReady] = useState(false);
   const [installEvt, setInstallEvt] = useState<BeforeInstallPromptEvent | null>(
     null,
@@ -40,14 +41,22 @@ export default function PwaPrompts() {
   const [bannerHeight, setBannerHeight] = useState(0);
   const bannerRef = useRef<HTMLDivElement | null>(null);
   const reloading = useRef(false);
+  const [isInstalled, setIsInstalled] = useState(false);
 
-  const isInstalled = useMemo(() => {
-    if (typeof window === "undefined") return false;
+  useEffect(() => {
+    // Check if app is installed
     // iOS Safari
     // @ts-expect-error non-standard
-    if (window.navigator.standalone) return true;
+    if (window.navigator.standalone) {
+      setIsInstalled(true);
+      setMounted(true);
+      return;
+    }
     // Other browsers
-    return window.matchMedia?.("(display-mode: standalone)").matches ?? false;
+    const installed =
+      window.matchMedia?.("(display-mode: standalone)").matches ?? false;
+    setIsInstalled(installed);
+    setMounted(true);
   }, []);
 
   // Listen to next-pwa workbox lifecycle for update prompt
@@ -90,19 +99,22 @@ export default function PwaPrompts() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const stored = window.localStorage.getItem("install-banner-dismissed");
-    setInstallDismissed(stored === "true");
+    if (stored === "true") {
+      setInstallDismissed(true);
+    }
   }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const media = window.matchMedia("(max-width: 768px)");
     const updateMobile = () => setIsMobile(media.matches);
-    updateMobile();
     if (typeof media.addEventListener === "function") {
       media.addEventListener("change", updateMobile);
+      updateMobile();
       return () => media.removeEventListener("change", updateMobile);
     }
     media.addListener?.(updateMobile);
+    updateMobile();
     return () => media.removeListener?.(updateMobile);
   }, []);
 
@@ -116,7 +128,8 @@ export default function PwaPrompts() {
         : /Windows|Macintosh|Linux|CrOS/i.test(ua)
           ? "desktop"
           : "other";
-    setIsIos(detected === "ios");
+    const isIosDevice = detected === "ios";
+    setIsIos(isIosDevice);
     setPlatform(detected);
   }, []);
 
@@ -173,7 +186,11 @@ export default function PwaPrompts() {
   };
 
   const shouldShowInstallBanner =
-    !isInstalled && isMobile && !installDismissed && (installEvt || isIos);
+    mounted &&
+    !isInstalled &&
+    isMobile &&
+    !installDismissed &&
+    (installEvt || isIos);
 
   useEffect(() => {
     if (!shouldShowInstallBanner) {
@@ -193,6 +210,8 @@ export default function PwaPrompts() {
     window.addEventListener("resize", updateHeight);
     return () => window.removeEventListener("resize", updateHeight);
   }, [shouldShowInstallBanner]);
+
+  if (!mounted) return null;
 
   return (
     <>

@@ -5,7 +5,10 @@ import type { ExchangeRate } from "../utils/definitions";
 import axios from "axios";
 
 vi.mock("axios");
-const mockedAxios = axios as unknown as { get: any; post: any };
+const mockedAxios = axios as unknown as {
+  get: ReturnType<typeof vi.fn>;
+  post: ReturnType<typeof vi.fn>;
+};
 
 const mockRates: ExchangeRate[] = [
   { currency: "USD", buy: "1", sell: "2" },

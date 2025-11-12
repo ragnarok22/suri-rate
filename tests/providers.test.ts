@@ -7,12 +7,12 @@ const apiMock = vi.fn<[string | URL, RequestInit?], Promise<{ html: string }>>(
 );
 
 vi.mock("@/utils", () => ({
-  api: (...args: any[]) => apiMock(...(args as [string | URL, RequestInit?])),
+  api: (...args: [string | URL, RequestInit?]) => apiMock(...args),
 }));
 
 // Mock Next.js unstable_cache to bypass caching in tests
 vi.mock("next/cache", () => ({
-  unstable_cache: (fn: any) => fn, // Return the function unwrapped
+  unstable_cache: <T extends (...args: unknown[]) => unknown>(fn: T) => fn, // Return the function unwrapped
 }));
 
 // Mock axios for CME provider
@@ -103,7 +103,7 @@ describe("providers: parsing", () => {
           SaleEuroExchangeRate: 6.4,
         },
       ],
-    } as any);
+    });
 
     const rates = await getCMEExchangeRates();
     expect(rates).toEqual<ExchangeRate[]>([
