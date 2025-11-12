@@ -1,7 +1,5 @@
 import { BankRates } from "./definitions";
 
-const EXPIRATION = 60 * 60 * 12; // 12h
-
 /**
  * Reads all data from a ReadableStream<Uint8Array> and returns it as a string.
  * @param stream - The ReadableStream to read from.
@@ -30,7 +28,8 @@ const readStream = async (
 };
 
 /**
- * Fetches data from the specified URL with a revalidation time.
+ * Fetches data from the specified URL.
+ * Caching is now handled at the function level via 'use cache' in utils/data.ts.
  * @param url - The API endpoint to fetch data from.
  * @returns The fetch API response.
  */
@@ -38,12 +37,7 @@ export const api = async (
   url: string | URL,
   init?: RequestInit,
 ): Promise<{ html: string } & Response> => {
-  const response = await fetch(url, {
-    next: {
-      revalidate: EXPIRATION,
-    },
-    ...init,
-  });
+  const response = await fetch(url, init);
 
   let html = "";
   if (response.body) {

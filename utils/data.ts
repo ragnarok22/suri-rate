@@ -1,10 +1,14 @@
-import { cache } from "react";
+import { cacheLife } from "next/cache";
 import { BankRates } from "./definitions";
 import { getCurrentRates } from "./places";
 
-const REVALIDATE_SECONDS = 60 * 60 * 12; // 12 hours
+export async function getRates(): Promise<{
+  rates: BankRates[];
+  updatedAt: string;
+} | null> {
+  "use cache";
+  cacheLife("exchangeRates");
 
-const fetchRates = cache(async () => {
   try {
     const rates = await getCurrentRates();
     const updatedAt = new Date().toISOString();
@@ -17,11 +21,4 @@ const fetchRates = cache(async () => {
     console.error("Failed to load exchange rates:", error);
     return null;
   }
-});
-
-export async function getRates(): Promise<{
-  rates: BankRates[];
-  updatedAt: string;
-} | null> {
-  return fetchRates();
 }

@@ -12,9 +12,6 @@ import {
   getExchangeRateSpecifications,
 } from "@/utils/schema";
 
-// Render dynamically; caching is handled via React cache to avoid double ISR
-export const dynamic = "force-dynamic";
-
 const faqItems = [
   {
     question: "How often does SuriRate update Suriname exchange rates?",

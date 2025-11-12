@@ -1,9 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 interface FooterProps {
   lastUpdated: string | undefined;
 }
 const Footer = ({ lastUpdated }: FooterProps) => {
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
   const formattedDate = lastUpdated
     ? new Date(lastUpdated).toLocaleString("en-US", {
         year: "numeric",
@@ -27,7 +36,7 @@ const Footer = ({ lastUpdated }: FooterProps) => {
       <footer className="bg-green-900 dark:bg-gray-950 py-6 text-white mt-8">
         <div className="container mx-auto px-4 text-center">
           <p>
-            © {new Date().getFullYear()} SuriRate - Created by{" "}
+            © {currentYear ?? "2024"} SuriRate - Created by{" "}
             <a
               target="_blank"
               rel="noopener noreferrer"
