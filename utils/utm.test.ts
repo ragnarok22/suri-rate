@@ -136,7 +136,10 @@ describe("UTM Builder Functions", () => {
         "usd",
       );
 
-      expect(url).toContain("utm_content=de-surinaamsche-bank-(dsb)-usd-en");
+      // URL encodes parentheses as %28 and %29
+      expect(url).toContain(
+        "utm_content=de-surinaamsche-bank-%28dsb%29-usd-en",
+      );
     });
 
     it("should preserve existing query params in bank URL", () => {
