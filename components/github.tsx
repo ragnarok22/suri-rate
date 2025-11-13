@@ -1,9 +1,30 @@
+"use client";
+
 import styles from "./github.module.css";
+import { usePostHog } from "posthog-js/react";
+import { buildUTMUrl } from "@/utils/utm";
 
 const GitHubLink = () => {
+  const posthog = usePostHog();
+
+  const githubUrl = buildUTMUrl("https://github.com/ragnarok22/suri-rate", {
+    source: "surirate",
+    medium: "github_corner",
+    campaign: "repository",
+  });
+
+  const handleClick = () => {
+    posthog.capture("outbound_click", {
+      url: "https://github.com/ragnarok22/suri-rate",
+      utm_url: githubUrl,
+      type: "github",
+    });
+  };
+
   return (
     <a
-      href="https://github.com/ragnarok22/suri-rate"
+      href={githubUrl}
+      onClick={handleClick}
       className={styles["github-corner"]}
       aria-label="View source on GitHub"
     >

@@ -2,16 +2,31 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePostHog } from "posthog-js/react";
+import { buildUTMUrl } from "@/utils/utm";
 
 interface FooterProps {
   lastUpdated: string | undefined;
 }
 const Footer = ({ lastUpdated }: FooterProps) => {
   const [currentYear, setCurrentYear] = useState<number | null>(null);
+  const posthog = usePostHog();
 
   useEffect(() => {
     setCurrentYear(new Date().getFullYear());
   }, []);
+
+  const handlePersonalSiteClick = () => {
+    posthog.capture("outbound_click", {
+      url: "https://reinierhernandez.com",
+      utm_url: buildUTMUrl("https://reinierhernandez.com", {
+        source: "surirate",
+        medium: "footer",
+        campaign: "credits",
+      }),
+      type: "personal_website",
+    });
+  };
 
   const formattedDate = lastUpdated
     ? new Date(lastUpdated).toLocaleString("en-US", {
@@ -40,7 +55,12 @@ const Footer = ({ lastUpdated }: FooterProps) => {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://reinierhernandez.com"
+              href={buildUTMUrl("https://reinierhernandez.com", {
+                source: "surirate",
+                medium: "footer",
+                campaign: "credits",
+              })}
+              onClick={handlePersonalSiteClick}
             >
               Reinier Hernández
             </a>

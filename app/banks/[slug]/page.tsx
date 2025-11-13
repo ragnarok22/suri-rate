@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBankPageBySlug, bankSlugs } from "@/utils/bank-pages";
 import { getBreadcrumbSchema } from "@/utils/schema";
+import OutboundLink from "@/components/outbound-link";
 
 type PageParams = {
   slug: string;
@@ -133,14 +134,15 @@ export default async function BankDetailPage({ params }: Props) {
               <p className="font-semibold text-green-900 dark:text-green-400">
                 Official site
               </p>
-              <a
+              <OutboundLink
                 href={bank.website}
-                target="_blank"
-                rel="noreferrer"
+                bankName={bank.name}
+                currency="all"
+                lang="en"
                 className="text-green-700 dark:text-green-400 underline"
               >
                 {bank.website}
-              </a>
+              </OutboundLink>
             </div>
           </div>
           <div>

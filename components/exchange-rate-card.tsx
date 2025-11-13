@@ -1,9 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { BankRates } from "@/utils/definitions";
+import { buildBankUTMUrl } from "@/utils/utm";
+import { usePostHog } from "posthog-js/react";
 
 interface ExchangeRateCardProps {
   bankRates: BankRates;
@@ -20,6 +24,7 @@ export default function ExchangeRateCard({
   bestRates,
 }: ExchangeRateCardProps) {
   const { name, logo, link, rates } = bankRates;
+  const posthog = usePostHog();
 
   // Find USD and EUR rates
   const usdRate = rates.find((rate) => rate.currency === "USD");
@@ -27,13 +32,28 @@ export default function ExchangeRateCard({
 
   if (!usdRate || !eurRate) return null;
 
+  // Build URL with UTM parameters
+  const utmUrl = buildBankUTMUrl(link, name, "all", "en");
+
+  // Handle outbound click tracking
+  const handleOutboundClick = () => {
+    posthog.capture("outbound_click", {
+      bank: name,
+      url: link,
+      utm_url: utmUrl,
+      currency: "all",
+      lang: "en",
+    });
+  };
+
   return (
     <Card className="overflow-hidden">
       <CardHeader className="bg-green-50 dark:bg-green-950 p-4">
         <Link
-          href={link}
+          href={utmUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={handleOutboundClick}
           className="flex items-center gap-3 hover:text-green-700 dark:hover:text-green-300 transition-colors duration-200"
         >
           <div className="relative h-12 w-12 overflow-hidden rounded-md border dark:border-gray-600 bg-white dark:bg-gray-700 shrink-0">
