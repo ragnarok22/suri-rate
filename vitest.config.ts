@@ -5,9 +5,8 @@ export default defineConfig({
     environment: "node",
     // Run in a single worker-thread to avoid sandbox kill(2) issues
     pool: "threads",
-    poolOptions: {
-      threads: { singleThread: true },
-    },
+    maxWorkers: 1,
+    isolate: false,
   },
   resolve: {},
 });
