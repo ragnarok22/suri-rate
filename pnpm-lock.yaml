@@ -4,10 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  "@types/react": 19.2.4
-  "@types/react-dom": 19.2.3
-
 importers:
   .:
     dependencies:
@@ -2261,7 +2257,7 @@ packages:
         integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==,
       }
     peerDependencies:
-      "@types/react": 19.2.4
+      "@types/react": ^19.2.0
 
   "@types/react@19.2.9":
     resolution:
