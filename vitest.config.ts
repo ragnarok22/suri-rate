@@ -7,11 +7,11 @@ export default defineConfig({
     pool: "threads",
     maxWorkers: 1,
     isolate: false,
+    coverage: {
+      provider: "v8",
+      include: ["utils/**/*.ts", "components/**/*.tsx", "app/**/*.{ts,tsx}"],
+      exclude: ["**/*.test.ts", "**/*.d.ts"],
+    },
   },
   resolve: {},
-  coverage: {
-    provider: "v8",
-    include: ["utils/**", "components/**", "app/**"],
-    exclude: ["**/*.test.ts", "**/*.d.ts"],
-  },
 });

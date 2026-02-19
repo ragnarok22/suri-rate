@@ -20,9 +20,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Ignore PWA generated files:
+    // Ignore hand-crafted service worker (plain JS, not TS):
     "public/sw.js",
-    "public/workbox-*.js",
+    // Ignore coverage output:
+    "coverage/**",
     // Ignore scratch/debug files:
     "index.js",
   ]),
