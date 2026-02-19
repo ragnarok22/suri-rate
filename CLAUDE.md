@@ -14,7 +14,9 @@ SuriRate is a Next.js 15 PWA that compares USD and EUR exchange rates from major
 - `pnpm start` - Start production server
 - `pnpm test` - Run Vitest test suite in watch mode
 - `pnpm test --run` - Run tests once (non-watch mode)
+- `pnpm coverage` - Run tests with V8 coverage report
 - `pnpm lint` - Run ESLint
+- `pnpm typecheck` - Run TypeScript type checking
 - `pnpm format` - Format code with Prettier
 
 ## Architecture

@@ -72,6 +72,7 @@ pnpm build        # Build for production
 pnpm start        # Start production server
 pnpm test         # Run tests in watch mode
 pnpm test --run   # Run tests once
+pnpm coverage     # Run tests with coverage report
 pnpm lint         # Run ESLint
 pnpm typecheck    # Run TypeScript type checking
 pnpm prettier     # Format code with Prettier

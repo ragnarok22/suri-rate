@@ -9,4 +9,9 @@ export default defineConfig({
     isolate: false,
   },
   resolve: {},
+  coverage: {
+    provider: "v8",
+    include: ["utils/**", "components/**", "app/**"],
+    exclude: ["**/*.test.ts", "**/*.d.ts"],
+  },
 });
