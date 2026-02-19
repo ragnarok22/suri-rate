@@ -7,7 +7,7 @@ export default defineConfig({
     // Run in a single worker-thread to avoid sandbox kill(2) issues
     pool: "threads",
     maxWorkers: 1,
-    isolate: false,
+    isolate: true,
     coverage: {
       provider: "v8",
       include: ["utils/**/*.ts", "components/**/*.tsx", "app/**/*.{ts,tsx}"],
