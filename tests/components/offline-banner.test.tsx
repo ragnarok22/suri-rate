@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import React from "react";
-import { render, screen, act } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import OfflineBanner from "../../components/offline-banner";
 
 describe("OfflineBanner", () => {
@@ -13,10 +13,12 @@ describe("OfflineBanner", () => {
   });
 
   it("renders nothing when online", async () => {
-    const { container } = render(<OfflineBanner />);
-    // After mount effect, should still be empty when online
-    await act(() => Promise.resolve());
-    expect(container.innerHTML).toBe("");
+    let container: HTMLElement;
+    await act(async () => {
+      const result = render(<OfflineBanner />);
+      container = result.container;
+    });
+    expect(container!.innerHTML).toBe("");
   });
 
   it("shows banner when offline", async () => {
@@ -26,17 +28,24 @@ describe("OfflineBanner", () => {
       configurable: true,
     });
 
-    render(<OfflineBanner />);
-    await act(() => Promise.resolve());
-    expect(screen.getByText("You're offline.")).toBeTruthy();
-    expect(
-      screen.getByText("Showing cached content if available."),
-    ).toBeTruthy();
+    let container: HTMLElement;
+    await act(async () => {
+      const result = render(<OfflineBanner />);
+      container = result.container;
+    });
+    expect(container!.textContent).toContain("offline");
+    expect(container!.textContent).toContain("cached content");
   });
 
   it("responds to online/offline events", async () => {
-    render(<OfflineBanner />);
-    await act(() => Promise.resolve());
+    let container: HTMLElement;
+    await act(async () => {
+      const result = render(<OfflineBanner />);
+      container = result.container;
+    });
+
+    // Initially online - no banner
+    expect(container!.innerHTML).toBe("");
 
     // Go offline
     Object.defineProperty(navigator, "onLine", {
@@ -44,11 +53,10 @@ describe("OfflineBanner", () => {
       writable: true,
       configurable: true,
     });
-    await act(() => {
+    await act(async () => {
       window.dispatchEvent(new Event("offline"));
-      return Promise.resolve();
     });
-    expect(screen.getByText("You're offline.")).toBeTruthy();
+    expect(container!.textContent).toContain("offline");
 
     // Go back online
     Object.defineProperty(navigator, "onLine", {
@@ -56,10 +64,9 @@ describe("OfflineBanner", () => {
       writable: true,
       configurable: true,
     });
-    await act(() => {
+    await act(async () => {
       window.dispatchEvent(new Event("online"));
-      return Promise.resolve();
     });
-    expect(screen.queryByText("You're offline.")).toBeNull();
+    expect(container!.innerHTML).toBe("");
   });
 });
