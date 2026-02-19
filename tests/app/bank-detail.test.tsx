@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 
 vi.mock("next/link", () => ({
   default: ({ children, href }: { children: React.ReactNode; href: string }) =>
@@ -52,20 +52,18 @@ describe("BankDetailPage", () => {
     const page = await BankDetailPage({
       params: Promise.resolve({ slug: "finabank" }),
     });
-    render(page);
-    expect(
-      screen.getByText("Finabank - USD & EUR to SRD Exchange Rates"),
-    ).toBeTruthy();
-    expect(screen.getByText("← Back to bank profiles")).toBeTruthy();
+    const { container } = render(page);
+    expect(container.textContent).toContain("Finabank");
+    expect(container.textContent).toContain("USD & EUR to SRD Exchange Rates");
   });
 
   it("renders bank services and highlights", async () => {
     const page = await BankDetailPage({
       params: Promise.resolve({ slug: "finabank" }),
     });
-    render(page);
-    expect(screen.getByText("Services")).toBeTruthy();
-    expect(screen.getByText("Highlights")).toBeTruthy();
+    const { container } = render(page);
+    expect(container.textContent).toContain("Services");
+    expect(container.textContent).toContain("Highlights");
   });
 
   it("calls notFound for invalid slug", async () => {

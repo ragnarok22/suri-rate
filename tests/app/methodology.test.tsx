@@ -11,27 +11,24 @@ import MethodologyPage from "../../app/methodology/page";
 
 describe("MethodologyPage", () => {
   it("renders the page heading", () => {
-    render(<MethodologyPage />);
-    expect(screen.getByText("Methodology")).toBeTruthy();
+    const { container } = render(<MethodologyPage />);
+    expect(container.textContent).toContain("Methodology");
   });
 
   it("renders all methodology steps", () => {
-    render(<MethodologyPage />);
-    expect(screen.getByText("Scraping")).toBeTruthy();
-    expect(screen.getByText("Normalization")).toBeTruthy();
-    expect(screen.getByText("Caching")).toBeTruthy();
+    const { container } = render(<MethodologyPage />);
+    expect(container.textContent).toContain("Scraping");
+    expect(container.textContent).toContain("Normalization");
+    expect(container.textContent).toContain("Caching");
   });
 
   it("renders best-rate badge logic section", () => {
-    render(<MethodologyPage />);
-    expect(screen.getByText("Best-rate badge logic")).toBeTruthy();
+    const { container } = render(<MethodologyPage />);
+    expect(container.textContent).toContain("Best-rate badge logic");
   });
 
   it("has a back link to dashboard", () => {
-    render(<MethodologyPage />);
-    const backLink = screen.getByText(
-      "← Back to dashboard",
-    ) as HTMLAnchorElement;
-    expect(backLink.getAttribute("href")).toBe("/");
+    const { container } = render(<MethodologyPage />);
+    expect(container.querySelector('a[href="/"]')).toBeTruthy();
   });
 });

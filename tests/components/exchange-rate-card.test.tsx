@@ -2,19 +2,16 @@ import { describe, it, expect, vi } from "vitest";
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 
-// Mock posthog
 const captureMock = vi.fn();
 vi.mock("posthog-js/react", () => ({
   usePostHog: () => ({ capture: captureMock }),
 }));
 
-// Mock next/image
 vi.mock("next/image", () => ({
   default: (props: Record<string, unknown>) =>
     React.createElement("img", { ...props }),
 }));
 
-// Mock next/link
 vi.mock("next/link", () => ({
   default: ({
     children,
@@ -47,23 +44,21 @@ const bankRates = {
 };
 
 describe("ExchangeRateCard", () => {
-  it("renders the bank name", () => {
-    render(<ExchangeRateCard bankRates={bankRates} bestRates={bestRates} />);
-    expect(screen.getByText("Finabank")).toBeTruthy();
-  });
-
-  it("renders USD and EUR rates", () => {
-    render(<ExchangeRateCard bankRates={bankRates} bestRates={bestRates} />);
-    expect(screen.getByText("5.50")).toBeTruthy();
-    expect(screen.getByText("5.80")).toBeTruthy();
-    expect(screen.getByText("6.10")).toBeTruthy();
-    expect(screen.getByText("6.40")).toBeTruthy();
+  it("renders the bank name and rate values", () => {
+    const { container } = render(
+      <ExchangeRateCard bankRates={bankRates} bestRates={bestRates} />,
+    );
+    expect(container.textContent).toContain("Finabank");
+    expect(container.textContent).toContain("5.50");
+    expect(container.textContent).toContain("5.80");
+    expect(container.textContent).toContain("6.10");
+    expect(container.textContent).toContain("6.40");
   });
 
   it("shows Best badges when rates match best rates", () => {
     render(<ExchangeRateCard bankRates={bankRates} bestRates={bestRates} />);
     const bestBadges = screen.getAllByText("Best");
-    expect(bestBadges.length).toBe(4); // all rates are best
+    expect(bestBadges.length).toBe(4);
   });
 
   it("does not show Best badges when rates do not match", () => {
@@ -101,13 +96,11 @@ describe("ExchangeRateCard", () => {
 
   it("tracks outbound clicks with posthog", () => {
     render(<ExchangeRateCard bankRates={bankRates} bestRates={bestRates} />);
-    const link = screen.getByText("Finabank").closest("a")!;
-    fireEvent.click(link);
+    const links = screen.getAllByRole("link");
+    fireEvent.click(links[0]);
     expect(captureMock).toHaveBeenCalledWith(
       "outbound_click",
-      expect.objectContaining({
-        bank: "Finabank",
-      }),
+      expect.objectContaining({ bank: "Finabank" }),
     );
   });
 });

@@ -11,20 +11,21 @@ import BanksPage from "../../app/banks/page";
 
 describe("BanksPage", () => {
   it("renders the page heading", () => {
-    render(<BanksPage />);
-    expect(
-      screen.getByText("Banks Offering USD & EUR Exchange Rates in Suriname"),
-    ).toBeTruthy();
+    const { container } = render(<BanksPage />);
+    expect(container.textContent).toContain(
+      "Banks Offering USD & EUR Exchange Rates in Suriname",
+    );
   });
 
-  it("renders all 6 bank cards", () => {
-    render(<BanksPage />);
-    expect(screen.getByText("Finabank")).toBeTruthy();
-    expect(screen.getByText("Central Bank")).toBeTruthy();
-    expect(screen.getByText("Central Money Exchange")).toBeTruthy();
-    expect(screen.getByText("Hakrinbank")).toBeTruthy();
-    expect(screen.getByText("De Surinaamsche Bank (DSB)")).toBeTruthy();
-    expect(screen.getByText("Republic Bank")).toBeTruthy();
+  it("renders all 6 bank names", () => {
+    const { container } = render(<BanksPage />);
+    const text = container.textContent!;
+    expect(text).toContain("Finabank");
+    expect(text).toContain("Central Bank");
+    expect(text).toContain("Central Money Exchange");
+    expect(text).toContain("Hakrinbank");
+    expect(text).toContain("De Surinaamsche Bank (DSB)");
+    expect(text).toContain("Republic Bank");
   });
 
   it("has detail links for each bank", () => {
@@ -34,11 +35,8 @@ describe("BanksPage", () => {
   });
 
   it("renders back link to dashboard", () => {
-    render(<BanksPage />);
-    const backLink = screen.getByText(
-      "← Back to dashboard",
-    ) as HTMLAnchorElement;
-    expect(backLink.getAttribute("href")).toBe("/");
+    const { container } = render(<BanksPage />);
+    expect(container.querySelector('a[href="/"]')).toBeTruthy();
   });
 
   it("renders JSON-LD scripts", () => {

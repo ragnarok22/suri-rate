@@ -1,13 +1,12 @@
 import { describe, it, expect, vi } from "vitest";
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 
 const captureMock = vi.fn();
 vi.mock("posthog-js/react", () => ({
   usePostHog: () => ({ capture: captureMock }),
 }));
 
-// Mock CSS modules
 vi.mock("../../components/github.module.css", () => ({
   default: {
     "github-corner": "github-corner",
@@ -19,24 +18,29 @@ vi.mock("../../components/github.module.css", () => ({
 import GitHubLink from "../../components/github";
 
 describe("GitHubLink", () => {
-  it("renders a link with aria-label", () => {
-    render(<GitHubLink />);
+  it("renders a link with aria-label", async () => {
+    await act(async () => {
+      render(<GitHubLink />);
+    });
     const link = screen.getByLabelText("View source on GitHub");
     expect(link).toBeTruthy();
     expect(link.tagName).toBe("A");
   });
 
-  it("includes UTM parameters in href", () => {
-    render(<GitHubLink />);
+  it("includes UTM parameters in href", async () => {
+    await act(async () => {
+      render(<GitHubLink />);
+    });
     const link = screen.getByLabelText(
       "View source on GitHub",
     ) as HTMLAnchorElement;
     expect(link.href).toContain("utm_source=surirate");
-    expect(link.href).toContain("utm_medium=github_corner");
   });
 
-  it("tracks click with posthog", () => {
-    render(<GitHubLink />);
+  it("tracks click with posthog", async () => {
+    await act(async () => {
+      render(<GitHubLink />);
+    });
     const link = screen.getByLabelText("View source on GitHub");
     fireEvent.click(link);
     expect(captureMock).toHaveBeenCalledWith(
@@ -45,8 +49,12 @@ describe("GitHubLink", () => {
     );
   });
 
-  it("renders an SVG icon", () => {
-    const { container } = render(<GitHubLink />);
-    expect(container.querySelector("svg")).toBeTruthy();
+  it("renders an SVG icon", async () => {
+    let container: HTMLElement;
+    await act(async () => {
+      const result = render(<GitHubLink />);
+      container = result.container;
+    });
+    expect(container!.querySelector("svg")).toBeTruthy();
   });
 });

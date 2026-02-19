@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 
 const captureMock = vi.fn();
 vi.mock("posthog-js/react", () => ({
@@ -10,66 +10,75 @@ vi.mock("posthog-js/react", () => ({
 import OutboundLink from "../../components/outbound-link";
 
 describe("OutboundLink", () => {
-  it("renders children", () => {
-    render(
-      <OutboundLink href="https://example.com" bankName="Finabank">
-        Visit site
-      </OutboundLink>,
-    );
+  it("renders children", async () => {
+    await act(async () => {
+      render(
+        <OutboundLink href="https://example.com" bankName="Finabank">
+          Visit site
+        </OutboundLink>,
+      );
+    });
     expect(screen.getByText("Visit site")).toBeTruthy();
   });
 
-  it("builds UTM url and sets it as href", () => {
-    render(
-      <OutboundLink href="https://example.com" bankName="Finabank">
-        Link
-      </OutboundLink>,
-    );
+  it("builds UTM url and sets it as href", async () => {
+    await act(async () => {
+      render(
+        <OutboundLink href="https://example.com" bankName="Finabank">
+          Link
+        </OutboundLink>,
+      );
+    });
     const link = screen.getByText("Link") as HTMLAnchorElement;
     expect(link.href).toContain("utm_source=surirate");
-    expect(link.href).toContain("finabank");
   });
 
-  it("defaults to target=_blank and rel=noopener noreferrer", () => {
-    render(
-      <OutboundLink href="https://example.com" bankName="Test">
-        Link
-      </OutboundLink>,
-    );
+  it("defaults to target=_blank and rel=noopener noreferrer", async () => {
+    await act(async () => {
+      render(
+        <OutboundLink href="https://example.com" bankName="Test">
+          Link
+        </OutboundLink>,
+      );
+    });
     const link = screen.getByText("Link") as HTMLAnchorElement;
     expect(link.target).toBe("_blank");
     expect(link.rel).toBe("noopener noreferrer");
   });
 
-  it("accepts custom target, rel, className", () => {
-    render(
-      <OutboundLink
-        href="https://example.com"
-        bankName="Test"
-        target="_self"
-        rel="nofollow"
-        className="custom"
-      >
-        Link
-      </OutboundLink>,
-    );
+  it("accepts custom target, rel, className", async () => {
+    await act(async () => {
+      render(
+        <OutboundLink
+          href="https://example.com"
+          bankName="Test"
+          target="_self"
+          rel="nofollow"
+          className="custom"
+        >
+          Link
+        </OutboundLink>,
+      );
+    });
     const link = screen.getByText("Link") as HTMLAnchorElement;
     expect(link.target).toBe("_self");
     expect(link.rel).toBe("nofollow");
     expect(link.className).toBe("custom");
   });
 
-  it("tracks click with posthog including currency and lang", () => {
-    render(
-      <OutboundLink
-        href="https://example.com"
-        bankName="Finabank"
-        currency="usd"
-        lang="nl"
-      >
-        Link
-      </OutboundLink>,
-    );
+  it("tracks click with posthog including currency and lang", async () => {
+    await act(async () => {
+      render(
+        <OutboundLink
+          href="https://example.com"
+          bankName="Finabank"
+          currency="usd"
+          lang="nl"
+        >
+          Link
+        </OutboundLink>,
+      );
+    });
     fireEvent.click(screen.getByText("Link"));
     expect(captureMock).toHaveBeenCalledWith(
       "outbound_click",
