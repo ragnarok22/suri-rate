@@ -4,6 +4,7 @@ import path from "path";
 export default defineConfig({
   test: {
     environment: "jsdom",
+    setupFiles: ["./tests/setup.ts"],
     // Run in a single worker-thread to avoid sandbox kill(2) issues
     pool: "threads",
     maxWorkers: 1,
