@@ -68,7 +68,7 @@ describe("findBestRates", () => {
   it("ignores zero rates when determining best values", () => {
     const result = findBestRates([
       {
-        name: "Zero Bank",
+        name: "Finabank",
         logo: "",
         link: "",
         rates: [

@@ -2,9 +2,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ExchangeRate } from "../utils/definitions";
 
 // Mock the api() helper used by provider functions to avoid network
-const apiMock = vi.fn<[string | URL, RequestInit?], Promise<{ html: string }>>(
-  () => Promise.resolve({ html: "" }),
-);
+const apiMock = vi.fn<
+  (url: string | URL, init?: RequestInit) => Promise<{ html: string }>
+>(() => Promise.resolve({ html: "" }));
 
 vi.mock("@/utils", () => ({
   api: (...args: [string | URL, RequestInit?]) => apiMock(...args),
