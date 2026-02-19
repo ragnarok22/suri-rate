@@ -11,6 +11,7 @@ export default defineConfig({
       provider: "v8",
       include: ["utils/**/*.ts", "components/**/*.tsx", "app/**/*.{ts,tsx}"],
       exclude: ["**/*.test.ts", "**/*.d.ts"],
+      reporter: ["text", "json"],
     },
   },
   resolve: {},

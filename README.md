@@ -1,6 +1,7 @@
 # SuriRate
 
 [![CI](https://github.com/ragnarok22/suri-rate/actions/workflows/test.yml/badge.svg)](https://github.com/ragnarok22/suri-rate/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/ragnarok22/suri-rate/graph/badge.svg)](https://codecov.io/gh/ragnarok22/suri-rate)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ragnarok22/suri-rate)
 
 SuriRate is a Progressive Web App (PWA) built with [Next.js 15](https://nextjs.org/) that compares USD and EUR exchange rates from major Surinamese banks. The application scrapes rates from 6 banks, caches them using Next.js revalidation, and provides real-time comparisons with offline support.
