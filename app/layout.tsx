@@ -44,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "SuriRate – Suriname Exchange Rate Comparison | USD & EUR to SRD Today",
     description:
       "Compare today's USD and EUR to SRD exchange rates from 6 major banks in Suriname (Paramaribo): Finabank, Central Bank, CME, Hakrinbank, DSB, and Republic Bank. Find the best Suriname dollar rates updated every 12 hours.",
-    manifest: "/manifest.json",
+    manifest: "/manifest.webmanifest",
     metadataBase: new URL(siteUrl),
     alternates: { canonical: "/" },
     keywords: Array.from(keywordSet),

@@ -43,4 +43,4 @@
 
 - Env: Use `.env.local` for local overrides; never commit secrets. Only expose safe browser vars with `NEXT_PUBLIC_` prefix.
 - Scraping: Keep selectors resilient in `utils/places/providers.ts`; favor explicit parsing and typed results.
-- Deployment: Vercel-ready; PWA disabled in development via `next-pwa`.
+- Deployment: Vercel-ready; service worker registered only in production.

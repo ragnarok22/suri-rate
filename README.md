@@ -18,7 +18,7 @@ SuriRate is a Progressive Web App (PWA) built with [Next.js 15](https://nextjs.o
 
 - 🔄 **Real-time Rate Comparison** - Compare USD and EUR exchange rates across 6 major banks
 - ⚡ **Fast Performance** - Next.js caching with 12-hour revalidation
-- 📱 **PWA Support** - Works offline with `next-pwa`
+- 📱 **PWA Support** - Works offline with a hand-crafted service worker
 - ⏰ **Real-time Updates** - Fresh rates with Next.js revalidation
 - 🎯 **Best Rate Highlighting** - Automatically identifies the best buy/sell rates
 - 📊 **Analytics** - Optional PostHog integration for usage tracking
@@ -89,7 +89,7 @@ pnpm test         # Run tests in watch mode
 
 The project is optimized for [Vercel](https://vercel.com/) deployment:
 
-1. **Automatic PWA Generation** - Offline support via `next-pwa`
+1. **PWA Support** - Offline support via hand-crafted service worker
 2. **Next.js Caching** - Built-in 12-hour revalidation with service worker caching
 3. **Environment Variables** - Configure in Vercel dashboard
 
@@ -104,7 +104,7 @@ The project is optimized for [Vercel](https://vercel.com/) deployment:
 - **Data Fetching**: Custom fetch wrapper with axios for bank APIs
 - **Web Scraping**: Cheerio for HTML parsing
 - **Caching**: Next.js revalidation with service worker caching
-- **PWA**: next-pwa for offline functionality
+- **PWA**: Hand-crafted service worker for offline functionality
 - **Analytics**: PostHog integration
 
 ## 📄 License

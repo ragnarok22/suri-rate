@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/methodology", changeFrequency: "monthly", priority: 0.6 },
     { path: "/banks", changeFrequency: "weekly", priority: 0.7 },
     { path: "/offline.html", changeFrequency: "yearly", priority: 0.1 },
-    { path: "/manifest.json", changeFrequency: "yearly", priority: 0.4 },
+    { path: "/manifest.webmanifest", changeFrequency: "yearly", priority: 0.4 },
   ];
 
   const bankRoutes = bankPages.map((bank) => ({

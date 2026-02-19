@@ -5,23 +5,6 @@ import { usePostHog } from "posthog-js/react";
 
 type InstallPlatform = "ios" | "android" | "desktop" | "other" | "unknown";
 
-type WBEvent = "waiting" | "externalwaiting" | "controlling";
-interface WorkboxLike {
-  addEventListener: (event: WBEvent, callback: () => void) => void;
-  removeEventListener: (event: WBEvent, callback: () => void) => void;
-  messageSW: (data: { type: string }) => Promise<void> | void;
-}
-
-const isWorkboxLike = (v: unknown): v is WorkboxLike => {
-  if (!v || typeof v !== "object") return false;
-  const obj = v as Record<string, unknown>;
-  return (
-    typeof obj.addEventListener === "function" &&
-    typeof obj.removeEventListener === "function" &&
-    typeof obj.messageSW === "function"
-  );
-};
-
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
@@ -41,6 +24,7 @@ export default function PwaPrompts() {
   const [bannerHeight, setBannerHeight] = useState(0);
   const bannerRef = useRef<HTMLDivElement | null>(null);
   const reloading = useRef(false);
+  const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
@@ -59,29 +43,61 @@ export default function PwaPrompts() {
     setMounted(true);
   }, []);
 
-  // Listen to next-pwa workbox lifecycle for update prompt
+  // Register service worker and listen for updates
   useEffect(() => {
-    const wbCandidate = (window as unknown as { workbox?: unknown }).workbox;
-    const wb = isWorkboxLike(wbCandidate) ? wbCandidate : null;
-    if (!wb) return;
+    if (
+      typeof navigator === "undefined" ||
+      !("serviceWorker" in navigator) ||
+      process.env.NODE_ENV !== "production"
+    )
+      return;
 
-    const onWaiting = () => setUpdateReady(true);
-    const onControlling = () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => {
+        registrationRef.current = registration;
+
+        // If there's already a waiting worker, show update banner
+        if (registration.waiting) {
+          setUpdateReady(true);
+          return;
+        }
+
+        // Listen for new service worker installing
+        registration.addEventListener("updatefound", () => {
+          const newWorker = registration.installing;
+          if (!newWorker) return;
+
+          newWorker.addEventListener("statechange", () => {
+            if (
+              newWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              setUpdateReady(true);
+            }
+          });
+        });
+      })
+      .catch(() => {
+        // SW registration failed silently
+      });
+
+    // Reload when the new SW takes control
+    const onControllerChange = () => {
       if (reloading.current) return;
       reloading.current = true;
       window.location.reload();
     };
-
-    wb.addEventListener("waiting", onWaiting);
-    wb.addEventListener("externalwaiting", onWaiting);
-    wb.addEventListener("controlling", onControlling);
+    navigator.serviceWorker.addEventListener(
+      "controllerchange",
+      onControllerChange,
+    );
 
     return () => {
-      try {
-        wb.removeEventListener("waiting", onWaiting);
-        wb.removeEventListener("externalwaiting", onWaiting);
-        wb.removeEventListener("controlling", onControlling);
-      } catch {}
+      navigator.serviceWorker.removeEventListener(
+        "controllerchange",
+        onControllerChange,
+      );
     };
   }, []);
 
@@ -144,11 +160,9 @@ export default function PwaPrompts() {
   };
 
   const acceptUpdate = () => {
-    const wbCandidate = (window as unknown as { workbox?: unknown }).workbox;
-    const wb = isWorkboxLike(wbCandidate) ? wbCandidate : null;
-    if (!wb) return;
-    // Tell the waiting SW to skip waiting; next-pwa/workbox will take control and we reload on 'controlling'
-    wb.messageSW({ type: "SKIP_WAITING" });
+    const waiting = registrationRef.current?.waiting;
+    if (!waiting) return;
+    waiting.postMessage({ type: "SKIP_WAITING" });
   };
 
   const install = async () => {
