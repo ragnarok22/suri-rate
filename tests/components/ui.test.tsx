@@ -95,8 +95,8 @@ describe("Card components", () => {
   });
 
   it("renders CardHeader", () => {
-    render(<CardHeader data-testid="header">Header</CardHeader>);
-    expect(screen.getByTestId("header").textContent).toBe("Header");
+    render(<CardHeader data-testid="header">HeaderText</CardHeader>);
+    expect(screen.getByTestId("header").textContent).toBe("HeaderText");
   });
 
   it("renders CardContent", () => {
@@ -105,8 +105,8 @@ describe("Card components", () => {
   });
 
   it("renders CardFooter", () => {
-    render(<CardFooter data-testid="footer">Footer</CardFooter>);
-    expect(screen.getByTestId("footer").textContent).toBe("Footer");
+    render(<CardFooter data-testid="footer">FooterText</CardFooter>);
+    expect(screen.getByTestId("footer").textContent).toBe("FooterText");
   });
 
   it("renders CardTitle", () => {
@@ -122,30 +122,34 @@ describe("Card components", () => {
 
 describe("Table components", () => {
   it("renders a full table structure", () => {
-    render(
+    const { container } = render(
       <Table data-testid="table">
-        <TableCaption>Caption</TableCaption>
+        <TableCaption>MyCaption</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Header</TableHead>
+            <TableHead>Col1</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell>Cell</TableCell>
+            <TableCell>Data1</TableCell>
           </TableRow>
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell>Footer</TableCell>
+            <TableCell>Foot1</TableCell>
           </TableRow>
         </TableFooter>
       </Table>,
     );
 
-    expect(screen.getByText("Caption")).toBeTruthy();
-    expect(screen.getByText("Header")).toBeTruthy();
-    expect(screen.getByText("Cell")).toBeTruthy();
-    expect(screen.getByText("Footer")).toBeTruthy();
+    expect(screen.getByText("MyCaption")).toBeTruthy();
+    expect(screen.getByText("Col1")).toBeTruthy();
+    expect(screen.getByText("Data1")).toBeTruthy();
+    expect(screen.getByText("Foot1")).toBeTruthy();
+    expect(container.querySelector("table")).toBeTruthy();
+    expect(container.querySelector("thead")).toBeTruthy();
+    expect(container.querySelector("tbody")).toBeTruthy();
+    expect(container.querySelector("tfoot")).toBeTruthy();
   });
 });

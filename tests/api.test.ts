@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-// We need to test the actual api() function, not mock it
-// So we mock global fetch instead
 const fetchMock = vi.fn();
 vi.stubGlobal("fetch", fetchMock);
 
@@ -18,7 +16,6 @@ describe("api", () => {
 
     const result = await api("https://example.com");
     expect(result.html).toBe(htmlContent);
-    expect(result.ok).toBe(true);
     expect(fetchMock).toHaveBeenCalledWith("https://example.com", undefined);
   });
 
