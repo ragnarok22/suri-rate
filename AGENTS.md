@@ -37,7 +37,7 @@
 
 - Commits: Conventional style (e.g., `fix(utils): correct JSON parsing`). Common types: `feat`, `fix`, `refactor`, `chore`, `build`.
 - PRs: Small, focused changes. Include description, linked issues, and screenshots for UI updates.
-- Checks: Run `pnpm lint && pnpm test` before opening/merging.
+- Checks: Run `pnpm lint && pnpm typecheck && pnpm test` before opening/merging.
 
 ## Security & Configuration Tips
 
