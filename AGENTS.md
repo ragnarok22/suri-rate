@@ -117,7 +117,7 @@ Only expose browser-safe values with the `NEXT_PUBLIC_` prefix. PostHog analytic
 - Location: `tests/` with `*.test.ts` filenames.
 - Mocks: use `vi.mock` for external calls such as providers and `api()`.
 - Axios: CME tests should mock `axios.post`, typically with `vi.spyOn()`.
-- CI: GitHub Actions runs on Node 20 and pnpm.
+- CI: GitHub Actions runs on Node 22.13 and pnpm.
 - Run locally with `pnpm test` or CI-like with `pnpm test --run`.
 - Before opening or merging, run `pnpm lint && pnpm typecheck && pnpm test --run` when feasible.
 
