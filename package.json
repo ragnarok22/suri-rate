@@ -14,32 +14,32 @@
   },
   "dependencies": {
     "@next/third-parties": "16.1.4",
-    "axios": "^1.15.2",
+    "axios": "^1.16.1",
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.562.0",
     "next": "16.2.6",
     "next-themes": "^0.4.6",
-    "posthog-js": "^1.351.4",
+    "posthog-js": "^1.376.0",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.2.0",
+    "@tailwindcss/postcss": "^4.3.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "^25.3.0",
+    "@types/node": "^25.9.1",
     "@types/react": "19.2.9",
     "@types/react-dom": "19.2.3",
-    "@vitest/coverage-v8": "^4.0.18",
-    "eslint": "^9.39.2",
+    "@vitest/coverage-v8": "^4.1.7",
+    "eslint": "^9.39.4",
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^28.1.0",
-    "prettier": "^3.8.1",
-    "tailwindcss": "^4.2.0",
+    "prettier": "^3.8.3",
+    "tailwindcss": "^4.3.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.7"
   },
   "packageManager": "pnpm@11.3.0+sha512.2c403d6594527287672b1f7056343a1f7c3634036a67ffabfcc2b3d7595d843768f8787148d1b57cf7956c90606bbd192857c363af19e96d2d0ec9ec5741d215"
 }
