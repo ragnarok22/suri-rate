@@ -4,116 +4,125 @@
 [![codecov](https://codecov.io/gh/ragnarok22/suri-rate/graph/badge.svg)](https://codecov.io/gh/ragnarok22/suri-rate)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ragnarok22/suri-rate)
 
-SuriRate is a Progressive Web App (PWA) built with [Next.js 15](https://nextjs.org/) that compares USD and EUR exchange rates from major Surinamese banks. The application scrapes rates from 6 banks, caches them using Next.js revalidation, and provides real-time comparisons with offline support.
+SuriRate is a Progressive Web App for comparing USD to SRD and EUR to SRD exchange rates from major banks in Suriname. It pulls public bank data, normalizes buy and sell prices, highlights the best rates, and keeps the dashboard usable offline.
 
-## 🏦 Supported Banks
+## Features
 
-- **Finabank** - HTML scraping with regex patterns
-- **Central Bank of Suriname (CBvS)** - Table scraping from HTML
-- **Central Money Exchange (CME)** - JSON POST API
-- **Hakrinbank** - Exchange page table parsing
-- **De Surinaamsche Bank (DSB)** - JSON API endpoint
-- **Republic Bank** - Table scraping with column mapping
+- **Exchange-rate dashboard**: Compare USD and EUR rates from six Surinamese banks in one view.
+- **Best-rate badges**: Highlight the highest buy rate and lowest sell rate per currency.
+- **Bank directory**: Browse SEO-friendly bank profiles at `/banks` and `/banks/[slug]`.
+- **Methodology page**: Explain scraping, normalization, caching, and badge logic at `/methodology`.
+- **PWA support**: Installable app shell, offline fallback, offline banner, and service-worker caching.
+- **Dark mode**: Theme switching through `next-themes`.
+- **Structured data**: Dataset, FAQ, organization, website, item list, breadcrumb, and financial-service schemas.
+- **Optional analytics**: PostHog integration through public environment variables.
 
-## ✨ Features
+## Supported Banks
 
-- 🔄 **Real-time Rate Comparison** - Compare USD and EUR exchange rates across 6 major banks
-- ⚡ **Fast Performance** - Next.js caching with 12-hour revalidation
-- 📱 **PWA Support** - Works offline with a hand-crafted service worker
-- ⏰ **Real-time Updates** - Fresh rates with Next.js revalidation
-- 🎯 **Best Rate Highlighting** - Automatically identifies the best buy/sell rates
-- 📊 **Analytics** - Optional PostHog integration for usage tracking
-- 🚀 **Modern Stack** - Built with Next.js 15, React 19, TypeScript, and Tailwind CSS
+| Bank                            | Source type        |
+| ------------------------------- | ------------------ |
+| Finabank                        | HTML text parsing  |
+| Central Bank of Suriname (CBvS) | HTML table parsing |
+| Central Money Exchange (CME)    | JSON POST endpoint |
+| Hakrinbank                      | HTML table parsing |
+| De Surinaamsche Bank (DSB)      | JSON endpoint      |
+| Republic Bank                   | HTML table parsing |
 
-## 🚀 Getting Started
+## Tech Stack
+
+- [Next.js 16](https://nextjs.org/) App Router with Cache Components
+- React 19 and TypeScript
+- Tailwind CSS 4
+- Cheerio for HTML parsing
+- Axios for the CME POST request
+- Vitest for tests and coverage
+- PostHog for optional browser analytics
+
+## Getting Started
 
 ### Prerequisites
 
 - Node.js 20+
-- pnpm (configured via `packageManager` in package.json)
+- pnpm 11, managed through the `packageManager` field in `package.json`
 
 ### Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/ragnarok22/suri-rate.git
 cd suri-rate
-
-# Install dependencies
 pnpm install
-
-# Start development server
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-### 🔧 Environment Variables
+## Environment Variables
 
-Create a `.env.local` file in the project root:
+Create `.env.local` only when you need deployment settings or analytics:
 
 ```bash
-# Required for Vercel deployment
-ENABLE_EXPERIMENTAL_COREPACK=1            # Required for pnpm on Vercel
+# Required for pnpm on Vercel deployments
+ENABLE_EXPERIMENTAL_COREPACK=1
 
-# Optional - Analytics
-NEXT_PUBLIC_POSTHOG_KEY=phc_xxxxx          # PostHog analytics key
+# Optional PostHog analytics
+NEXT_PUBLIC_POSTHOG_KEY=phc_xxxxx
 NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
-**Note**: Cache duration is hardcoded to 12 hours in the codebase (`utils/index.ts`).
-
-## 🛠️ Development
-
-### Available Commands
+## Development Commands
 
 ```bash
-pnpm dev          # Start development server with Turbopack
+pnpm dev          # Start the Next.js development server with Turbopack
 pnpm build        # Build for production
-pnpm start        # Start production server
-pnpm test         # Run tests in watch mode
-pnpm test --run   # Run tests once
-pnpm coverage     # Run tests with coverage report
+pnpm start        # Start the production server
 pnpm lint         # Run ESLint
-pnpm typecheck    # Run TypeScript type checking
-pnpm prettier     # Format code with Prettier
+pnpm format       # Format with Prettier
+pnpm typecheck    # Run TypeScript without emitting files
+pnpm test         # Run Vitest in watch mode
+pnpm test --run   # Run Vitest once
+pnpm coverage     # Run tests with coverage
 ```
 
-### 🧪 Testing
+## Project Structure
 
-The project uses [Vitest](https://vitest.dev/) for testing:
+```text
+app/                  Next.js routes, metadata, manifest, sitemap, and robots
+components/           Reusable UI components and app shell helpers
+components/ui/        Small UI primitives
+public/               Static assets, bank logos, PWA icons, and service worker
+tests/                Vitest specs
+utils/                Data fetching, scraping providers, schemas, and helpers
+utils/places/         Bank-specific exchange-rate providers
+```
+
+## Data Flow
+
+1. `app/page.tsx` calls `getRates()` from `utils/data.ts`.
+2. `getRates()` uses the Next.js `use cache` directive and the `exchangeRates` cache profile.
+3. `utils/places` fetches rates from each bank provider and returns normalized `USD` and `EUR` buy/sell values.
+4. Components render the rate cards, calculate best-rate badges, and link back to official bank sources.
+
+The `exchangeRates` cache profile is configured in `next.config.ts` with 12-hour revalidation and 24-hour expiration.
+
+## Testing
+
+The test suite uses [Vitest](https://vitest.dev/) and mocks external network calls where possible.
 
 ```bash
-pnpm test --run   # Run all tests once
-pnpm test         # Run tests in watch mode
+pnpm test --run
+pnpm coverage
 ```
 
-## 🌐 Deployment
+## Deployment
 
-The project is optimized for [Vercel](https://vercel.com/) deployment:
-
-1. **PWA Support** - Offline support via hand-crafted service worker
-2. **Next.js Caching** - Built-in 12-hour revalidation with service worker caching
-3. **Environment Variables** - Configure in Vercel dashboard
-
-### Deploy to Vercel
+The project is optimized for [Vercel](https://vercel.com/) and uses Next.js caching plus a hand-authored service worker for offline support.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ragnarok22/suri-rate)
 
-## 🏗️ Architecture
+## License
 
-- **Frontend**: Next.js 15 with App Router, React 19, TypeScript
-- **Styling**: Tailwind CSS 4 with class-variance-authority
-- **Data Fetching**: Custom fetch wrapper with axios for bank APIs
-- **Web Scraping**: Cheerio for HTML parsing
-- **Caching**: Next.js revalidation with service worker caching
-- **PWA**: Hand-crafted service worker for offline functionality
-- **Analytics**: PostHog integration
+This project is licensed under the GNU General Public License v3.0. See [`LICENSE`](LICENSE) for details.
 
-## 📄 License
+## Disclaimer
 
-This project is private and not licensed for public use.
-
-## ⚠️ Disclaimer
-
-Rates provided by this application are for informational purposes only. Always verify exchange rates directly with your bank for official values.
+Rates are provided for informational purposes only. Always verify exchange rates directly with the bank before making a transaction.
