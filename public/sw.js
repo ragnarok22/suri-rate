@@ -122,16 +122,15 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((names) =>
-        Promise.all(
-          names
-            .filter(
-              (name) =>
-                name.startsWith(CACHE_PREFIX) && !currentCaches.has(name),
-            )
-            .map((name) => caches.delete(name)),
-        ),
-      )
+      .then((names) => {
+        const deletions = [];
+        for (const name of names) {
+          if (name.startsWith(CACHE_PREFIX) && !currentCaches.has(name)) {
+            deletions.push(caches.delete(name));
+          }
+        }
+        return Promise.all(deletions);
+      })
       .then(() => self.clients.claim()),
   );
 });

@@ -5,9 +5,14 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 
 const setThemeMock = vi.fn();
 let mockTheme: string | undefined = "light";
+let mockResolvedTheme = "light";
 
 vi.mock("next-themes", () => ({
-  useTheme: () => ({ theme: mockTheme, setTheme: setThemeMock }),
+  useTheme: () => ({
+    theme: mockTheme,
+    resolvedTheme: mockTheme === "system" ? mockResolvedTheme : mockTheme,
+    setTheme: setThemeMock,
+  }),
 }));
 
 vi.mock("lucide-react", () => ({
@@ -38,36 +43,66 @@ describe("ThemeToggle", () => {
   });
 
   it.each(["light", "dark"])(
-    "hydrates the server placeholder with the %s theme without a mismatch",
-    (theme) => {
+    "hydrates the %s theme without changing the button or icons",
+    async (theme) => {
       mockTheme = undefined;
       const container = document.createElement("div");
       container.innerHTML = renderToString(<ThemeToggle />);
       document.body.appendChild(container);
 
+      const serverHTML = container.innerHTML;
       const serverButton = container.querySelector("button");
-      expect(serverButton?.disabled).toBe(true);
-      expect(
-        container.querySelector('[data-testid="sun-icon"]'),
-      ).not.toBeNull();
+      const mutations: MutationRecord[] = [];
+      const observer = new MutationObserver((records) =>
+        mutations.push(...records),
+      );
+      observer.observe(container, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+        attributes: true,
+      });
 
       mockTheme = theme;
       const onRecoverableError = vi.fn();
-      render(<ThemeToggle />, {
-        container,
-        hydrate: true,
-        onRecoverableError,
-      });
+      try {
+        await act(async () => {
+          render(<ThemeToggle />, {
+            container,
+            hydrate: true,
+            onRecoverableError,
+          });
+        });
 
-      const button = screen.getByRole("button") as HTMLButtonElement;
-      expect(button).toBe(serverButton);
-      expect(button.disabled).toBe(false);
-      expect(
-        screen.getByTestId(theme === "dark" ? "sun-icon" : "moon-icon"),
-      ).toBeTruthy();
-      expect(onRecoverableError).not.toHaveBeenCalled();
+        expect(mutations).toHaveLength(0);
+        expect(container.innerHTML).toBe(serverHTML);
+        const button = screen.getByRole("button") as HTMLButtonElement;
+        expect(button).toBe(serverButton);
+        expect(button.disabled).toBe(false);
+        expect(
+          screen.getByTestId(theme === "dark" ? "sun-icon" : "moon-icon"),
+        ).toBeTruthy();
+        expect(onRecoverableError).not.toHaveBeenCalled();
 
-      fireEvent.click(button);
+        fireEvent.click(button);
+        expect(setThemeMock).toHaveBeenLastCalledWith(
+          theme === "dark" ? "light" : "dark",
+        );
+      } finally {
+        observer.disconnect();
+      }
+    },
+  );
+
+  it.each(["light", "dark"])(
+    "toggles the resolved %s system theme",
+    (theme) => {
+      mockTheme = "system";
+      mockResolvedTheme = theme;
+      render(<ThemeToggle />);
+
+      fireEvent.click(screen.getByRole("button"));
+
       expect(setThemeMock).toHaveBeenLastCalledWith(
         theme === "dark" ? "light" : "dark",
       );

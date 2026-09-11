@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { readFileSync } from "node:fs";
 import { setImmediate } from "node:timers/promises";
 import { runInNewContext } from "node:vm";
