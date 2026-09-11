@@ -5,4 +5,12 @@ updates:
     schedule:
       interval: "weekly"
     cooldown:
+      # Keep in sync with minimumReleaseAge: 10080 in pnpm-workspace.yaml.
+      # pnpm still verifies the full lockfile, including transitive dependencies.
       default-days: 7
+    groups:
+      # Vitest and its coverage provider require matching versions.
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
