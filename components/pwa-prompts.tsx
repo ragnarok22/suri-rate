@@ -52,9 +52,14 @@ export default function PwaPrompts() {
     )
       return;
 
-    navigator.serviceWorker
+    const serviceWorker = navigator.serviceWorker;
+    let disposed = false;
+    const removeListeners: (() => void)[] = [];
+
+    serviceWorker
       .register("/sw.js")
       .then((registration) => {
+        if (disposed) return;
         registrationRef.current = registration;
 
         // If there's already a waiting worker, show update banner
@@ -64,18 +69,28 @@ export default function PwaPrompts() {
         }
 
         // Listen for new service worker installing
-        registration.addEventListener("updatefound", () => {
+        const onUpdateFound = () => {
+          if (disposed) return;
           const newWorker = registration.installing;
           if (!newWorker) return;
 
-          newWorker.addEventListener("statechange", () => {
+          const onStateChange = () => {
             if (
+              !disposed &&
               newWorker.state === "installed" &&
-              navigator.serviceWorker.controller
+              serviceWorker.controller
             ) {
               setUpdateReady(true);
             }
+          };
+          newWorker.addEventListener("statechange", onStateChange);
+          removeListeners.push(() => {
+            newWorker.removeEventListener("statechange", onStateChange);
           });
+        };
+        registration.addEventListener("updatefound", onUpdateFound);
+        removeListeners.push(() => {
+          registration.removeEventListener("updatefound", onUpdateFound);
         });
       })
       .catch(() => {
@@ -84,20 +99,16 @@ export default function PwaPrompts() {
 
     // Reload when the new SW takes control
     const onControllerChange = () => {
-      if (reloading.current) return;
+      if (disposed || reloading.current) return;
       reloading.current = true;
       window.location.reload();
     };
-    navigator.serviceWorker.addEventListener(
-      "controllerchange",
-      onControllerChange,
-    );
+    serviceWorker.addEventListener("controllerchange", onControllerChange);
 
     return () => {
-      navigator.serviceWorker.removeEventListener(
-        "controllerchange",
-        onControllerChange,
-      );
+      disposed = true;
+      serviceWorker.removeEventListener("controllerchange", onControllerChange);
+      for (const removeListener of removeListeners) removeListener();
     };
   }, []);
 
