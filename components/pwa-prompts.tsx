@@ -19,7 +19,7 @@ export default function PwaPrompts() {
   );
   const [isMobile, setIsMobile] = useState(false);
   const [isIos, setIsIos] = useState(false);
-  const [platform, setPlatform] = useState<InstallPlatform>("unknown");
+  const platformRef = useRef<InstallPlatform>("unknown");
   const [installDismissed, setInstallDismissed] = useState(false);
   const [bannerHeight, setBannerHeight] = useState(0);
   const bannerRef = useRef<HTMLDivElement | null>(null);
@@ -157,13 +157,13 @@ export default function PwaPrompts() {
           : "other";
     const isIosDevice = detected === "ios";
     setIsIos(isIosDevice);
-    setPlatform(detected);
+    platformRef.current = detected;
   }, []);
 
   const dismissInstall = () => {
     setInstallDismissed(true);
     posthog?.capture("pwa_install_banner_dismiss", {
-      platform,
+      platform: platformRef.current,
       hadPrompt: Boolean(installEvt),
     });
     if (typeof window === "undefined") return;
@@ -183,19 +183,19 @@ export default function PwaPrompts() {
       const choice = await installEvt.userChoice;
       posthog?.capture("pwa_install_prompt_result", {
         outcome: choice.outcome,
-        platform,
+        platform: platformRef.current,
       });
       setInstallEvt(null);
     } catch {
       posthog?.capture("pwa_install_prompt_error", {
-        platform,
+        platform: platformRef.current,
       });
     }
   };
 
   const handleInstallClick = () => {
     posthog?.capture("pwa_install_banner_click", {
-      platform,
+      platform: platformRef.current,
       variant: installEvt ? "prompt" : "instructions",
     });
     if (installEvt) {
