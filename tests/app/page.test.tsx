@@ -56,6 +56,7 @@ vi.mock("lucide-react", () => ({
 }));
 
 import Home from "../../app/page";
+import { getCurrentRates } from "../../utils/places";
 
 describe("Home page", () => {
   it("renders the main heading", async () => {
@@ -105,4 +106,53 @@ describe("Home page", () => {
     );
     expect(scripts.length).toBeGreaterThan(0);
   });
+
+  it.each(["reordered", "filtered"])(
+    "preserves exchange-rate script identity when rates are %s and prices change",
+    async (change) => {
+      const banks = await getCurrentRates();
+      const { container, rerender } = render(await Home());
+      const getExchangeScripts = () =>
+        Array.from(
+          container.querySelectorAll('script[type="application/ld+json"]'),
+        ).filter(
+          (script) =>
+            JSON.parse(script.textContent || "{}")["@type"] ===
+            "ExchangeRateSpecification",
+        );
+      const originalScripts = getExchangeScripts();
+      expect(originalScripts).toHaveLength(8);
+      const scriptsByName = new Map(
+        originalScripts.map((script) => [
+          JSON.parse(script.textContent || "{}").name,
+          script,
+        ]),
+      );
+      expect(scriptsByName.size).toBe(originalScripts.length);
+
+      const nextBanks =
+        change === "reordered" ? [...banks].reverse() : banks.slice(1);
+      vi.mocked(getCurrentRates).mockResolvedValueOnce(
+        nextBanks.map((bank) => ({
+          ...bank,
+          rates: [...bank.rates].reverse().map((rate) => ({
+            ...rate,
+            buy: "7.00",
+            sell: "8.00",
+          })),
+        })),
+      );
+      rerender(await Home());
+
+      const updatedScripts = getExchangeScripts();
+      expect(updatedScripts).toHaveLength(change === "reordered" ? 8 : 4);
+      updatedScripts.forEach((script) => {
+        const spec = JSON.parse(script.textContent || "{}");
+        expect(script).toBe(scriptsByName.get(spec.name));
+        expect(spec.currentExchangeRate.price).toBe(
+          spec.name.endsWith("Buy Rate") ? 7 : 8,
+        );
+      });
+    },
+  );
 });
