@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findBankPageBySlug, bankSlugs } from "@/utils/bank-pages";
 import { getBreadcrumbSchema } from "@/utils/schema";
+import { serializeJsonForHtml } from "@/utils/serialize-json";
 import OutboundLink from "@/components/outbound-link";
 
 type PageParams = {
@@ -195,14 +196,14 @@ export default async function BankDetailPage({ params }: Props) {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema),
+          __html: serializeJsonForHtml(breadcrumbSchema),
         }}
       />
       <script
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(financialServiceSchema),
+          __html: serializeJsonForHtml(financialServiceSchema),
         }}
       />
     </div>

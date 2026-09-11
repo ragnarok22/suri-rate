@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { bankPages } from "@/utils/bank-pages";
 import { getBreadcrumbSchema } from "@/utils/schema";
+import { serializeJsonForHtml } from "@/utils/serialize-json";
 
 export const metadata: Metadata = {
   title:
@@ -122,14 +123,14 @@ export default function BanksPage() {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema),
+          __html: serializeJsonForHtml(breadcrumbSchema),
         }}
       />
       <script
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(itemListSchema),
+          __html: serializeJsonForHtml(itemListSchema),
         }}
       />
     </div>

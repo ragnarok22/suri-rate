@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import React from "react";
+import { renderToString } from "react-dom/server";
 import { render } from "@testing-library/react";
 
 vi.mock("next/link", () => ({
@@ -22,6 +23,7 @@ import BankDetailPage, {
   generateStaticParams,
   generateMetadata,
 } from "../../app/banks/[slug]/page";
+import * as bankPages from "@/utils/bank-pages";
 
 describe("generateStaticParams", () => {
   it("returns all bank slugs", () => {
@@ -81,5 +83,49 @@ describe("BankDetailPage", () => {
       'script[type="application/ld+json"]',
     );
     expect(scripts.length).toBe(2);
+  });
+
+  it("keeps bank profile data inside JSON-LD when server HTML is parsed", async () => {
+    const payload =
+      "</script><img data-json-breakout src=x onerror=alert(1)> & < >";
+    const findBankMock = vi
+      .spyOn(bankPages, "findBankPageBySlug")
+      .mockReturnValueOnce({
+        ...bankPages.bankPages[0],
+        slug: payload,
+        summary: payload,
+      });
+
+    try {
+      const page = await BankDetailPage({
+        params: Promise.resolve({ slug: "finabank" }),
+      });
+      const document = new DOMParser().parseFromString(
+        renderToString(page),
+        "text/html",
+      );
+      expect(document.querySelector("[data-json-breakout]")).toBeNull();
+
+      const scripts = document.querySelectorAll(
+        'script[type="application/ld+json"]',
+      );
+      expect(scripts).toHaveLength(2);
+      const schemas = Array.from(scripts, (script) => {
+        expect(script.textContent).not.toMatch(/[<>&]/);
+        return JSON.parse(script.textContent || "{}");
+      });
+      const service = schemas.find(
+        (schema) => schema["@type"] === "FinancialService",
+      );
+      expect(service.description).toBe(payload);
+      const breadcrumb = schemas.find(
+        (schema) => schema["@type"] === "BreadcrumbList",
+      );
+      expect(breadcrumb.itemListElement[2].item).toBe(
+        `https://suri-rate.ragnarok22.dev/banks/${payload}`,
+      );
+    } finally {
+      findBankMock.mockRestore();
+    }
   });
 });

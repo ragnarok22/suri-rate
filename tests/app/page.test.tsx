@@ -140,6 +140,35 @@ describe("Home page", () => {
     expect(scripts.length).toBeGreaterThan(0);
   });
 
+  it("keeps hostile rate values inside JSON-LD when server HTML is parsed", async () => {
+    const payload =
+      "0.00</ScRiPt><img data-json-breakout src=x onerror=alert(1)> & < >";
+    const [bank] = await getCurrentRates();
+    vi.mocked(getCurrentRates).mockResolvedValueOnce([
+      {
+        ...bank,
+        rates: bank.rates.map((rate) => ({ ...rate, buy: payload })),
+      },
+    ]);
+
+    const document = new DOMParser().parseFromString(
+      renderToString(await Home()),
+      "text/html",
+    );
+    expect(document.querySelector("[data-json-breakout]")).toBeNull();
+
+    const scripts = document.querySelectorAll(
+      'script[type="application/ld+json"]',
+    );
+    expect(scripts).toHaveLength(9);
+    const schemas = Array.from(scripts, (script) => {
+      expect(script.textContent).not.toMatch(/[<>&]/);
+      return JSON.parse(script.textContent || "{}");
+    });
+    const itemList = schemas.find((schema) => schema["@type"] === "ItemList");
+    expect(itemList.itemListElement[0].item.makesOffer[0].price).toBe(payload);
+  });
+
   it.each(["reordered", "filtered"])(
     "preserves exchange-rate script identity when rates are %s and prices change",
     async (change) => {

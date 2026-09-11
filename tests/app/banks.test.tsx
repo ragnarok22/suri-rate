@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import React from "react";
+import { renderToString } from "react-dom/server";
 import { render, screen } from "@testing-library/react";
 
 vi.mock("next/link", () => ({
@@ -8,6 +9,7 @@ vi.mock("next/link", () => ({
 }));
 
 import BanksPage from "../../app/banks/page";
+import { bankPages } from "@/utils/bank-pages";
 
 describe("BanksPage", () => {
   it("renders the page heading", () => {
@@ -45,5 +47,33 @@ describe("BanksPage", () => {
       'script[type="application/ld+json"]',
     );
     expect(scripts.length).toBe(2);
+  });
+
+  it("keeps bank descriptions inside JSON-LD when server HTML is parsed", () => {
+    const payload =
+      "</script><img data-json-breakout src=x onerror=alert(1)> & < >";
+    const originalSummary = bankPages[0].summary;
+    bankPages[0].summary = payload;
+
+    try {
+      const document = new DOMParser().parseFromString(
+        renderToString(<BanksPage />),
+        "text/html",
+      );
+      expect(document.querySelector("[data-json-breakout]")).toBeNull();
+
+      const scripts = document.querySelectorAll(
+        'script[type="application/ld+json"]',
+      );
+      expect(scripts).toHaveLength(2);
+      const schemas = Array.from(scripts, (script) => {
+        expect(script.textContent).not.toMatch(/[<>&]/);
+        return JSON.parse(script.textContent || "{}");
+      });
+      const itemList = schemas.find((schema) => schema["@type"] === "ItemList");
+      expect(itemList.itemListElement[0].item.description).toBe(payload);
+    } finally {
+      bankPages[0].summary = originalSummary;
+    }
   });
 });

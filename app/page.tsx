@@ -13,6 +13,7 @@ import {
   getItemListSchema,
   getExchangeRateSpecifications,
 } from "@/utils/schema";
+import { serializeJsonForHtml } from "@/utils/serialize-json";
 
 const faqItems = [
   {
@@ -158,39 +159,43 @@ export default async function Home() {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationSchema),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(itemListSchema),
+          __html: serializeJsonForHtml(organizationSchema),
         }}
       />
       <script
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(datasetStructuredData),
+          __html: serializeJsonForHtml(webSiteSchema),
         }}
       />
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonForHtml(itemListSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonForHtml(datasetStructuredData),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonForHtml(faqStructuredData),
+        }}
       />
       {exchangeRateSpecifications.map((spec) => (
         <script
           key={spec.name}
           type="application/ld+json"
           suppressHydrationWarning
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(spec) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonForHtml(spec) }}
         />
       ))}
 
