@@ -12,7 +12,7 @@ SuriRate is a Next.js 16 PWA that compares USD to SRD and EUR to SRD exchange ra
 - `utils/places/`: Bank-specific exchange-rate collection orchestration and provider scrapers.
 - `public/`: Static assets, bank logos, PWA icons, `offline.html`, and `sw.js`.
 - `tests/`: Vitest specs named `*.test.ts`.
-- Key configs: `next.config.ts`, `eslint.config.mjs`, `vitest.config.ts`, `tsconfig.json`.
+- Key configs: `next.config.ts`, `eslint.config.mjs`, `vitest.config.mts`, `tsconfig.json`.
 
 ## Build, Test, and Development Commands
 
