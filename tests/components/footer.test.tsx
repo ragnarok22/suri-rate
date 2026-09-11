@@ -63,13 +63,13 @@ describe("Footer", () => {
   });
 
   it("renders 'Not yet updated' when no lastUpdated", () => {
-    render(<Footer lastUpdated={undefined} />);
+    render(<Footer lastUpdated={undefined} currentYear={2030} />);
     expect(screen.getByText(/Not yet updated/)).toBeTruthy();
   });
 
   it("renders formatted date when lastUpdated is provided", async () => {
     await act(async () => {
-      render(<Footer lastUpdated="2024-06-15T12:00:00Z" />);
+      render(<Footer lastUpdated="2024-06-15T12:00:00Z" currentYear={2030} />);
     });
     const el = screen.getByText(/Last updated:/);
     expect(el.textContent).toContain("Jun");
@@ -77,9 +77,11 @@ describe("Footer", () => {
 
   it("renders creator link and navigation", async () => {
     await act(async () => {
-      render(<Footer lastUpdated={undefined} />);
+      render(<Footer lastUpdated={undefined} currentYear={2030} />);
     });
-    const { container } = render(<Footer lastUpdated={undefined} />);
+    const { container } = render(
+      <Footer lastUpdated={undefined} currentYear={2030} />,
+    );
     expect(container.textContent).toContain("Reinier");
     expect(container.textContent).toContain("About");
     expect(container.textContent).toContain("Methodology");
@@ -89,7 +91,9 @@ describe("Footer", () => {
   it("tracks outbound click on personal site", async () => {
     let container: HTMLElement;
     await act(async () => {
-      const result = render(<Footer lastUpdated={undefined} />);
+      const result = render(
+        <Footer lastUpdated={undefined} currentYear={2030} />,
+      );
       container = result.container;
     });
     const link = container!.querySelector(

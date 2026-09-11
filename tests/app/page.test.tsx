@@ -72,7 +72,9 @@ describe("Home page", () => {
     async ({ info }) => {
       vi.useFakeTimers({ toFake: ["Date"] });
       vi.setSystemTime(new Date("2030-12-31T12:00:00Z"));
-      const getRatesMock = vi.spyOn(data, "getRates").mockResolvedValueOnce(info);
+      const getRatesMock = vi
+        .spyOn(data, "getRates")
+        .mockResolvedValueOnce(info);
 
       try {
         const page = await Home();

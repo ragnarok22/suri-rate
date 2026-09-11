@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { cacheLife } from "next/cache";
 import ExchangeRateGrid from "@/components/exchange-rate-grid";
 import ExchangeSkeleton from "@/components/exchange-skeleton";
 import Footer from "@/components/footer";
@@ -40,8 +41,15 @@ const faqItems = [
   },
 ];
 
+async function getCurrentYear() {
+  "use cache";
+  cacheLife("exchangeRates");
+
+  return new Date().getFullYear();
+}
+
 export default async function Home() {
-  const info = await getRates();
+  const [info, currentYear] = await Promise.all([getRates(), getCurrentYear()]);
   const updatedAt = info?.updatedAt;
   const rates = info?.rates || [];
 
@@ -340,7 +348,7 @@ export default async function Home() {
         />
       ))}
 
-      <Footer lastUpdated={updatedAt} />
+      <Footer lastUpdated={updatedAt} currentYear={currentYear} />
     </div>
   );
 }
