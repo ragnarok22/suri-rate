@@ -182,7 +182,7 @@ importers:
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.9)
       "@vitest/coverage-v8":
-        specifier: 4.1.11
+        specifier: ^4.1.11
         version: 4.1.11(vitest@4.1.11)
       eslint:
         specifier: ^9.39.5
@@ -206,7 +206,7 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       vitest:
-        specifier: 4.1.11
+        specifier: ^4.1.11
         version: 4.1.11(@types/node@25.9.5)(@vitest/coverage-v8@4.1.11)(jsdom@29.1.1)(vite@8.2.2(@types/node@25.9.5)(jiti@2.7.0))
 
 packages:
