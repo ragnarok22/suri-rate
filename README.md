@@ -42,8 +42,8 @@ SuriRate is a Progressive Web App for comparing USD to SRD and EUR to SRD exchan
 
 ### Prerequisites
 
-- Node.js 22.13+
-- pnpm 11, managed through the `packageManager` field in `package.json`
+- Node.js 24 LTS
+- pnpm, using the version pinned in the `packageManager` field in `package.json`
 
 ### Installation
 
