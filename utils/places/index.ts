@@ -66,22 +66,23 @@ export const getCurrentRates = async (): Promise<BankRates[]> => {
     },
   ];
 
-  const bankRates: BankRates[] = [];
-  for (const bankInfo of bankInfos) {
-    try {
-      const rates = await retrieveRates(bankInfo.name);
-      bankRates.push({ ...bankInfo, rates });
-    } catch (e) {
-      console.error(e);
-      bankRates.push({
-        ...bankInfo,
-        rates: [
-          { currency: "USD", buy: "0.00", sell: "0.00" },
-          { currency: "EUR", buy: "0.00", sell: "0.00" },
-        ],
-      });
-    }
-  }
+  const bankRates: BankRates[] = await Promise.all(
+    bankInfos.map(async (bankInfo): Promise<BankRates> => {
+      try {
+        const rates = await retrieveRates(bankInfo.name);
+        return { ...bankInfo, rates };
+      } catch (e) {
+        console.error(e);
+        return {
+          ...bankInfo,
+          rates: [
+            { currency: "USD", buy: "0.00", sell: "0.00" },
+            { currency: "EUR", buy: "0.00", sell: "0.00" },
+          ],
+        };
+      }
+    }),
+  );
 
   return bankRates;
 };

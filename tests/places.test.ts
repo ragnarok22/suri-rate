@@ -1,6 +1,13 @@
 import { describe, it, expect, vi } from "vitest";
 import { getCurrentRates } from "../utils/places";
-import { getDsbExchangeRates } from "../utils/places/providers";
+import {
+  getCBVSExchangeRates,
+  getCMEExchangeRates,
+  getDsbExchangeRates,
+  getFinabankExchangeRates,
+  getHakrinbankExchangeRates,
+  getRepublicBankExchangeRates,
+} from "../utils/places/providers";
 import type { ExchangeRate } from "../utils/definitions";
 import axios from "axios";
 
@@ -29,6 +36,55 @@ describe("getCurrentRates", () => {
     const result = await getCurrentRates();
     expect(result).toHaveLength(6);
     expect(result[0].rates).toEqual(mockRates);
+  });
+
+  it("fetches banks concurrently while preserving bank order and rate associations", async () => {
+    vi.useFakeTimers();
+    try {
+      const providerCalls = [
+        getFinabankExchangeRates,
+        getCBVSExchangeRates,
+        getCMEExchangeRates,
+        getHakrinbankExchangeRates,
+        getDsbExchangeRates,
+        getRepublicBankExchangeRates,
+      ];
+      const delays = [60, 50, 40, 30, 20, 10];
+      const expectedRates = delays.map((delay) => [
+        {
+          currency: "USD" as const,
+          buy: String(delay),
+          sell: String(delay + 1),
+        },
+      ]);
+
+      providerCalls.forEach((provider, index) => {
+        vi.mocked(provider).mockImplementationOnce(
+          () =>
+            new Promise((resolve) => {
+              setTimeout(() => resolve(expectedRates[index]), delays[index]);
+            }),
+        );
+      });
+
+      const startedAt = Date.now();
+      const pendingRates = getCurrentRates();
+      await vi.runAllTimersAsync();
+      const result = await pendingRates;
+
+      expect(Date.now() - startedAt).toBe(Math.max(...delays));
+      expect(result.map((bank) => bank.name)).toEqual([
+        "Finabank",
+        "Central Bank",
+        "Central Money Exchange",
+        "Hakrinbank",
+        "De Surinaamsche Bank (DSB)",
+        "Republic Bank",
+      ]);
+      expect(result.map((bank) => bank.rates)).toEqual(expectedRates);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   // Fallback behavior is covered in providers.test.ts (CBVS)
