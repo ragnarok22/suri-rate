@@ -511,11 +511,12 @@ describe("PwaPrompts (production SW)", () => {
       ? { postMessage: vi.fn(), state: "installed" }
       : null;
 
-    const registration = {
+    const registration = Object.assign(new EventTarget(), {
       waiting: waitingWorker,
-      installing: null,
-      addEventListener: vi.fn(),
-    };
+      installing: null as ServiceWorker | null,
+    });
+    vi.spyOn(registration, "addEventListener");
+    vi.spyOn(registration, "removeEventListener");
 
     const controllerChangeListeners: (() => void)[] = [];
 
@@ -551,6 +552,77 @@ describe("PwaPrompts (production SW)", () => {
     });
 
     expect(swMock.register).toHaveBeenCalledWith("/sw.js");
+  });
+
+  it("removes service worker listeners for every discovered worker on unmount", async () => {
+    const { swMock, registration } = mockServiceWorker();
+    const workers = Array.from({ length: 2 }, () => {
+      const worker = Object.assign(new EventTarget(), { state: "installing" });
+      vi.spyOn(worker, "addEventListener");
+      vi.spyOn(worker, "removeEventListener");
+      return worker;
+    });
+    const { unmount, getByText } = render(<PwaPrompts />);
+    await act(async () => {});
+
+    for (const worker of workers) {
+      registration.installing = worker as unknown as ServiceWorker;
+      act(() => registration.dispatchEvent(new Event("updatefound")));
+      expect(worker.addEventListener).toHaveBeenCalledWith(
+        "statechange",
+        expect.any(Function),
+      );
+    }
+
+    act(() => {
+      workers[1].state = "installed";
+      workers[1].dispatchEvent(new Event("statechange"));
+    });
+    expect(getByText("Update available")).toBeTruthy();
+
+    unmount();
+
+    const controllerHandler = swMock.addEventListener.mock.calls[0][1];
+    expect(swMock.removeEventListener).toHaveBeenCalledWith(
+      "controllerchange",
+      controllerHandler,
+    );
+    const updateHandler = vi.mocked(registration.addEventListener).mock
+      .calls[0][1];
+    expect(registration.removeEventListener).toHaveBeenCalledWith(
+      "updatefound",
+      updateHandler,
+    );
+    for (const worker of workers) {
+      const stateHandler = vi.mocked(worker.addEventListener).mock.calls[0][1];
+      expect(worker.removeEventListener).toHaveBeenCalledWith(
+        "statechange",
+        stateHandler,
+      );
+    }
+
+    registration.dispatchEvent(new Event("updatefound"));
+    expect(workers[1].addEventListener).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not attach listeners when service worker registration resolves after unmount", async () => {
+    const { swMock, registration } = mockServiceWorker();
+    let resolveRegistration!: (value: typeof registration) => void;
+    swMock.register.mockReturnValue(
+      new Promise<typeof registration>((resolve) => {
+        resolveRegistration = resolve;
+      }),
+    );
+
+    const { unmount } = render(<PwaPrompts />);
+    expect(swMock.register).toHaveBeenCalledWith("/sw.js");
+    unmount();
+
+    await act(async () => {
+      resolveRegistration(registration);
+    });
+
+    expect(registration.addEventListener).not.toHaveBeenCalled();
   });
 
   it("shows update banner when SW has waiting worker", async () => {
@@ -643,12 +715,14 @@ describe("PwaPrompts (production SW)", () => {
     const newWorker = {
       state: "installing",
       addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
     };
 
     const registration = {
       waiting: null,
       installing: newWorker,
       addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
     };
 
     const swMock = {
