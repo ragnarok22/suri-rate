@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import React from "react";
 import { render } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 
 vi.mock("next/link", () => ({
   default: ({ children, href }: { children: React.ReactNode; href: string }) =>
@@ -57,8 +58,38 @@ vi.mock("lucide-react", () => ({
 
 import Home from "../../app/page";
 import { getCurrentRates } from "../../utils/places";
+import * as data from "../../utils/data";
 
 describe("Home page", () => {
+  it.each([
+    { name: "missing", info: null },
+    {
+      name: "stale",
+      info: { rates: [], updatedAt: "2024-06-15T12:00:00Z" },
+    },
+  ])(
+    "preserves the server-computed footer year with $name rate data",
+    async ({ info }) => {
+      vi.useFakeTimers({ toFake: ["Date"] });
+      vi.setSystemTime(new Date("2030-12-31T12:00:00Z"));
+      const getRatesMock = vi.spyOn(data, "getRates").mockResolvedValueOnce(info);
+
+      try {
+        const page = await Home();
+        vi.setSystemTime(new Date("2031-01-01T12:00:00Z"));
+        const container = document.createElement("div");
+        container.innerHTML = renderToString(page);
+
+        expect(container.querySelector("footer")?.textContent).toContain(
+          "© 2030 SuriRate",
+        );
+      } finally {
+        getRatesMock.mockRestore();
+        vi.useRealTimers();
+      }
+    },
+  );
+
   it("renders the main heading", async () => {
     const page = await Home();
     const { container } = render(page);
