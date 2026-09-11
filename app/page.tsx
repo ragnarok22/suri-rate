@@ -331,9 +331,9 @@ export default async function Home() {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
-      {exchangeRateSpecifications.map((spec, index) => (
+      {exchangeRateSpecifications.map((spec) => (
         <script
-          key={`exchange-rate-${index}`}
+          key={spec.name}
           type="application/ld+json"
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(spec) }}
