@@ -21,26 +21,26 @@
     "lucide-react": "^0.562.0",
     "next": "16.3.8",
     "next-themes": "^0.4.6",
-    "posthog-js": "^1.427.0",
+    "posthog-js": "^1.437.0",
     "react": "19.3.0",
-    "react-dom": "19.2.3"
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@types/node": "^25.9.5",
+    "@types/node": "^25.9.9",
     "@types/react": "19.3.0",
-    "@types/react-dom": "19.2.3",
+    "@types/react-dom": "19.3.0",
     "@vitest/coverage-v8": "^5.0.3",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.3.6",
     "eslint-config-prettier": "^10.1.8",
-    "jsdom": "^30.1.1",
-    "prettier": "^3.9.6",
+    "jsdom": "^30.1.2",
+    "prettier": "^3.9.9",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3"
   },
-  "packageManager": "pnpm@12.3.4+sha512.961aa41fb077da3a04a441d9f8e15ebc0c96da8ef710b2eb67bf9ee7cb0610eabd48f1fd85f51cffe73846785fa0f87c56a3a872a1d893f8446741b5cce45457"
+  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
 }
