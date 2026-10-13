@@ -7,6 +7,8 @@ const CACHE_SECONDS = CACHE_HOURS * 60 * 60;
 const nextConfig: NextConfig = {
   // Enable Cache Components for 'use cache' directive
   cacheComponents: true,
+  // Preserve existing prefetch behavior when migrating to Next.js 16.4.
+  partialPrefetching: false,
   // Custom cache profile for exchange rates
   cacheLife: {
     exchangeRates: {
