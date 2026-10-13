@@ -139,6 +139,61 @@ describe("providers: parsing", () => {
     ]);
   });
 
+  it.each(["before", "after"])(
+    "parses the current Hakrinbank table with cross rates %s it",
+    async (crossRatesPosition) => {
+      // Rate tables captured from Hakrinbank's English pages on 2026-10-13.
+      // The homepage and foreign-exchange page display them in different orders.
+      const exchangeRates = `
+        <h2 id="tablepress-13-name">Exchange, Checks and Transfers</h2>
+        <table id="tablepress-13" class="tablepress tablepress-id-13" aria-labelledby="tablepress-13-name">
+          <thead>
+            <tr class="row-1">
+              <th class="column-1"> </th><th class="column-2">Purchase</th><th class="column-3">Sale</th>
+            </tr>
+          </thead>
+          <tbody class="row-striping row-hover">
+            <tr class="row-2">
+              <td class="column-1">USD</td><td class="column-2">37.3500</td><td class="column-3">37.9000</td>
+            </tr>
+            <tr class="row-3">
+              <td class="column-1">EUR</td><td class="column-2">41.7500</td><td class="column-3">42.5800</td>
+            </tr>
+          </tbody>
+        </table>`;
+      const crossRates = `
+        <h2 id="tablepress-12-name">(Spot) Cross Rates</h2>
+        <table id="tablepress-12" class="tablepress tablepress-id-12" aria-labelledby="tablepress-12-name">
+          <thead>
+            <tr class="row-1">
+              <th colspan="2" class="column-1">Foreign Exchange</th>
+            </tr>
+          </thead>
+          <tbody class="row-striping row-hover">
+            <tr class="row-2">
+              <td class="column-1">EUR / USD</td><td class="column-2">1.0980</td>
+            </tr>
+            <tr class="row-3">
+              <td class="column-1">USD / EUR</td><td class="column-2">1.1380</td>
+            </tr>
+          </tbody>
+        </table>`;
+      apiMock.mockResolvedValue({
+        html:
+          crossRatesPosition === "before"
+            ? crossRates + exchangeRates
+            : exchangeRates + crossRates,
+      });
+
+      await expect(getHakrinbankExchangeRates()).resolves.toEqual<
+        ExchangeRate[]
+      >([
+        { currency: "USD", buy: "37.35", sell: "37.90" },
+        { currency: "EUR", buy: "41.75", sell: "42.58" },
+      ]);
+    },
+  );
+
   it("parses Republic Bank table with specific headers", async () => {
     apiMock.mockResolvedValue({
       html: `

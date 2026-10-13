@@ -246,11 +246,7 @@ export async function getHakrinbankExchangeRates(): Promise<ExchangeRate[]> {
         .find("thead tr th")
         .map((_, th) => $(th).text().trim().toLowerCase())
         .get();
-      if (
-        headers.includes("foreign exchange") &&
-        headers.includes("purchase") &&
-        headers.includes("sale")
-      ) {
+      if (headers.includes("purchase") && headers.includes("sale")) {
         $(table)
           .find("tbody tr")
           .each((_, row) => {

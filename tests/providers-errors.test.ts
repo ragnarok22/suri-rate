@@ -150,6 +150,22 @@ describe("CME error paths", () => {
 });
 
 describe("Hakrinbank error paths", () => {
+  it("rejects cross rates as a substitute for USD/SRD and EUR/SRD rates", async () => {
+    apiMock.mockResolvedValue({
+      html: `<table>
+        <thead><tr><th colspan="2">Foreign Exchange</th></tr></thead>
+        <tbody>
+          <tr><td>EUR / USD</td><td>1.0980</td></tr>
+          <tr><td>USD / EUR</td><td>1.1380</td></tr>
+        </tbody>
+      </table>`,
+    });
+
+    await expect(getHakrinbankExchangeRates()).rejects.toThrow(
+      "No exchange rate data found on Hakrinbank page",
+    );
+  });
+
   it("throws when no exchange rate data found", async () => {
     apiMock.mockResolvedValue({
       html: "<table><thead><tr><th>Other</th></tr></thead></table>",
