@@ -230,8 +230,8 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       posthog-js:
-        specifier: ^1.447.4
-        version: 1.447.4(@types/react@19.3.0)(react@19.3.1)
+        specifier: ^1.450.0
+        version: 1.450.0(@types/react@19.3.0)(react@19.3.1)
       react:
         specifier: 19.3.1
         version: 19.3.1
@@ -754,14 +754,14 @@ packages:
   '@oxc-project/types@0.156.0':
     resolution: {integrity: sha512-1Duyg48TdJNdyhEB8Xn1L36bT9Pv6GUtlKjHxOys8xkaF/rQq3XJE+bAurSK/AgIz5mGFsb77cn9Pb20+WCScw==}
 
-  '@posthog/browser-common@0.10.7':
-    resolution: {integrity: sha512-1V2SBu7gxVbroZk49YsCM++K9qy3qcrOaylemjkkTPvACgAGwm0Y/AkJN2eRZO1YME0FnagF6QKBaXmq3o0e8g==}
+  '@posthog/browser-common@0.12.0':
+    resolution: {integrity: sha512-P1CubrDp1xwYi2DQxjzJITEeMJpZ7qYcbHuhtXLHgkG8bE6gLy0JwkykjRtEFbElvJNbHQO1jQi7Cbb3JyazNw==}
 
-  '@posthog/core@1.64.1':
-    resolution: {integrity: sha512-2ziryOLWTxftHrTLhGYQzLHDpPughaRRi/+L1vhg4cQFHJfgTevMzAz21R1zR7MKFDkyJ9lCJD/K2jxIkGbnfg==}
+  '@posthog/core@1.68.0':
+    resolution: {integrity: sha512-5kjPcLquzj47qBGn52+7RRXrJJvrTHaRKgxV9izYPFzoVFEftFqSXYZF/ug+yialxDU73dR9apyi+mSaAeaXPw==}
 
-  '@posthog/types@1.421.1':
-    resolution: {integrity: sha512-475eg+usYiQ2m7GfxgylnBTVa3aPsEfaE6gQoDvg5nEkWAjcNiGm1u3WsESOErfrFFUajpYcxc71JCzfdoJ8gg==}
+  '@posthog/types@1.425.1':
+    resolution: {integrity: sha512-mh7jyQ5lN+XCeOnMdYkBEFtO/G0TxeLOKTWNH6E6OZjxS4nVM0Tb2xQt+FG5DCFM9qzL2HmuX6A793TwlJVDvw==}
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     resolution: {integrity: sha512-ia3DwAs0OsMGS7+IConptSiyk9pEXkOx/AbJ2n/lAGxH3QkWQus1t8d7gnAT38FCU2sQu8lUbeR6AiZFv4JxaA==}
@@ -2438,8 +2438,8 @@ packages:
     resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-js@1.447.4:
-    resolution: {integrity: sha512-TZnQXMpBuOOhH1j7F9BcbTJ9HFTE9uStLeahYeR8C2ZhiqzbX15Eaqln16xVbEC+Fa9g+vSXtt+uhS2V/CyfTQ==}
+  posthog-js@1.450.0:
+    resolution: {integrity: sha512-KsjBOy0At8HFm8aYIb3zZ+0oYdOeAMCDkGcvM4po/N08K+nyvFNJgqHL2DzyVXkN0FiB6lvdWzjbZk7QQbxJCQ==}
     peerDependencies:
       '@types/react': '>=16.8.0'
       react: '>=16.8.0'
@@ -3383,20 +3383,20 @@ snapshots:
 
   '@oxc-project/types@0.156.0': {}
 
-  '@posthog/browser-common@0.10.7':
+  '@posthog/browser-common@0.12.0':
     dependencies:
-      '@posthog/core': 1.64.1
-      '@posthog/types': 1.421.1
+      '@posthog/core': 1.68.0
+      '@posthog/types': 1.425.1
       dompurify: 3.4.17
       preact: 10.29.8
     transitivePeerDependencies:
       - preact-render-to-string
 
-  '@posthog/core@1.64.1':
+  '@posthog/core@1.68.0':
     dependencies:
-      '@posthog/types': 1.421.1
+      '@posthog/types': 1.425.1
 
-  '@posthog/types@1.421.1': {}
+  '@posthog/types@1.425.1': {}
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     optional: true
@@ -5167,11 +5167,11 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
-  posthog-js@1.447.4(@types/react@19.3.0)(react@19.3.1):
+  posthog-js@1.450.0(@types/react@19.3.0)(react@19.3.1):
     dependencies:
-      '@posthog/browser-common': 0.10.7
-      '@posthog/core': 1.64.1
-      '@posthog/types': 1.421.1
+      '@posthog/browser-common': 0.12.0
+      '@posthog/core': 1.68.0
+      '@posthog/types': 1.425.1
       core-js: 3.51.0
       dompurify: 3.4.17
       fflate: 0.4.9
